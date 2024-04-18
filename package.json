@@ -16,6 +16,7 @@
     "prisma:gen": "prisma generate",
     "prisma:push": "npx prisma db push",
     "prisma:studio": "npx prisma studio",
+    "prisma:seed": "ts-node prisma/seed.ts",
     "docker:db": "docker compose up -d",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -32,6 +33,7 @@
     "rxjs": "^7.8.1"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.0.0",
     "@nestjs/testing": "^10.0.0",
