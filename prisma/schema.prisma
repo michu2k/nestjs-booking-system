@@ -9,3 +9,58 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id       Int       @id @default(autoincrement())
+  name     String
+  email    String    @unique
+  phone    String
+  password String
+  role     UserRole
+  Booking  Booking[]
+}
+
+enum UserRole {
+  ADMIN
+  MANAGER
+  USER
+}
+
+model Booking {
+  id        Int           @id @default(autoincrement())
+  from      DateTime
+  to        DateTime
+  createdAt DateTime      @default(now())
+  userId    Int
+  serviceId Int
+  status    BookingStatus
+  user      User          @relation(fields: [userId], references: [id])
+  service   Service       @relation(fields: [serviceId], references: [id])
+}
+
+enum BookingStatus {
+  CONFIRMED
+  PENDING
+  CANCELLED
+}
+
+model Service {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String
+  price       Int
+  locationId  Int
+  createdAt   DateTime  @default(now())
+  Booking     Booking[]
+  location    Location  @relation(fields: [locationId], references: [id])
+}
+
+model Location {
+  id      Int       @id @default(autoincrement())
+  city    String
+  address String
+  country String
+  lat     Float
+  lng     Float
+  Service Service[]
+}
