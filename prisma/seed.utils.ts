@@ -1,0 +1,10 @@
+const SEED_RECORDS = {
+  ADMIN: 1,
+  MANAGER: 2,
+  USER: 5,
+  LOCATION: 2,
+  SERVICE: 3,
+  BOOKING: 10
+};
+
+export {SEED_RECORDS};
