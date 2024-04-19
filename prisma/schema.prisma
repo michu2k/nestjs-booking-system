@@ -34,8 +34,8 @@ model Booking {
   userId    Int
   serviceId Int
   status    BookingStatus
-  user      User          @relation(fields: [userId], references: [id])
-  service   Service       @relation(fields: [serviceId], references: [id])
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  service   Service       @relation(fields: [serviceId], references: [id], onDelete: Cascade)
 }
 
 enum BookingStatus {
@@ -52,7 +52,7 @@ model Service {
   locationId  Int
   createdAt   DateTime  @default(now())
   Booking     Booking[]
-  location    Location  @relation(fields: [locationId], references: [id])
+  location    Location  @relation(fields: [locationId], references: [id], onDelete: Cascade)
 }
 
 model Location {
