@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -20,12 +17,6 @@ model User {
   Booking  Booking[]
 }
 
-enum UserRole {
-  ADMIN
-  MANAGER
-  USER
-}
-
 model Booking {
   id        Int           @id @default(autoincrement())
   from      DateTime
@@ -34,14 +25,8 @@ model Booking {
   userId    Int
   serviceId Int
   status    BookingStatus
-  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   service   Service       @relation(fields: [serviceId], references: [id], onDelete: Cascade)
-}
-
-enum BookingStatus {
-  CONFIRMED
-  PENDING
-  CANCELLED
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Service {
@@ -63,4 +48,16 @@ model Location {
   lat     Float
   lng     Float
   Service Service[]
+}
+
+enum UserRole {
+  ADMIN
+  MANAGER
+  USER
+}
+
+enum BookingStatus {
+  CONFIRMED
+  PENDING
+  CANCELLED
 }
