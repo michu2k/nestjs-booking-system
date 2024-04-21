@@ -1,16 +1,4 @@
-import {
-  BadRequestException,
-  Body,
-  Controller,
-  Delete,
-  Get,
-  NotFoundException,
-  Param,
-  ParseIntPipe,
-  Patch,
-  Post,
-  Query
-} from "@nestjs/common";
+import {Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query} from "@nestjs/common";
 import {LocationService} from "../location/location.service";
 import {FindAllEntitiesDto} from "../prisma/prisma.dto";
 import {ServiceService} from "./service.service";
@@ -35,26 +23,18 @@ export class ServiceController {
 
   @Post()
   async create(@Body() {locationId, ...serviceData}: CreateServiceDto) {
-    try {
-      await this.locationService.findOneLocation(locationId);
-      return this.serviceService.createService({...serviceData, location: {connect: {id: locationId}}});
-    } catch (error) {
-      throw new BadRequestException(error.message);
-    }
+    await this.locationService.findOneLocation(locationId);
+    return this.serviceService.createService({...serviceData, location: {connect: {id: locationId}}});
   }
 
   @Patch(":id")
   async update(@Param("id", ParseIntPipe) id: number, @Body() {locationId, ...serviceData}: UpdateServiceDto) {
-    try {
-      if (locationId) {
-        await this.locationService.findOneLocation(locationId);
-        return this.serviceService.updateService(id, {...serviceData, location: {connect: {id: locationId}}});
-      }
-
-      return this.serviceService.updateService(id, serviceData);
-    } catch (error) {
-      throw new NotFoundException(error.message);
+    if (locationId) {
+      await this.locationService.findOneLocation(locationId);
+      return this.serviceService.updateService(id, {...serviceData, location: {connect: {id: locationId}}});
     }
+
+    return this.serviceService.updateService(id, serviceData);
   }
 
   @Delete(":id")

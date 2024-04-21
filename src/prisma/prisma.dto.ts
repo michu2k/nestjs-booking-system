@@ -6,10 +6,10 @@ export class FindAllEntitiesDto {
   @Type(() => Number)
   @IsNumber()
   @Min(1)
-  limit: number;
+  limit?: number;
 
   @IsOptional()
   @Type(() => Number)
   @IsNumber()
-  offset: number;
+  offset?: number;
 }
