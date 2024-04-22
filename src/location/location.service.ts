@@ -6,8 +6,11 @@ import {Prisma} from "@prisma/client";
 export class LocationService {
   constructor(private prisma: PrismaService) {}
 
-  async findAllLocations() {
-    return this.prisma.location.findMany();
+  async findAllLocations(limit?: number, offset?: number) {
+    return this.prisma.service.findMany({
+      take: limit,
+      skip: offset
+    });
   }
 
   async findOneLocation(id: number) {
