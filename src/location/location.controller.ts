@@ -8,7 +8,7 @@ export class LocationController {
   constructor(private locationService: LocationService) {}
 
   @Get()
-  async findAll(@Query() {limit, offset}: FindAllEntitiesDto) {
+  findAll(@Query() {limit, offset}: FindAllEntitiesDto) {
     return this.locationService.findAllLocations(limit, offset);
   }
 

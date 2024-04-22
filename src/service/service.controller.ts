@@ -12,33 +12,33 @@ export class ServiceController {
   ) {}
 
   @Get()
-  async findAll(@Query() {limit, offset}: FindAllEntitiesDto) {
+  findAll(@Query() {limit, offset}: FindAllEntitiesDto) {
     return this.serviceService.findAllServices(limit, offset);
   }
 
   @Get(":id")
-  async findOne(@Param("id", ParseIntPipe) id: number) {
+  findOne(@Param("id", ParseIntPipe) id: number) {
     return this.serviceService.findOneService(id);
   }
 
   @Post()
   async create(@Body() {locationId, ...serviceData}: CreateServiceDto) {
     await this.locationService.findOneLocation(locationId);
-    return this.serviceService.createService({...serviceData, location: {connect: {id: locationId}}});
+    return this.serviceService.createService({locationId, ...serviceData});
   }
 
   @Patch(":id")
   async update(@Param("id", ParseIntPipe) id: number, @Body() {locationId, ...serviceData}: UpdateServiceDto) {
     if (locationId) {
       await this.locationService.findOneLocation(locationId);
-      return this.serviceService.updateService(id, {...serviceData, location: {connect: {id: locationId}}});
+      return this.serviceService.updateService(id, {...serviceData, locationId});
     }
 
     return this.serviceService.updateService(id, serviceData);
   }
 
   @Delete(":id")
-  async delete(@Param("id", ParseIntPipe) id: number) {
+  delete(@Param("id", ParseIntPipe) id: number) {
     return this.serviceService.deleteService(id);
   }
 }
