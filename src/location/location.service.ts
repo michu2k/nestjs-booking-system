@@ -16,7 +16,7 @@ export class LocationService {
         where: {id}
       })
       .catch(() => {
-        throw new BadRequestException("Location not found.");
+        throw new NotFoundException("Location not found.");
       });
   }
 
