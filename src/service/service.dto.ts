@@ -1,4 +1,5 @@
-import {IsNumber, IsOptional, IsString, Min} from "class-validator";
+import {PartialType} from "@nestjs/mapped-types";
+import {IsOptional, IsString, Min, IsInt} from "class-validator";
 
 export class CreateServiceDto {
   @IsString()
@@ -8,28 +9,11 @@ export class CreateServiceDto {
   description: string;
 
   @Min(1)
-  @IsNumber()
+  @IsInt()
   price: number;
 
-  @IsNumber()
+  @IsInt()
   locationId: number;
 }
 
-export class UpdateServiceDto {
-  @IsOptional()
-  @IsString()
-  name?: string;
-
-  @IsOptional()
-  @IsString()
-  description?: string;
-
-  @IsOptional()
-  @Min(1)
-  @IsNumber()
-  price?: number;
-
-  @IsOptional()
-  @IsNumber()
-  locationId?: number;
-}
+export class UpdateServiceDto extends PartialType(CreateServiceDto) {}
