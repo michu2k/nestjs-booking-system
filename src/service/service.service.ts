@@ -14,19 +14,18 @@ export class ServiceService {
   }
 
   async findOneService(id: number) {
-    const service = await this.prisma.service.findUnique({
-      where: {id}
-    });
-
-    if (!service) {
-      throw new NotFoundException("Service not found.");
-    }
-
-    return service;
+    return this.prisma.service
+      .findUniqueOrThrow({
+        where: {id}
+      })
+      .catch(() => {
+        throw new NotFoundException("Service not found.");
+      });
   }
 
   async createService(data: Prisma.ServiceCreateInput) {
-    return this.prisma.service.create({data}).catch(() => {
+    return this.prisma.service.create({data}).catch((e) => {
+      console.error(e.message);
       throw new BadRequestException("Failed to create service.");
     });
   }
@@ -37,7 +36,8 @@ export class ServiceService {
         where: {id},
         data
       })
-      .catch(() => {
+      .catch((e) => {
+        console.error(e.message);
         throw new BadRequestException("Failed to update service.");
       });
   }
@@ -47,7 +47,8 @@ export class ServiceService {
       .delete({
         where: {id}
       })
-      .catch(() => {
+      .catch((e) => {
+        console.error(e.message);
         throw new BadRequestException("Failed to delete service.");
       });
   }
