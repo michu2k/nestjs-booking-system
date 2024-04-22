@@ -30,14 +30,11 @@ export class ServiceService {
     });
   }
 
-  async updateService(id: number, {locationId, ...data}: UpdateServiceDto) {
+  async updateService(id: number, data: UpdateServiceDto) {
     return this.prisma.service
       .update({
         where: {id},
-        data: {
-          ...data,
-          locationId
-        }
+        data
       })
       .catch((e) => {
         console.error(e.message);
