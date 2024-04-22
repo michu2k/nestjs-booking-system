@@ -1,4 +1,5 @@
-import {Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post} from "@nestjs/common";
+import {Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query} from "@nestjs/common";
+import {FindAllEntitiesDto} from "../prisma/prisma.dto";
 import {LocationService} from "./location.service";
 import {CreateLocationDto, UpdateLocationDto} from "./location.dto";
 
@@ -7,8 +8,8 @@ export class LocationController {
   constructor(private locationService: LocationService) {}
 
   @Get()
-  findAll() {
-    return this.locationService.findAllLocations();
+  findAll(@Query() {limit, offset}: FindAllEntitiesDto) {
+    return this.locationService.findAllLocations(limit, offset);
   }
 
   @Get(":id")

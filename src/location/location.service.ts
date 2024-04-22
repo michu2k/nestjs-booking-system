@@ -1,13 +1,16 @@
 import {BadRequestException, Injectable, NotFoundException} from "@nestjs/common";
 import {PrismaService} from "../prisma/prisma.service";
-import {Prisma} from "@prisma/client";
+import {CreateLocationDto, UpdateLocationDto} from "./location.dto";
 
 @Injectable()
 export class LocationService {
   constructor(private prisma: PrismaService) {}
 
-  async findAllLocations() {
-    return this.prisma.location.findMany();
+  async findAllLocations(limit?: number, offset?: number) {
+    return this.prisma.service.findMany({
+      take: limit,
+      skip: offset
+    });
   }
 
   async findOneLocation(id: number) {
@@ -20,14 +23,14 @@ export class LocationService {
       });
   }
 
-  async createLocation(data: Prisma.LocationCreateInput) {
+  async createLocation(data: CreateLocationDto) {
     return this.prisma.location.create({data}).catch((e) => {
       console.error(e.message);
       throw new BadRequestException("Failed to create location.");
     });
   }
 
-  async updateLocation(id: number, data: Prisma.LocationUpdateInput) {
+  async updateLocation(id: number, data: UpdateLocationDto) {
     return this.prisma.location
       .update({
         where: {id},

@@ -1,12 +1,12 @@
 import {BadRequestException, Injectable, NotFoundException} from "@nestjs/common";
-import {Prisma} from "@prisma/client";
 import {PrismaService} from "../prisma/prisma.service";
+import {CreateServiceDto, UpdateServiceDto} from "./service.dto";
 
 @Injectable()
 export class ServiceService {
   constructor(private prisma: PrismaService) {}
 
-  findAllServices(limit?: number, offset?: number) {
+  async findAllServices(limit?: number, offset?: number) {
     return this.prisma.service.findMany({
       take: limit,
       skip: offset
@@ -23,14 +23,14 @@ export class ServiceService {
       });
   }
 
-  async createService(data: Prisma.ServiceCreateInput) {
+  async createService(data: CreateServiceDto) {
     return this.prisma.service.create({data}).catch((e) => {
       console.error(e.message);
       throw new BadRequestException("Failed to create service.");
     });
   }
 
-  async updateService(id: number, data: Prisma.ServiceUpdateInput) {
+  async updateService(id: number, data: UpdateServiceDto) {
     return this.prisma.service
       .update({
         where: {id},
