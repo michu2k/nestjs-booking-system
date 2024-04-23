@@ -14,7 +14,6 @@
     "lint:fix": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "postinstall": "prisma generate",
     "prisma:gen": "prisma generate",
-    "prisma:push": "npx prisma db push",
     "prisma:studio": "npx prisma studio",
     "prisma:seed": "npx prisma db seed",
     "docker:db": "docker compose up -d",

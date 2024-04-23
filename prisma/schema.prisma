@@ -34,10 +34,10 @@ model Service {
   name        String
   description String
   price       Int
-  locationId  Int
+  locationId  Int?
   createdAt   DateTime  @default(now())
   Booking     Booking[]
-  location    Location  @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  location    Location? @relation(fields: [locationId], references: [id])
 }
 
 model Location {
