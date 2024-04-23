@@ -1,12 +1,12 @@
 import {PartialType} from "@nestjs/mapped-types";
 import {BookingStatus} from "@prisma/client";
-import {IsDate, IsEnum, IsInt} from "class-validator";
+import {IsDateString, IsEnum, IsInt, IsISO8601} from "class-validator";
 
 export class CreateBookingDto {
-  @IsDate()
+  @IsISO8601({strict: true, strictSeparator: true})
   from: Date;
 
-  @IsDate()
+  @IsDateString({strict: true, strictSeparator: true})
   to: Date;
 
   @IsEnum(BookingStatus)
