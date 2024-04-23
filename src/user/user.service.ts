@@ -8,11 +8,10 @@ export class UserService {
   async findOneUser(id: number) {
     return this.prisma.user
       .findUniqueOrThrow({
-        where: {id}
-      })
-      .then((user) => {
-        const excludeFields = ["password"];
-        return Object.fromEntries(Object.entries(user).filter(([key]) => !excludeFields.includes(key)));
+        where: {id},
+        omit: {
+          password: true
+        }
       })
       .catch(() => {
         throw new NotFoundException("User not found.");
