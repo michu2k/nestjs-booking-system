@@ -1,6 +1,7 @@
 import {Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query} from "@nestjs/common";
 import {FindAllEntitiesDto} from "../prisma/prisma.dto";
 import {ServiceService} from "../service/service.service";
+import {UserService} from "../user/user.service";
 import {BookingService} from "./booking.service";
 import {CreateBookingDto, UpdateBookingDto} from "./booking.dto";
 
@@ -8,7 +9,8 @@ import {CreateBookingDto, UpdateBookingDto} from "./booking.dto";
 export class BookingController {
   constructor(
     private bookingService: BookingService,
-    private serviceService: ServiceService
+    private serviceService: ServiceService,
+    private userService: UserService
   ) {}
 
   @Get()
@@ -24,8 +26,7 @@ export class BookingController {
   @Post()
   async create(@Body() {serviceId, userId, ...data}: CreateBookingDto) {
     await this.serviceService.findOneService(serviceId);
-    // TODO: check for user id
-    // await this.userService.findOneUser(userId);
+    await this.userService.findOneUser(userId);
     return this.bookingService.createBooking({serviceId, userId, ...data});
   }
 
