@@ -11,12 +11,12 @@ import {validateEnvs} from "./env.validation";
 @Module({
   imports: [
     ConfigModule.forRoot({validate: validateEnvs}),
+    AuthModule,
+    UserModule,
     LocationModule,
     ServiceModule,
     PrismaModule,
-    BookingModule,
-    UserModule,
-    AuthModule
+    BookingModule
   ],
   controllers: [],
   providers: []
