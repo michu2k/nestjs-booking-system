@@ -9,11 +9,11 @@ datasource db {
 }
 
 model Account {
-  id               Int    @id @default(autoincrement())
-  userId           Int
-  provider         String @unique
-  proiverAccountId String @unique
-  user             User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                Int    @id @default(autoincrement())
+  userId            Int
+  provider          String @unique
+  providerAccountId String @unique
+  user              User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model User {
