@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["omitApi"]
 }
 
@@ -8,13 +8,22 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Account {
+  id               Int    @id @default(autoincrement())
+  userId           Int
+  provider         String @unique
+  proiverAccountId String @unique
+  user             User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
 model User {
   id       Int       @id @default(autoincrement())
   name     String
   email    String    @unique
-  phone    String
-  password String
+  phone    String?
+  password String?
   role     UserRole
+  accounts Account[]
   Booking  Booking[]
 }
 
