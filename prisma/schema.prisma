@@ -11,8 +11,8 @@ datasource db {
 model Account {
   id                Int    @id @default(autoincrement())
   userId            Int
-  provider          String @unique
-  providerAccountId String @unique
+  provider          String
+  providerAccountId String
   user              User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
