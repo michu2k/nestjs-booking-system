@@ -20,8 +20,8 @@ export class UserController {
   async delete(@Param("id", ParseIntPipe) id: number) {
     try {
       return await this.userService.deleteUserAccount(id);
-    } catch (error) {
-      console.error(error.message);
+    } catch (e) {
+      console.error(e.message);
       throw new BadRequestException("Failed to delete account");
     }
   }

@@ -39,8 +39,8 @@ export class LocationController {
   async create(@Body() data: CreateLocationDto) {
     try {
       return await this.locationService.createLocation(data);
-    } catch (error) {
-      console.error(error.message);
+    } catch (e) {
+      console.error(e.message);
       throw new BadRequestException("Failed to create location.");
     }
   }
@@ -49,8 +49,8 @@ export class LocationController {
   async update(@Param("id", ParseIntPipe) id: number, @Body() data: UpdateLocationDto) {
     try {
       return await this.locationService.updateLocation(id, data);
-    } catch (error) {
-      console.error(error.message);
+    } catch (e) {
+      console.error(e.message);
       throw new BadRequestException("Failed to update location.");
     }
   }
@@ -59,8 +59,8 @@ export class LocationController {
   async delete(@Param("id", ParseIntPipe) id: number) {
     try {
       return await this.locationService.deleteLocation(id);
-    } catch (error) {
-      console.error(error.message);
+    } catch (e) {
+      console.error(e.message);
       throw new BadRequestException("Failed to delete location.");
     }
   }
