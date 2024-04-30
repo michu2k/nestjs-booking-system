@@ -1,17 +1,23 @@
-import {Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query} from "@nestjs/common";
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Delete,
+  Get,
+  NotFoundException,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Query
+} from "@nestjs/common";
 import {FindAllEntitiesDto} from "../prisma/prisma.dto";
-import {ServiceService} from "../service/service.service";
-import {UserService} from "../user/user.service";
 import {BookingService} from "./booking.service";
 import {CreateBookingDto, UpdateBookingDto} from "./booking.dto";
 
 @Controller("booking")
 export class BookingController {
-  constructor(
-    private bookingService: BookingService,
-    private serviceService: ServiceService,
-    private userService: UserService
-  ) {}
+  constructor(private bookingService: BookingService) {}
 
   @Get()
   findAll(@Query() {limit, offset}: FindAllEntitiesDto) {
@@ -19,24 +25,43 @@ export class BookingController {
   }
 
   @Get(":id")
-  findOne(@Param("id", ParseIntPipe) id: number) {
-    return this.bookingService.findOneBooking(id);
+  async findOne(@Param("id", ParseIntPipe) id: number) {
+    const booking = await this.bookingService.findOneBooking(id);
+
+    if (!booking) {
+      throw new NotFoundException("Booking not found.");
+    }
+
+    return booking;
   }
 
   @Post()
-  async create(@Body() {serviceId, userId, ...data}: CreateBookingDto) {
-    await this.serviceService.findOneService(serviceId);
-    await this.userService.findOneUser(userId);
-    return this.bookingService.createBooking({serviceId, userId, ...data});
+  async create(@Body() data: CreateBookingDto) {
+    try {
+      return await this.bookingService.createBooking(data);
+    } catch (e) {
+      console.log(e.message);
+      throw new BadRequestException("Failed to create booking.");
+    }
   }
 
   @Patch(":id")
-  update(@Param("id", ParseIntPipe) id: number, @Body() data: UpdateBookingDto) {
-    return this.bookingService.updateBooking(id, data);
+  async update(@Param("id", ParseIntPipe) id: number, @Body() data: UpdateBookingDto) {
+    try {
+      return await this.bookingService.updateBooking(id, data);
+    } catch (e) {
+      console.error(e.message);
+      throw new BadRequestException("Failed to update booking.");
+    }
   }
 
   @Delete(":id")
-  delete(@Param("id", ParseIntPipe) id: number) {
-    return this.bookingService.deleteBooking(id);
+  async delete(@Param("id", ParseIntPipe) id: number) {
+    try {
+      return await this.bookingService.deleteBooking(id);
+    } catch (e) {
+      console.error(e.message);
+      throw new BadRequestException("Failed to delete booking.");
+    }
   }
 }

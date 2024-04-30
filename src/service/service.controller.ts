@@ -1,15 +1,23 @@
-import {Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query} from "@nestjs/common";
-import {LocationService} from "../location/location.service";
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Delete,
+  Get,
+  NotFoundException,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Query
+} from "@nestjs/common";
 import {FindAllEntitiesDto} from "../prisma/prisma.dto";
 import {ServiceService} from "./service.service";
 import {CreateServiceDto, UpdateServiceDto} from "./service.dto";
 
 @Controller("service")
 export class ServiceController {
-  constructor(
-    private serviceService: ServiceService,
-    private locationService: LocationService
-  ) {}
+  constructor(private serviceService: ServiceService) {}
 
   @Get()
   findAll(@Query() {limit, offset}: FindAllEntitiesDto) {
@@ -17,28 +25,43 @@ export class ServiceController {
   }
 
   @Get(":id")
-  findOne(@Param("id", ParseIntPipe) id: number) {
-    return this.serviceService.findOneService(id);
+  async findOne(@Param("id", ParseIntPipe) id: number) {
+    const service = await this.serviceService.findOneService(id);
+
+    if (!service) {
+      throw new NotFoundException("Service not found.");
+    }
+
+    return service;
   }
 
   @Post()
-  async create(@Body() {locationId, ...serviceData}: CreateServiceDto) {
-    await this.locationService.findOneLocation(locationId);
-    return this.serviceService.createService({locationId, ...serviceData});
+  async create(@Body() data: CreateServiceDto) {
+    try {
+      return await this.serviceService.createService(data);
+    } catch (e) {
+      console.error(e.message);
+      throw new BadRequestException("Failed to create service.");
+    }
   }
 
   @Patch(":id")
-  async update(@Param("id", ParseIntPipe) id: number, @Body() {locationId, ...serviceData}: UpdateServiceDto) {
-    if (locationId) {
-      await this.locationService.findOneLocation(locationId);
-      return this.serviceService.updateService(id, {...serviceData, locationId});
+  async update(@Param("id", ParseIntPipe) id: number, @Body() data: UpdateServiceDto) {
+    try {
+      return await this.serviceService.updateService(id, data);
+    } catch (e) {
+      console.error(e.message);
+      throw new BadRequestException("Failed to update service.");
     }
-
-    return this.serviceService.updateService(id, serviceData);
   }
 
   @Delete(":id")
-  delete(@Param("id", ParseIntPipe) id: number) {
-    return this.serviceService.deleteService(id);
+  async delete(@Param("id", ParseIntPipe) id: number) {
+    try {
+      return await this.serviceService.deleteService(id);
+    } catch (e) {
+      console.error(e.message);
+      throw new BadRequestException("Failed to delete service.");
+    }
   }
 }

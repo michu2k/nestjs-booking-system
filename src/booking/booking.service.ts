@@ -1,4 +1,4 @@
-import {BadRequestException, Injectable, NotFoundException} from "@nestjs/common";
+import {BadRequestException, Injectable} from "@nestjs/common";
 import {PrismaService} from "../prisma/prisma.service";
 import {CreateBookingDto, UpdateBookingDto} from "./booking.dto";
 
@@ -14,24 +14,15 @@ export class BookingService {
   }
 
   async findOneBooking(id: number) {
-    return this.prisma.booking
-      .findUniqueOrThrow({
-        where: {id}
-      })
-      .catch(() => {
-        throw new NotFoundException("Booking not found.");
-      });
+    return this.prisma.booking.findUnique({
+      where: {id}
+    });
   }
 
   async createBooking(data: CreateBookingDto) {
-    return this.prisma.booking
-      .create({
-        data
-      })
-      .catch((e) => {
-        console.error(e.message);
-        throw new BadRequestException("Failed to create booking.");
-      });
+    return this.prisma.booking.create({
+      data
+    });
   }
 
   async updateBooking(id: number, data: UpdateBookingDto) {
@@ -47,13 +38,8 @@ export class BookingService {
   }
 
   async deleteBooking(id: number) {
-    return this.prisma.booking
-      .delete({
-        where: {id}
-      })
-      .catch((e) => {
-        console.error(e.message);
-        throw new BadRequestException("Failed to delete booking.");
-      });
+    return this.prisma.booking.delete({
+      where: {id}
+    });
   }
 }
