@@ -11,17 +11,13 @@ import {
   Post,
   Query
 } from "@nestjs/common";
-import {LocationService} from "../location/location.service";
 import {FindAllEntitiesDto} from "../prisma/prisma.dto";
 import {ServiceService} from "./service.service";
 import {CreateServiceDto, UpdateServiceDto} from "./service.dto";
 
 @Controller("service")
 export class ServiceController {
-  constructor(
-    private serviceService: ServiceService,
-    private locationService: LocationService
-  ) {}
+  constructor(private serviceService: ServiceService) {}
 
   @Get()
   findAll(@Query() {limit, offset}: FindAllEntitiesDto) {
@@ -40,15 +36,9 @@ export class ServiceController {
   }
 
   @Post()
-  async create(@Body() {locationId, ...serviceData}: CreateServiceDto) {
-    const location = await this.locationService.findOneLocation(locationId);
-
-    if (!location) {
-      throw new NotFoundException("Location not found.");
-    }
-
+  async create(@Body() data: CreateServiceDto) {
     try {
-      return await this.serviceService.createService({locationId, ...serviceData});
+      return await this.serviceService.createService(data);
     } catch (e) {
       console.error(e.message);
       throw new BadRequestException("Failed to create service.");
@@ -56,17 +46,9 @@ export class ServiceController {
   }
 
   @Patch(":id")
-  async update(@Param("id", ParseIntPipe) id: number, @Body() {locationId, ...serviceData}: UpdateServiceDto) {
-    if (locationId) {
-      const location = await this.locationService.findOneLocation(locationId);
-
-      if (!location) {
-        throw new NotFoundException("Location not found.");
-      }
-    }
-
+  async update(@Param("id", ParseIntPipe) id: number, @Body() data: UpdateServiceDto) {
     try {
-      return await this.serviceService.updateService(id, {locationId, ...serviceData});
+      return await this.serviceService.updateService(id, data);
     } catch (e) {
       console.error(e.message);
       throw new BadRequestException("Failed to update service.");
