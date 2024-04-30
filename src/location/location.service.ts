@@ -1,4 +1,4 @@
-import {BadRequestException, Injectable, NotFoundException} from "@nestjs/common";
+import {Injectable} from "@nestjs/common";
 import {PrismaService} from "../prisma/prisma.service";
 import {CreateLocationDto, UpdateLocationDto} from "./location.dto";
 
@@ -14,38 +14,23 @@ export class LocationService {
   }
 
   async findOneLocation(id: number) {
-    return this.prisma.location
-      .findUniqueOrThrow({
-        where: {id}
-      })
-      .catch(() => {
-        throw new NotFoundException("Location not found.");
-      });
+    return this.prisma.location.findUnique({
+      where: {id}
+    });
   }
 
   async createLocation(data: CreateLocationDto) {
-    return this.prisma.location.create({data}).catch((e) => {
-      console.error(e.message);
-      throw new BadRequestException("Failed to create location.");
-    });
+    return this.prisma.location.create({data});
   }
 
   async updateLocation(id: number, data: UpdateLocationDto) {
-    return this.prisma.location
-      .update({
-        where: {id},
-        data
-      })
-      .catch((e) => {
-        console.error(e.message);
-        throw new BadRequestException("Failed to update location.");
-      });
+    return this.prisma.location.update({
+      where: {id},
+      data
+    });
   }
 
   async deleteLocation(id: number) {
-    return this.prisma.location.delete({where: {id}}).catch((e) => {
-      console.error(e.message);
-      throw new BadRequestException("Failed to delete location.");
-    });
+    return this.prisma.location.delete({where: {id}});
   }
 }
