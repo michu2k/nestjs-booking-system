@@ -1,5 +1,5 @@
 import {plainToInstance} from "class-transformer";
-import {IsString, validateSync} from "class-validator";
+import {IsString, IsUrl, validateSync} from "class-validator";
 
 class EnvironmentVariables {
   @IsString()
@@ -19,6 +19,12 @@ class EnvironmentVariables {
 
   @IsString()
   GOOGLE_CLIENT_SECRET: string;
+
+  @IsUrl({require_tld: false})
+  GOOGLE_CALLBACK_URL: string;
+
+  @IsString()
+  JWT_SECRET: string;
 }
 
 export function validateEnvs(config: Record<string, unknown>) {
