@@ -37,10 +37,9 @@ async function seedUsers(prisma: PrismaClient) {
   const admins = faker.helpers.multiple(() => createUser(UserRole.ADMIN), {count: adminCount});
   const managers = faker.helpers.multiple(() => createUser(UserRole.MANAGER), {count: managerCount});
   const users = faker.helpers.multiple(() => createUser(UserRole.USER), {count: userCount});
+  const createdUsers = [...admins, ...managers, ...users];
 
-  const createdUsers = [...admins, ...managers, ...users].map(async (data) => await prisma.user.create({data}));
-
-  await Promise.all(createdUsers);
+  await Promise.all(createdUsers.map(async (data) => await prisma.user.create({data})));
 }
 
 export {seedUsers};
