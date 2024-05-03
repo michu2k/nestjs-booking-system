@@ -25,6 +25,12 @@ class EnvironmentVariables {
 
   @IsString()
   JWT_SECRET: string;
+
+  @IsString()
+  ACCESS_TOKEN: string;
+
+  @IsString()
+  ACCESS_TOKEN_VALIDITY: string;
 }
 
 export function validateEnvs(config: Record<string, unknown>) {
