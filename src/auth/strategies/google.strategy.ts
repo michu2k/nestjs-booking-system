@@ -15,9 +15,9 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
     protected configService: ConfigService
   ) {
     super({
-      clientID: configService.get<string>("GOOGLE_CLIENT_ID"),
-      clientSecret: configService.get<string>("GOOGLE_CLIENT_SECRET"),
-      callbackURL: configService.get<string>("GOOGLE_CALLBACK_URL"),
+      clientID: configService.get("GOOGLE_CLIENT_ID"),
+      clientSecret: configService.get("GOOGLE_CLIENT_SECRET"),
+      callbackURL: configService.get("GOOGLE_CALLBACK_URL"),
       scope: ["email", "profile"]
     });
   }
@@ -25,7 +25,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
   async validate(accessToken: string, refreshToken: string, profile: Profile): Promise<UserEntity> {
     console.log("validate", {accessToken, refreshToken, profile});
 
-    // TODO: Get picture
     const {emails, displayName, provider, id: providerId} = profile;
 
     const email = emails[0].value;

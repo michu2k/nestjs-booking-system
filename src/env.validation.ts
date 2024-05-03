@@ -31,6 +31,9 @@ class EnvironmentVariables {
 
   @IsString()
   ACCESS_TOKEN_VALIDITY: string;
+
+  @IsUrl({require_tld: false})
+  AUTH_REDIRECT_URL: string;
 }
 
 export function validateEnvs(config: Record<string, unknown>) {
