@@ -5,6 +5,7 @@ import {UserEntity} from "../user/user.dto";
 import {User} from "../decorators/user.decorator";
 import {AuthService} from "./auth.service";
 import {GoogleAuthGuard} from "./guards/google-auth.guard";
+import {JwtAuthGuard} from "./guards/jwt.guard";
 
 @Controller("auth")
 export class AuthController {
@@ -37,6 +38,7 @@ export class AuthController {
   }
 
   @Get("logout")
+  @UseGuards(JwtAuthGuard)
   logout(@Res() res: Response) {
     const accessTokenCookie = this.configService.get("ACCESS_TOKEN");
 
