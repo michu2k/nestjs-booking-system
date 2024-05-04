@@ -1,7 +1,5 @@
 const SEED_RECORDS = {
-  ADMIN: 1,
-  MANAGER: 2,
-  USER: 5,
+  USER: 10,
   LOCATION: 2,
   SERVICE: 3,
   BOOKING: 10
