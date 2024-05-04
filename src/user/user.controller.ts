@@ -18,6 +18,8 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @Get(":id")
+  // TODO: Implement IsMeGuard
+  @UseGuards(JwtAuthGuard)
   async findOne(@Param("id", ParseIntPipe) id: number) {
     const user = await this.userService.findOneUser({id});
 
@@ -29,6 +31,8 @@ export class UserController {
   }
 
   @Delete(":id")
+  // TODO: Implement IsMeGuard
+  @UseGuards(JwtAuthGuard)
   async delete(@Param("id", ParseIntPipe) id: number) {
     try {
       return await this.userService.deleteUserAccount(id);
