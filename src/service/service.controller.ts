@@ -9,11 +9,16 @@ import {
   ParseIntPipe,
   Patch,
   Post,
-  Query
+  Query,
+  UseGuards
 } from "@nestjs/common";
 import {FindAllEntitiesDto} from "../prisma/prisma.dto";
 import {ServiceService} from "./service.service";
 import {CreateServiceDto, UpdateServiceDto} from "./service.dto";
+import {JwtAuthGuard} from "../auth/guards/jwt.guard";
+import {RolesGuard} from "../guards/roles.guard";
+import {Roles} from "src/decorators/roles.deorator";
+import {UserRole} from "@prisma/client";
 
 @Controller("service")
 export class ServiceController {
@@ -36,6 +41,8 @@ export class ServiceController {
   }
 
   @Post()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
   async create(@Body() data: CreateServiceDto) {
     try {
       return await this.serviceService.createService(data);
@@ -46,6 +53,8 @@ export class ServiceController {
   }
 
   @Patch(":id")
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.MANAGER)
   async update(@Param("id", ParseIntPipe) id: number, @Body() data: UpdateServiceDto) {
     try {
       return await this.serviceService.updateService(id, data);
@@ -56,6 +65,8 @@ export class ServiceController {
   }
 
   @Delete(":id")
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
   async delete(@Param("id", ParseIntPipe) id: number) {
     try {
       return await this.serviceService.deleteService(id);
