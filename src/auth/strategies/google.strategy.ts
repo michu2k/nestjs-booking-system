@@ -22,9 +22,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
     });
   }
 
-  async validate(accessToken: string, refreshToken: string, profile: Profile): Promise<UserEntity> {
-    console.log("validate", {accessToken, refreshToken, profile});
-
+  async validate(_accessToken: string, _refreshToken: string, profile: Profile): Promise<UserEntity> {
     const {emails, displayName, provider, id: providerId} = profile;
 
     const email = emails[0].value;
@@ -43,6 +41,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
       });
     }
 
+    // If the user exists, but logs in with a different provider account, create an account
     const providerAccountExists = await this.authService.checkIfProviderAccountExists(user.id, profile);
 
     if (!providerAccountExists) {

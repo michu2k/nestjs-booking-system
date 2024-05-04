@@ -24,7 +24,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, "jwt") {
     const cookie = req.cookies[cookieName];
 
     if (!cookie) {
-      throw new UnauthorizedException("No access token found in cookie");
+      throw new UnauthorizedException();
     }
 
     return cookie;
