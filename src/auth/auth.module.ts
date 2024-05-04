@@ -6,6 +6,7 @@ import {UserModule} from "../user/user.module";
 import {AuthService} from "./auth.service";
 import {AuthController} from "./auth.controller";
 import {GoogleStrategy} from "./strategies/google.strategy";
+import {JwtStrategy} from "./strategies/jwt.strategy";
 
 @Module({
   imports: [
@@ -14,15 +15,15 @@ import {GoogleStrategy} from "./strategies/google.strategy";
     ConfigModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
+      inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         global: true,
         secret: configService.get("JWT_SECRET"),
         signOptions: {expiresIn: configService.get("ACCESS_TOKEN_VALIDITY")}
-      }),
-      inject: [ConfigService]
+      })
     })
   ],
-  providers: [AuthService, GoogleStrategy],
+  providers: [AuthService, GoogleStrategy, JwtStrategy],
   controllers: [AuthController],
   exports: [AuthService]
 })
