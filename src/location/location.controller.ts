@@ -26,7 +26,7 @@ export class LocationController {
 
   @Get()
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.MANAGER)
   findAll(@Query() {limit, offset}: FindAllEntitiesDto) {
     return this.locationService.findAllLocations(limit, offset);
   }
@@ -56,7 +56,7 @@ export class LocationController {
 
   @Patch(":id")
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.MANAGER)
+  @Roles(UserRole.ADMIN)
   async update(@Param("id", ParseIntPipe) id: number, @Body() data: UpdateLocationDto) {
     try {
       return await this.locationService.updateLocation(id, data);
