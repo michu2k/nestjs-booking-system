@@ -24,8 +24,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, "jwt") {
   }
 
   private getAccessTokenCookie(req: Request) {
-    const cookieName = this.configService.get("ACCESS_TOKEN");
-    const cookie = req.cookies[cookieName];
+    const accessToken = this.configService.get("ACCESS_TOKEN");
+    const cookie = req.cookies[accessToken];
 
     if (!cookie) {
       throw new UnauthorizedException();

@@ -11,7 +11,7 @@ export type JwtPayload = {
 };
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy, "jwt-refresh") {
+export class JwtRefreshStrategy extends PassportStrategy(Strategy, "jwt-refresh") {
   constructor(
     protected configService: ConfigService,
     private userService: UserService
@@ -24,8 +24,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, "jwt-refresh") {
   }
 
   private getRefreshTokenCookie(req: Request) {
-    const cookieName = this.configService.get("REFRESH_TOKEN");
-    const cookie = req.cookies[cookieName];
+    const refreshToken = this.configService.get("REFRESH_TOKEN");
+    const cookie = req.cookies[refreshToken];
 
     if (!cookie) {
       throw new UnauthorizedException();
