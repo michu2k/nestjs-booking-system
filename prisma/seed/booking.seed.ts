@@ -6,7 +6,6 @@ function createBooking(): Prisma.BookingCreateManyInput {
   return {
     from: faker.date.recent(),
     to: faker.date.soon(),
-    createdAt: faker.date.recent(),
     serviceId: faker.number.int({min: 1, max: SEED_RECORDS.SERVICE}),
     userId: faker.number.int({min: 1, max: SEED_RECORDS.USER}),
     status: faker.helpers.enumValue(BookingStatus)
