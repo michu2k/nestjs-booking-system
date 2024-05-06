@@ -41,7 +41,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
       });
     }
 
-    // If the user exists, but logs in with a different provider account, create an account
+    // If the user exists, but logs in with a different provider account, create a new account
     const providerAccountExists = await this.authService.checkIfProviderAccountExists(user.id, profile);
 
     if (!providerAccountExists) {

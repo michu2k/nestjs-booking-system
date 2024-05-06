@@ -32,6 +32,12 @@ class EnvironmentVariables {
   @IsString()
   ACCESS_TOKEN_VALIDITY: string;
 
+  @IsString()
+  REFRESH_TOKEN: string;
+
+  @IsString()
+  REFRESH_TOKEN_VALIDITY: string;
+
   @IsUrl({require_tld: false})
   AUTH_REDIRECT_URL: string;
 }
