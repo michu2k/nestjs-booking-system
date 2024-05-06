@@ -7,7 +7,6 @@ function createService(): Prisma.ServiceCreateManyInput {
     name: faker.commerce.productName(),
     description: faker.commerce.productDescription(),
     price: faker.number.int({min: 19, max: 79}),
-    createdAt: faker.date.recent(),
     locationId: faker.number.int({min: 1, max: SEED_RECORDS.LOCATION})
   };
 }
