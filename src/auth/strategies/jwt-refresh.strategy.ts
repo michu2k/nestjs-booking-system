@@ -11,20 +11,20 @@ export type JwtPayload = {
 };
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy, "jwt") {
+export class JwtStrategy extends PassportStrategy(Strategy, "jwt-refresh") {
   constructor(
     protected configService: ConfigService,
     private userService: UserService
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromExtractors([(req: Request) => this.getAccessTokenCookie(req)]),
+      jwtFromRequest: ExtractJwt.fromExtractors([(req: Request) => this.getRefreshTokenCookie(req)]),
       secretOrKey: configService.get("JWT_SECRET"),
       ignoreExpiration: false
     });
   }
 
-  private getAccessTokenCookie(req: Request) {
-    const cookieName = this.configService.get("ACCESS_TOKEN");
+  private getRefreshTokenCookie(req: Request) {
+    const cookieName = this.configService.get("REFRESH_TOKEN");
     const cookie = req.cookies[cookieName];
 
     if (!cookie) {
