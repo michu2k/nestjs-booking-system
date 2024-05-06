@@ -32,6 +32,7 @@ model Booking {
   from      DateTime
   to        DateTime
   createdAt DateTime      @default(now())
+  updatedAt DateTime      @default(now())
   userId    Int
   serviceId Int
   status    BookingStatus
@@ -46,6 +47,7 @@ model Service {
   price       Int
   locationId  Int?
   createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now())
   Booking     Booking[]
   location    Location? @relation(fields: [locationId], references: [id])
 }
@@ -55,8 +57,8 @@ model Location {
   city    String
   address String
   country String
-  lat     Float
-  lng     Float
+  lat     Float?
+  lng     Float?
   Service Service[]
 }
 
