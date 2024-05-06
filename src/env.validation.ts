@@ -40,6 +40,9 @@ class EnvironmentVariables {
 
   @IsUrl({require_tld: false})
   AUTH_REDIRECT_URL: string;
+
+  @IsString()
+  CORS_ORIGINS: string;
 }
 
 export function validateEnvs(config: Record<string, unknown>) {
