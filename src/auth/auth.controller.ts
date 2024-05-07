@@ -40,9 +40,12 @@ export class AuthController {
   @Get("logout")
   @UseGuards(JwtAuthGuard)
   logout(@Res() res: Response) {
-    const accessTokenCookie = this.configService.get("ACCESS_TOKEN");
+    const accessToken = this.configService.get("ACCESS_TOKEN");
+    const refreshToken = this.configService.get("REFRESH_TOKEN");
 
-    res.clearCookie(accessTokenCookie);
+    res.clearCookie(accessToken);
+    res.clearCookie(refreshToken);
+
     return res.status(HttpStatus.OK).send();
   }
 }
