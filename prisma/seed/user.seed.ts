@@ -3,19 +3,15 @@ import {faker} from "@faker-js/faker";
 import {SEED_RECORDS} from "../seed.utils";
 
 function createUser(role: UserRole): Prisma.UserCreateInput {
-  // TODO: Password should be hashed
-  const password = faker.helpers.arrayElement([null, "test"]);
-
   return {
     name: faker.person.fullName(),
     email: faker.internet.email(),
     phone: faker.phone.number(),
-    password,
     role,
     accounts: {
       create: {
-        provider: !!password ? "password" : "google",
-        providerAccountId: !!password ? "password" : faker.string.uuid()
+        provider: "google",
+        providerAccountId: faker.string.uuid()
       }
     }
   };
