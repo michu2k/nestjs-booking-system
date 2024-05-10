@@ -17,6 +17,10 @@ export class UserEntity implements User {
 
   @IsEnum(UserRole)
   role: UserRole;
+
+  @IsString()
+  @IsOptional()
+  refreshToken: string | null;
 }
 
 export class CreateUserDto extends PickType(UserEntity, ["name", "email", "role"]) {
@@ -40,9 +44,6 @@ export class AccountEntity implements Account {
 
   @IsInt()
   userId: number;
-
-  @IsString()
-  refreshToken: string;
 }
 
 export class CreateAccountDto extends PickType(AccountEntity, ["provider", "providerAccountId", "userId"]) {}
