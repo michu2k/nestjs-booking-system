@@ -43,4 +43,16 @@ export class UserService {
       where: {id}
     });
   }
+
+  /**
+   * Update the user's refresh token
+   */
+  async updateUserRefreshToken(userId: number, refreshToken: string): Promise<UserEntity> {
+    return this.prisma.user.update({
+      where: {id: userId},
+      data: {
+        refreshToken
+      }
+    });
+  }
 }
