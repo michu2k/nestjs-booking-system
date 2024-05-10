@@ -13,20 +13,20 @@ model Account {
   userId            Int
   provider          String
   providerAccountId String
-  refreshToken      String? @db.Text
   user              User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
 
 model User {
-  id       Int       @id @default(autoincrement())
-  name     String
-  email    String    @unique
-  phone    String?
-  role     UserRole
-  accounts Account[]
-  Booking  Booking[]
+  id           Int       @id @default(autoincrement())
+  name         String
+  email        String    @unique
+  phone        String?
+  role         UserRole
+  refreshToken String?
+  accounts     Account[]
+  Booking      Booking[]
 }
 
 model Booking {
