@@ -17,7 +17,7 @@ function createUser(role: UserRole): Prisma.UserCreateInput {
   };
 }
 
-async function seedUsers(prisma: PrismaClient) {
+export async function seedUsers(prisma: PrismaClient) {
   console.log("Seeding users...");
 
   await prisma.account.deleteMany();
@@ -37,5 +37,3 @@ async function seedUsers(prisma: PrismaClient) {
 
   await Promise.all(createdUsers.map(async (data) => await prisma.user.create({data})));
 }
-
-export {seedUsers};

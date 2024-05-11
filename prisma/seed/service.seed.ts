@@ -11,7 +11,7 @@ function createService(): Prisma.ServiceCreateManyInput {
   };
 }
 
-async function seedServices(prisma: PrismaClient) {
+export async function seedServices(prisma: PrismaClient) {
   console.log("Seeding services...");
 
   await prisma.service.deleteMany();
@@ -21,5 +21,3 @@ async function seedServices(prisma: PrismaClient) {
 
   await prisma.service.createMany({data: records});
 }
-
-export {seedServices};

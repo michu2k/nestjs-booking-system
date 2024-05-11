@@ -12,7 +12,7 @@ function createBooking(): Prisma.BookingCreateManyInput {
   };
 }
 
-async function seedBookings(prisma: PrismaClient) {
+export async function seedBookings(prisma: PrismaClient) {
   console.log("Seeding bookings...");
 
   await prisma.booking.deleteMany();
@@ -22,5 +22,3 @@ async function seedBookings(prisma: PrismaClient) {
 
   await prisma.booking.createMany({data: records});
 }
-
-export {seedBookings};
