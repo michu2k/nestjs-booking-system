@@ -6,6 +6,7 @@ import {User} from "../decorators/user.decorator";
 import {AuthService} from "./auth.service";
 import {GoogleAuthGuard} from "./guards/google-auth.guard";
 import {JwtAuthGuard} from "./guards/jwt.guard";
+import {JwtRefreshAuthGuard} from "./guards/jwt-refresh.guard";
 
 @Controller("auth")
 export class AuthController {
@@ -35,6 +36,19 @@ export class AuthController {
     });
 
     return res.status(HttpStatus.OK).redirect(redirectUrl);
+  }
+
+  @Get("refresh")
+  @UseGuards(JwtRefreshAuthGuard)
+  async refresh(@Req() req: Request, @User() user: UserEntity) {
+    const refreshToken = this.configService.get("REFRESH_TOKEN");
+    const refreshTokenCookie = req.cookies[refreshToken];
+
+    if (!refreshToken) {
+      throw new UnauthorizedException();
+    }
+
+    return this.authService.refreshAuthTokens(user, refreshTokenCookie);
   }
 
   @Get("logout")
