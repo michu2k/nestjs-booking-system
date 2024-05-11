@@ -1,5 +1,5 @@
-import {Controller, Get, HttpStatus, Res, UseGuards} from "@nestjs/common";
-import {Response} from "express";
+import {Controller, Get, HttpStatus, Req, Res, UseGuards} from "@nestjs/common";
+import {Request, Response} from "express";
 import {ConfigService} from "@nestjs/config";
 import {UserEntity} from "../user/user.dto";
 import {User} from "../decorators/user.decorator";
@@ -7,6 +7,7 @@ import {AuthService} from "./auth.service";
 import {GoogleAuthGuard} from "./guards/google-auth.guard";
 import {JwtAuthGuard} from "./guards/jwt.guard";
 import {JwtRefreshAuthGuard} from "./guards/jwt-refresh.guard";
+import {createAuthCookies} from "./auth.utils";
 
 @Controller("auth")
 export class AuthController {
@@ -22,33 +23,23 @@ export class AuthController {
   @Get("google/callback")
   @UseGuards(GoogleAuthGuard)
   async googleAuthRedirect(@Res() res: Response, @User() user: UserEntity) {
-    const accessToken = await this.authService.generateAccessToken(user);
+    const authTokens = await this.authService.generateAuthTokens(user);
+    createAuthCookies({res, ...authTokens});
 
-    const accessTokenCookie = this.configService.get("ACCESS_TOKEN");
-    const cookieMaxAge = this.configService.get("ACCESS_TOKEN_VALIDITY");
     const redirectUrl = this.configService.get("AUTH_REDIRECT_URL");
-
-    res.cookie(accessTokenCookie, accessToken, {
-      maxAge: cookieMaxAge,
-      httpOnly: true,
-      secure: true,
-      sameSite: "lax"
-    });
-
     return res.status(HttpStatus.OK).redirect(redirectUrl);
   }
 
   @Get("refresh")
   @UseGuards(JwtRefreshAuthGuard)
-  async refresh(@Req() req: Request, @User() user: UserEntity) {
+  async refresh(@Res() res: Response, @Req() req: Request, @User() user: UserEntity) {
     const refreshToken = this.configService.get("REFRESH_TOKEN");
-    const refreshTokenCookie = req.cookies[refreshToken];
+    const cookie = req.cookies[refreshToken];
 
-    if (!refreshToken) {
-      throw new UnauthorizedException();
-    }
+    const authTokens = await this.authService.refreshAuthTokens(user, cookie);
+    createAuthCookies({res, ...authTokens});
 
-    return this.authService.refreshAuthTokens(user, refreshTokenCookie);
+    return res.status(HttpStatus.OK).send();
   }
 
   @Get("logout")
