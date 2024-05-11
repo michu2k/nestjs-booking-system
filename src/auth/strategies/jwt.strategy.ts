@@ -24,7 +24,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, "jwt") {
     const cookie = req.cookies[accessToken];
 
     if (!cookie) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException("Invalid access token");
     }
 
     return cookie;
@@ -34,7 +34,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, "jwt") {
     const user = await this.userService.findOneUser({id, email});
 
     if (!user) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException("User not found");
     }
 
     return user;

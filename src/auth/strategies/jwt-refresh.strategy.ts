@@ -24,7 +24,7 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, "jwt-refresh"
     const cookie = req.cookies[refreshToken];
 
     if (!cookie) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException("Invalid refresh token");
     }
 
     return cookie;
@@ -34,7 +34,7 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, "jwt-refresh"
     const user = await this.userService.findOneUser({id, email});
 
     if (!user) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException("User not found");
     }
 
     return user;
