@@ -29,13 +29,8 @@ export class AuthService {
   }
 
   /**
-   * Generate JWT token for the user
+   * Generate JWT tokens for the user
    */
-  async generateAccessToken({id, email}: UserEntity) {
-    const payload: JwtPayload = {sub: id, email};
-    return await this.jwtService.signAsync(payload);
-  }
-
   async generateAuthTokens({id, email}: UserEntity) {
     const payload: JwtPayload = {sub: id, email};
 
