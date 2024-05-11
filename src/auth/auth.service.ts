@@ -1,10 +1,12 @@
-import {Injectable} from "@nestjs/common";
+import {BadRequestException, Injectable, UnauthorizedException} from "@nestjs/common";
 import {Profile} from "passport-google-oauth20";
 import {ConfigService} from "@nestjs/config";
 import {JwtService} from "@nestjs/jwt";
+import * as bcrypt from "bcrypt";
 import {PrismaService} from "../prisma/prisma.service";
 import {UserEntity} from "../user/user.dto";
 import {UserService} from "../user/user.service";
+import {JwtPayload} from "./auth.utils";
 
 @Injectable()
 export class AuthService {
@@ -44,11 +46,31 @@ export class AuthService {
 
     const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
 
-    await this.userService.updateUserRefreshToken(id, hashedRefreshToken);
+    try {
+      await this.userService.updateUserRefreshToken(id, hashedRefreshToken);
 
-    return {
-      accessToken,
-      refreshToken
-    };
+      return {
+        accessToken,
+        refreshToken
+      };
+    } catch (e) {
+      console.error(e.message);
+      throw new BadRequestException("Failed to update user's token");
+    }
+  }
+
+  /**
+   * Refresh authorization tokens by comparing the cookie token and the user's token
+   */
+  async refreshAuthTokens(user: UserEntity, refreshToken: string) {
+    const isTokenMatched = await bcrypt.compare(refreshToken, user.refreshToken);
+
+    if (!isTokenMatched) {
+      throw new UnauthorizedException("Invalid refresh token");
+    }
+
+    const authTokens = await this.generateAuthTokens(user);
+
+    return authTokens;
   }
 }
