@@ -1,15 +1,20 @@
-import {Injectable} from "@nestjs/common";
+import {BadRequestException, Injectable, UnauthorizedException} from "@nestjs/common";
 import {Profile} from "passport-google-oauth20";
+import {ConfigService} from "@nestjs/config";
 import {JwtService} from "@nestjs/jwt";
+import * as bcrypt from "bcrypt";
 import {PrismaService} from "../prisma/prisma.service";
 import {UserEntity} from "../user/user.dto";
-import {JwtPayload} from "./strategies/jwt.strategy";
+import {UserService} from "../user/user.service";
+import {JwtPayload} from "./auth.utils";
 
 @Injectable()
 export class AuthService {
   constructor(
     private prisma: PrismaService,
-    private jwtService: JwtService
+    private jwtService: JwtService,
+    private userService: UserService,
+    protected configService: ConfigService
   ) {}
 
   /**
@@ -26,10 +31,46 @@ export class AuthService {
   }
 
   /**
-   * Generate JWT token for the user
+   * Generate JWT tokens for the user
    */
-  async generateAccessToken({id, email}: UserEntity) {
+  async generateAuthTokens({id, email}: UserEntity) {
     const payload: JwtPayload = {sub: id, email};
-    return await this.jwtService.signAsync(payload);
+
+    const accessToken = await this.jwtService.signAsync(payload, {
+      expiresIn: this.configService.get("ACCESS_TOKEN_VALIDITY")
+    });
+
+    const refreshToken = await this.jwtService.signAsync(payload, {
+      expiresIn: this.configService.get("REFRESH_TOKEN_VALIDITY")
+    });
+
+    const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
+
+    try {
+      await this.userService.updateUserRefreshToken(id, hashedRefreshToken);
+
+      return {
+        accessToken,
+        refreshToken
+      };
+    } catch (e) {
+      console.error(e.message);
+      throw new BadRequestException("Failed to update user's token");
+    }
+  }
+
+  /**
+   * Refresh authorization tokens by comparing the cookie token and the user's token
+   */
+  async refreshAuthTokens(user: UserEntity, refreshToken: string) {
+    const isTokenMatched = await bcrypt.compare(refreshToken, user.refreshToken);
+
+    if (!isTokenMatched) {
+      throw new UnauthorizedException("Invalid refresh token");
+    }
+
+    const authTokens = await this.generateAuthTokens(user);
+
+    return authTokens;
   }
 }

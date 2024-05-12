@@ -7,24 +7,24 @@ import {UserService} from "../../user/user.service";
 import {JwtPayload} from "../auth.utils";
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy, "jwt") {
+export class JwtRefreshStrategy extends PassportStrategy(Strategy, "jwt-refresh") {
   constructor(
     protected configService: ConfigService,
     private userService: UserService
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromExtractors([(req: Request) => this.getAccessTokenCookie(req)]),
+      jwtFromRequest: ExtractJwt.fromExtractors([(req: Request) => this.getRefreshTokenCookie(req)]),
       secretOrKey: configService.get("JWT_SECRET"),
       ignoreExpiration: false
     });
   }
 
-  private getAccessTokenCookie(req: Request) {
-    const accessToken = this.configService.get("ACCESS_TOKEN");
-    const cookie = req.cookies[accessToken];
+  private getRefreshTokenCookie(req: Request) {
+    const refreshToken = this.configService.get("REFRESH_TOKEN");
+    const cookie = req.cookies[refreshToken];
 
     if (!cookie) {
-      throw new UnauthorizedException("Invalid access token");
+      throw new UnauthorizedException("Invalid refresh token");
     }
 
     return cookie;

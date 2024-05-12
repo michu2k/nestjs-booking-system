@@ -9,10 +9,7 @@ export class UserService {
 
   async findOneUser(where: Prisma.UserWhereUniqueInput): Promise<UserEntity> {
     return this.prisma.user.findUnique({
-      where,
-      omit: {
-        password: true
-      }
+      where
     });
   }
 
@@ -23,9 +20,6 @@ export class UserService {
         accounts: {
           create: account
         }
-      },
-      omit: {
-        password: true
       }
     });
   }
@@ -46,9 +40,18 @@ export class UserService {
 
   async deleteUserAccount(id: number): Promise<UserEntity> {
     return this.prisma.user.delete({
-      where: {id},
-      omit: {
-        password: true
+      where: {id}
+    });
+  }
+
+  /**
+   * Update the user's refresh token
+   */
+  async updateUserRefreshToken(userId: number, refreshToken: string): Promise<UserEntity> {
+    return this.prisma.user.update({
+      where: {id: userId},
+      data: {
+        refreshToken
       }
     });
   }

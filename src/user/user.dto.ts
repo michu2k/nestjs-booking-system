@@ -2,7 +2,7 @@ import {PickType} from "@nestjs/mapped-types";
 import {Account, User, UserRole} from "@prisma/client";
 import {IsEnum, IsPhoneNumber, IsString, IsArray, IsInt, IsOptional} from "class-validator";
 
-export class UserEntity implements Omit<User, "password"> {
+export class UserEntity implements User {
   @IsInt()
   id: number;
 
@@ -17,17 +17,16 @@ export class UserEntity implements Omit<User, "password"> {
 
   @IsEnum(UserRole)
   role: UserRole;
+
+  @IsString()
+  @IsOptional()
+  refreshToken: string | null;
 }
 
 export class CreateUserDto extends PickType(UserEntity, ["name", "email", "role"]) {
   @IsOptional()
   @IsPhoneNumber()
   phone?: string;
-
-  // Currently not supported
-  /*   @IsOptional()
-  @IsString()
-  password?: string; */
 
   @IsArray()
   account: Pick<AccountEntity, "provider" | "providerAccountId">;

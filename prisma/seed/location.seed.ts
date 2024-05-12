@@ -12,7 +12,7 @@ function createLocation(): Prisma.LocationCreateManyInput {
   };
 }
 
-async function seedLocations(prisma: PrismaClient) {
+export async function seedLocations(prisma: PrismaClient) {
   console.log("Seeding locations...");
 
   await prisma.location.deleteMany();
@@ -22,5 +22,3 @@ async function seedLocations(prisma: PrismaClient) {
 
   await prisma.location.createMany({data: records});
 }
-
-export {seedLocations};
