@@ -1,0 +1,60 @@
+name: Check Nest.js project
+
+on: pull_request
+
+jobs:
+  check:
+    name: Check project
+    runs-on: ubuntu-latest
+
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+
+      GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+      GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+      GOOGLE_CALLBACK_URL: ${{ secrets.GOOGLE_CALLBACK_URL }}
+
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      ACCESS_TOKEN_VALIDITY: ${{ secrets.ACCESS_TOKEN_VALIDITY }}
+      REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
+      REFRESH_TOKEN_VALIDITY: ${{ secrets.REFRESH_TOKEN_VALIDITY }}
+
+      AUTH_REDIRECT_URL: ${{ secrets.AUTH_REDIRECT_URL }}
+      CORS_ORIGINS: ${{ secrets.CORS_ORIGINS }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Use pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ github.workspace }}/.next/cache
+          # Generate a new cache whenever packages or source files change.
+          key: ${{ runner.os }}-next-js-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
+          # If source files changed but packages didn't, rebuild from a prior cache.
+          restore-keys: |
+            ${{ runner.os }}-next-js-${{ hashFiles('**/pnpm-lock.yaml') }}-
+            ${{ runner.os }}-next-js-
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Check ESLint errors
+        run: pnpm run lint:check
+
+      - name: Check Prettier errors
+        run: pnpm run format:check
+
+      - name: Run unit tests
+        run: pnpm test

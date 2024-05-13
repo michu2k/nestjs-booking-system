@@ -17,7 +17,7 @@ import {ServiceService} from "./service.service";
 import {CreateServiceDto, UpdateServiceDto} from "./service.dto";
 import {JwtAuthGuard} from "../auth/guards/jwt.guard";
 import {RolesGuard} from "../guards/roles.guard";
-import {Roles} from "src/decorators/roles.deorator";
+import {Roles} from "../decorators/roles.deorator";
 import {UserRole} from "@prisma/client";
 
 @Controller("service")
