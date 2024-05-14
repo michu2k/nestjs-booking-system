@@ -27,7 +27,7 @@ export class LocationController {
   @Get()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.MANAGER)
-  findAll(@Query() {limit, offset}: FindAllEntitiesDto) {
+  findAll(@Query() {limit, offset}: FindAllEntitiesDto = {}) {
     return this.locationService.findAllLocations(limit, offset);
   }
 

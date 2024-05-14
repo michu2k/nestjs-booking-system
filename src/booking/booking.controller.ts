@@ -23,7 +23,7 @@ export class BookingController {
   constructor(private bookingService: BookingService) {}
 
   @Get()
-  findAll(@Query() {limit, offset}: FindAllEntitiesDto) {
+  findAll(@Query() {limit, offset}: FindAllEntitiesDto = {}) {
     return this.bookingService.findAllBookings(limit, offset);
   }
 
