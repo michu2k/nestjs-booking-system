@@ -115,7 +115,7 @@ describe("BookingController", () => {
       expect(bookingService.updateBooking).toHaveBeenCalledWith(itemId, updateBookingDto);
     });
 
-    it("should update a booking", async () => {
+    it("should update a booking", () => {
       expect(booking).toEqual({...mockBooking(), ...updateBookingDto});
     });
   });
@@ -132,7 +132,7 @@ describe("BookingController", () => {
       expect(bookingService.deleteBooking).toHaveBeenCalledWith(itemId);
     });
 
-    it("should delete a booking", async () => {
+    it("should delete a booking", () => {
       expect(booking).toEqual(mockBooking());
     });
   });
