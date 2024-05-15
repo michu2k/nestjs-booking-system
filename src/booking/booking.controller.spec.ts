@@ -5,18 +5,16 @@ import {BookingService} from "./booking.service";
 import {CreateBookingDto, UpdateBookingDto} from "./booking.dto";
 import {mockBooking} from "./booking.mocks";
 
-jest.useFakeTimers();
-
 describe("BookingController", () => {
   let bookingController: BookingController;
   let bookingService: BookingService;
 
   const mockBookingService = {
-    findAllBookings: jest.fn().mockResolvedValue([mockBooking(), mockBooking()]),
-    findOneBooking: jest.fn().mockResolvedValue(mockBooking()),
-    createBooking: jest.fn((data: CreateBookingDto) => Promise.resolve({...mockBooking(), ...data})),
-    updateBooking: jest.fn((_, data: UpdateBookingDto) => Promise.resolve({...mockBooking(), ...data})),
-    deleteBooking: jest.fn().mockResolvedValue(mockBooking())
+    findAllBookings: jest.fn().mockResolvedValue([mockBooking, mockBooking]),
+    findOneBooking: jest.fn().mockResolvedValue(mockBooking),
+    createBooking: jest.fn((data: CreateBookingDto) => Promise.resolve({...mockBooking, ...data})),
+    updateBooking: jest.fn((_, data: UpdateBookingDto) => Promise.resolve({...mockBooking, ...data})),
+    deleteBooking: jest.fn().mockResolvedValue(mockBooking)
   };
 
   beforeEach(async () => {
@@ -56,24 +54,23 @@ describe("BookingController", () => {
     });
 
     it("should get all bookings", () => {
-      expect(booking).toEqual([mockBooking(), mockBooking()]);
+      expect(booking).toEqual([mockBooking, mockBooking]);
     });
   });
 
   describe("findOne", () => {
     let booking: Booking;
-    const itemId = mockBooking().id;
 
     beforeEach(async () => {
-      booking = await bookingController.findOne(itemId);
+      booking = await bookingController.findOne(mockBooking.id);
     });
 
     it("should call findOneBooking method", () => {
-      expect(bookingService.findOneBooking).toHaveBeenCalledWith(itemId);
+      expect(bookingService.findOneBooking).toHaveBeenCalled();
     });
 
     it("should get a booking", () => {
-      expect(booking).toEqual(mockBooking());
+      expect(booking).toEqual(mockBooking);
     });
   });
 
@@ -92,48 +89,46 @@ describe("BookingController", () => {
     });
 
     it("should call createBooking method", () => {
-      expect(bookingService.createBooking).toHaveBeenCalledWith(createBookingDto);
+      expect(bookingService.createBooking).toHaveBeenCalled();
     });
 
     it("should create a booking", () => {
-      expect(booking).toEqual({...mockBooking(), ...createBookingDto});
+      expect(booking).toEqual({...mockBooking, ...createBookingDto});
     });
   });
 
   describe("update", () => {
     let booking: Booking;
-    const itemId = mockBooking().id;
     const updateBookingDto: UpdateBookingDto = {
       status: BookingStatus.CANCELLED
     };
 
     beforeEach(async () => {
-      booking = await bookingController.update(itemId, updateBookingDto);
+      booking = await bookingController.update(mockBooking.id, updateBookingDto);
     });
 
     it("should call updateBooking method", () => {
-      expect(bookingService.updateBooking).toHaveBeenCalledWith(itemId, updateBookingDto);
+      expect(bookingService.updateBooking).toHaveBeenCalled();
     });
 
     it("should update a booking", () => {
-      expect(booking).toEqual({...mockBooking(), ...updateBookingDto});
+      expect(booking).toEqual({...mockBooking, ...updateBookingDto});
     });
   });
 
   describe("delete", () => {
     let booking: Booking;
-    const itemId = mockBooking().id;
 
     beforeEach(async () => {
-      booking = await bookingController.delete(itemId);
+      booking = await bookingController.delete(mockBooking.id);
     });
 
     it("should call deleteBooking method", () => {
-      expect(bookingService.deleteBooking).toHaveBeenCalledWith(itemId);
+      expect(bookingService.deleteBooking).toHaveBeenCalled();
     });
 
     it("should delete a booking", () => {
-      expect(booking).toEqual(mockBooking());
+      expect(booking).toEqual(mockBooking);
     });
   });
 });

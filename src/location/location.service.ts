@@ -7,7 +7,7 @@ export class LocationService {
   constructor(private prisma: PrismaService) {}
 
   async findAllLocations(limit?: number, offset?: number) {
-    return this.prisma.service.findMany({
+    return this.prisma.location.findMany({
       take: limit,
       skip: offset
     });
