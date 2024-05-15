@@ -60,7 +60,6 @@ describe("BookingService", () => {
 
   describe("findOneBooking", () => {
     let findOneBookingSpy: jest.SpyInstance;
-    const itemId = mockBooking.id;
 
     beforeEach(() => {
       findOneBookingSpy = jest.spyOn(bookingService, "findOneBooking");
@@ -69,9 +68,9 @@ describe("BookingService", () => {
     it("should get a booking", async () => {
       findOneBookingSpy.mockResolvedValue(mockBooking);
 
-      const booking = await bookingService.findOneBooking(itemId);
+      const booking = await bookingService.findOneBooking(mockBooking.id);
 
-      expect(findOneBookingSpy).toHaveBeenCalledWith(itemId);
+      expect(findOneBookingSpy).toHaveBeenCalledWith(mockBooking.id);
       expect(booking).toEqual(mockBooking);
     });
   });
@@ -104,7 +103,6 @@ describe("BookingService", () => {
 
   describe("updateBooking", () => {
     let updateBookingSpy: jest.SpyInstance;
-    const itemId = mockBooking.id;
 
     beforeEach(() => {
       updateBookingSpy = jest.spyOn(bookingService, "updateBooking");
@@ -118,16 +116,15 @@ describe("BookingService", () => {
 
       updateBookingSpy.mockResolvedValue(createBookingResult);
 
-      const booking = await bookingService.updateBooking(itemId, updateBookingDto);
+      const booking = await bookingService.updateBooking(mockBooking.id, updateBookingDto);
 
-      expect(updateBookingSpy).toHaveBeenCalledWith(itemId, updateBookingDto);
+      expect(updateBookingSpy).toHaveBeenCalledWith(mockBooking.id, updateBookingDto);
       expect(booking).toEqual(createBookingResult);
     });
   });
 
   describe("deleteBooking", () => {
     let deleteBookingSpy: jest.SpyInstance;
-    const itemId = mockBooking.id;
 
     beforeEach(() => {
       deleteBookingSpy = jest.spyOn(bookingService, "deleteBooking");
@@ -136,9 +133,9 @@ describe("BookingService", () => {
     it("should delete a booking", async () => {
       deleteBookingSpy.mockResolvedValue(mockBooking);
 
-      const booking = await bookingService.deleteBooking(itemId);
+      const booking = await bookingService.deleteBooking(mockBooking.id);
 
-      expect(deleteBookingSpy).toHaveBeenCalledWith(itemId);
+      expect(deleteBookingSpy).toHaveBeenCalledWith(mockBooking.id);
       expect(booking).toEqual(mockBooking);
     });
   });
