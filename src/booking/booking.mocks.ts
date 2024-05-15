@@ -1,6 +1,6 @@
 import {Booking, BookingStatus} from "@prisma/client";
 
-export const mockBooking = (): Booking => ({
+export const mockBooking: Booking = {
   id: 1,
   createdAt: new Date(),
   updatedAt: new Date(),
@@ -9,4 +9,4 @@ export const mockBooking = (): Booking => ({
   status: BookingStatus.PENDING,
   userId: 1,
   serviceId: 1
-});
+};
