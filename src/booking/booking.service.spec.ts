@@ -59,15 +59,8 @@ describe("BookingService", () => {
   });
 
   describe("findOneBooking", () => {
-    let findOneBookingSpy: jest.SpyInstance;
-
-    beforeEach(() => {
-      findOneBookingSpy = jest.spyOn(service, "findOneBooking");
-    });
-
     it("should get a booking", async () => {
-      findOneBookingSpy.mockResolvedValue(mockBooking);
-
+      const findOneBookingSpy = jest.spyOn(service, "findOneBooking").mockResolvedValue(mockBooking);
       const booking = await service.findOneBooking(mockBooking.id);
 
       expect(findOneBookingSpy).toHaveBeenCalledWith(mockBooking.id);
@@ -76,12 +69,6 @@ describe("BookingService", () => {
   });
 
   describe("createBooking", () => {
-    let createBookingSpy: jest.SpyInstance;
-
-    beforeEach(() => {
-      createBookingSpy = jest.spyOn(service, "createBooking");
-    });
-
     it("should create a booking", async () => {
       const createBookingDto: CreateBookingDto = {
         from: new Date(),
@@ -92,8 +79,7 @@ describe("BookingService", () => {
       };
       const createBookingResult = {...mockBooking, ...createBookingDto};
 
-      createBookingSpy.mockResolvedValue(createBookingResult);
-
+      const createBookingSpy = jest.spyOn(service, "createBooking").mockResolvedValue(createBookingResult);
       const booking = await service.createBooking(createBookingDto);
 
       expect(createBookingSpy).toHaveBeenCalledWith(createBookingDto);
@@ -102,20 +88,13 @@ describe("BookingService", () => {
   });
 
   describe("updateBooking", () => {
-    let updateBookingSpy: jest.SpyInstance;
-
-    beforeEach(() => {
-      updateBookingSpy = jest.spyOn(service, "updateBooking");
-    });
-
     it("should update a booking", async () => {
       const updateBookingDto: UpdateBookingDto = {
         status: BookingStatus.CANCELLED
       };
       const createBookingResult = {...mockBooking, ...updateBookingDto};
 
-      updateBookingSpy.mockResolvedValue(createBookingResult);
-
+      const updateBookingSpy = jest.spyOn(service, "updateBooking").mockResolvedValue(createBookingResult);
       const booking = await service.updateBooking(mockBooking.id, updateBookingDto);
 
       expect(updateBookingSpy).toHaveBeenCalledWith(mockBooking.id, updateBookingDto);
@@ -124,15 +103,8 @@ describe("BookingService", () => {
   });
 
   describe("deleteBooking", () => {
-    let deleteBookingSpy: jest.SpyInstance;
-
-    beforeEach(() => {
-      deleteBookingSpy = jest.spyOn(service, "deleteBooking");
-    });
-
     it("should delete a booking", async () => {
-      deleteBookingSpy.mockResolvedValue(mockBooking);
-
+      const deleteBookingSpy = jest.spyOn(service, "deleteBooking").mockResolvedValue(mockBooking);
       const booking = await service.deleteBooking(mockBooking.id);
 
       expect(deleteBookingSpy).toHaveBeenCalledWith(mockBooking.id);

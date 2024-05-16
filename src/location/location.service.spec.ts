@@ -58,15 +58,8 @@ describe("LocationService", () => {
   });
 
   describe("findOneLocation", () => {
-    let findOneLocationSpy: jest.SpyInstance;
-
-    beforeEach(() => {
-      findOneLocationSpy = jest.spyOn(service, "findOneLocation");
-    });
-
     it("should get a location", async () => {
-      findOneLocationSpy.mockResolvedValue(mockLocation);
-
+      const findOneLocationSpy = jest.spyOn(service, "findOneLocation").mockResolvedValue(mockLocation);
       const location = await service.findOneLocation(mockLocation.id);
 
       expect(findOneLocationSpy).toHaveBeenCalledWith(mockLocation.id);
@@ -75,12 +68,6 @@ describe("LocationService", () => {
   });
 
   describe("createLocation", () => {
-    let createLocationSpy: jest.SpyInstance;
-
-    beforeEach(() => {
-      createLocationSpy = jest.spyOn(service, "createLocation");
-    });
-
     it("should create a location", async () => {
       const createLocationDto: CreateLocationDto = {
         address: "934 Koelpin Oval",
@@ -89,11 +76,9 @@ describe("LocationService", () => {
         lat: -77.4925,
         lng: -72.1182
       };
-
       const createLocationResult = {...mockLocation, ...createLocationDto};
 
-      createLocationSpy.mockResolvedValue(createLocationResult);
-
+      const createLocationSpy = jest.spyOn(service, "createLocation").mockResolvedValue(createLocationResult);
       const location = await service.createLocation(createLocationDto);
 
       expect(createLocationSpy).toHaveBeenCalledWith(createLocationDto);
@@ -102,21 +87,13 @@ describe("LocationService", () => {
   });
 
   describe("updateLocation", () => {
-    let updateLocationSpy: jest.SpyInstance;
-
-    beforeEach(() => {
-      updateLocationSpy = jest.spyOn(service, "updateLocation");
-    });
-
     it("should update a location", async () => {
       const updateLocationDto: UpdateLocationDto = {
         city: "London"
       };
-
       const updateLocationResult = {...mockLocation, ...updateLocationDto};
 
-      updateLocationSpy.mockResolvedValue(updateLocationResult);
-
+      const updateLocationSpy = jest.spyOn(service, "updateLocation").mockResolvedValue(updateLocationResult);
       const location = await service.updateLocation(mockLocation.id, updateLocationDto);
 
       expect(updateLocationSpy).toHaveBeenCalledWith(mockLocation.id, updateLocationDto);
@@ -125,15 +102,8 @@ describe("LocationService", () => {
   });
 
   describe("deleteLocation", () => {
-    let deleteLocationSpy: jest.SpyInstance;
-
-    beforeEach(() => {
-      deleteLocationSpy = jest.spyOn(service, "deleteLocation");
-    });
-
     it("should delete a location", async () => {
-      deleteLocationSpy.mockResolvedValue(mockLocation);
-
+      const deleteLocationSpy = jest.spyOn(service, "deleteLocation").mockResolvedValue(mockLocation);
       const location = await service.deleteLocation(mockLocation.id);
 
       expect(deleteLocationSpy).toHaveBeenCalledWith(mockLocation.id);
