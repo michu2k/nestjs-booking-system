@@ -1,12 +1,12 @@
 import {Test, TestingModule} from "@nestjs/testing";
-import {Booking, BookingStatus} from "@prisma/client";
+import {BookingStatus} from "@prisma/client";
 import {BookingController} from "./booking.controller";
 import {BookingService} from "./booking.service";
 import {CreateBookingDto, UpdateBookingDto} from "./booking.dto";
 import {mockBooking} from "./booking.mocks";
 
 describe("BookingController", () => {
-  let bookingController: BookingController;
+  let controller: BookingController;
   let bookingService: BookingService;
 
   const mockBookingService = {
@@ -28,14 +28,14 @@ describe("BookingController", () => {
       controllers: [BookingController]
     }).compile();
 
-    bookingController = module.get<BookingController>(BookingController);
+    controller = module.get<BookingController>(BookingController);
     bookingService = module.get<BookingService>(BookingService);
 
     jest.clearAllMocks();
   });
 
-  it("bookingController should be defined", () => {
-    expect(bookingController).toBeDefined();
+  it("should be defined", () => {
+    expect(controller).toBeDefined();
   });
 
   it("bookingService should be defined", () => {
@@ -43,91 +43,58 @@ describe("BookingController", () => {
   });
 
   describe("findAll", () => {
-    let booking: Array<Booking>;
+    it("should get all bookings", async () => {
+      const booking = await controller.findAll();
 
-    beforeEach(async () => {
-      booking = await bookingController.findAll();
-    });
-
-    it("should call findAllBookings method", () => {
       expect(bookingService.findAllBookings).toHaveBeenCalled();
-    });
-
-    it("should get all bookings", () => {
       expect(booking).toEqual([mockBooking, mockBooking]);
     });
   });
 
   describe("findOne", () => {
-    let booking: Booking;
+    it("should get a booking", async () => {
+      const booking = await controller.findOne(mockBooking.id);
 
-    beforeEach(async () => {
-      booking = await bookingController.findOne(mockBooking.id);
-    });
-
-    it("should call findOneBooking method", () => {
       expect(bookingService.findOneBooking).toHaveBeenCalled();
-    });
-
-    it("should get a booking", () => {
       expect(booking).toEqual(mockBooking);
     });
   });
 
   describe("create", () => {
-    let booking: Booking;
-    const createBookingDto: CreateBookingDto = {
-      from: new Date(),
-      to: new Date(),
-      status: BookingStatus.PENDING,
-      userId: 2,
-      serviceId: 1
-    };
+    it("should create a booking", async () => {
+      const createBookingDto: CreateBookingDto = {
+        from: new Date(),
+        to: new Date(),
+        status: BookingStatus.PENDING,
+        userId: 2,
+        serviceId: 1
+      };
 
-    beforeEach(async () => {
-      booking = await bookingController.create(createBookingDto);
-    });
+      const booking = await controller.create(createBookingDto);
 
-    it("should call createBooking method", () => {
       expect(bookingService.createBooking).toHaveBeenCalled();
-    });
-
-    it("should create a booking", () => {
       expect(booking).toEqual({...mockBooking, ...createBookingDto});
     });
   });
 
   describe("update", () => {
-    let booking: Booking;
-    const updateBookingDto: UpdateBookingDto = {
-      status: BookingStatus.CANCELLED
-    };
+    it("should update a booking", async () => {
+      const updateBookingDto: UpdateBookingDto = {
+        status: BookingStatus.CANCELLED
+      };
 
-    beforeEach(async () => {
-      booking = await bookingController.update(mockBooking.id, updateBookingDto);
-    });
+      const booking = await controller.update(mockBooking.id, updateBookingDto);
 
-    it("should call updateBooking method", () => {
       expect(bookingService.updateBooking).toHaveBeenCalled();
-    });
-
-    it("should update a booking", () => {
       expect(booking).toEqual({...mockBooking, ...updateBookingDto});
     });
   });
 
   describe("delete", () => {
-    let booking: Booking;
+    it("should delete a booking", async () => {
+      const booking = await controller.delete(mockBooking.id);
 
-    beforeEach(async () => {
-      booking = await bookingController.delete(mockBooking.id);
-    });
-
-    it("should call deleteBooking method", () => {
       expect(bookingService.deleteBooking).toHaveBeenCalled();
-    });
-
-    it("should delete a booking", () => {
       expect(booking).toEqual(mockBooking);
     });
   });
