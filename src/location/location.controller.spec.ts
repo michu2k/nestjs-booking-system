@@ -31,7 +31,7 @@ describe("LocationController", () => {
     locationService = module.get<LocationService>(LocationService);
   });
 
-  it("locationController should be defined", () => {
+  it("should be defined", () => {
     expect(controller).toBeDefined();
   });
 
