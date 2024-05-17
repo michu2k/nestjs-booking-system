@@ -29,8 +29,6 @@ describe("LocationController", () => {
 
     controller = module.get<LocationController>(LocationController);
     locationService = module.get<LocationService>(LocationService);
-
-    jest.clearAllMocks();
   });
 
   it("locationController should be defined", () => {

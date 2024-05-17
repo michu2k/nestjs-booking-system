@@ -30,8 +30,6 @@ describe("BookingController", () => {
 
     controller = module.get<BookingController>(BookingController);
     bookingService = module.get<BookingService>(BookingService);
-
-    jest.clearAllMocks();
   });
 
   it("should be defined", () => {
