@@ -1,19 +1,19 @@
 import {Injectable} from "@nestjs/common";
 import {Prisma} from "@prisma/client";
 import {PrismaService} from "../prisma/prisma.service";
-import {AccountEntity, CreateAccountDto, CreateUserDto, UserEntity} from "./user.dto";
+import {CreateAccountDto, CreateUserDto} from "./user.dto";
 
 @Injectable()
 export class UserService {
   constructor(private prisma: PrismaService) {}
 
-  async findOneUser(where: Prisma.UserWhereUniqueInput): Promise<UserEntity> {
+  async findOneUser(where: Prisma.UserWhereUniqueInput) {
     return this.prisma.user.findUnique({
       where
     });
   }
 
-  async createUserAccount({account, ...data}: CreateUserDto): Promise<UserEntity> {
+  async createUserAccount({account, ...data}: CreateUserDto) {
     return this.prisma.user.create({
       data: {
         ...data,
@@ -24,7 +24,7 @@ export class UserService {
     });
   }
 
-  async createSSOProviderAccount({provider, providerAccountId, userId}: CreateAccountDto): Promise<AccountEntity> {
+  async createSSOProviderAccount({provider, providerAccountId, userId}: CreateAccountDto) {
     return this.prisma.account.create({
       data: {
         provider,
@@ -38,7 +38,7 @@ export class UserService {
     });
   }
 
-  async deleteUserAccount(id: number): Promise<UserEntity> {
+  async deleteUserAccount(id: number) {
     return this.prisma.user.delete({
       where: {id}
     });
@@ -47,7 +47,7 @@ export class UserService {
   /**
    * Update the user's refresh token
    */
-  async updateUserRefreshToken(userId: number, refreshToken: string): Promise<UserEntity> {
+  async updateUserRefreshToken(userId: number, refreshToken: string) {
     return this.prisma.user.update({
       where: {id: userId},
       data: {
