@@ -37,19 +37,19 @@ describe("UserController", () => {
 
   describe("findOne", () => {
     it("should get a user", async () => {
-      const user = await controller.findOne(mockUser.id);
+      const result = await controller.findOne(mockUser.id);
 
       expect(userService.findOneUser).toHaveBeenCalled();
-      expect(user).toEqual(mockUser);
+      expect(result).toEqual(mockUser);
     });
   });
 
   describe("delete", () => {
     it("should delete a user", async () => {
-      const user = await controller.delete(mockUser.id);
+      const result = await controller.delete(mockUser.id);
 
       expect(userService.deleteUserAccount).toHaveBeenCalled();
-      expect(user).toEqual(mockUser);
+      expect(result).toEqual(mockUser);
     });
   });
 });

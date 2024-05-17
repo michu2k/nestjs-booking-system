@@ -42,19 +42,19 @@ describe("BookingController", () => {
 
   describe("findAll", () => {
     it("should get all bookings", async () => {
-      const booking = await controller.findAll();
+      const result = await controller.findAll();
 
       expect(bookingService.findAllBookings).toHaveBeenCalled();
-      expect(booking).toEqual([mockBooking, mockBooking]);
+      expect(result).toEqual([mockBooking, mockBooking]);
     });
   });
 
   describe("findOne", () => {
     it("should get a booking", async () => {
-      const booking = await controller.findOne(mockBooking.id);
+      const result = await controller.findOne(mockBooking.id);
 
       expect(bookingService.findOneBooking).toHaveBeenCalled();
-      expect(booking).toEqual(mockBooking);
+      expect(result).toEqual(mockBooking);
     });
   });
 
@@ -68,10 +68,10 @@ describe("BookingController", () => {
         serviceId: 1
       };
 
-      const booking = await controller.create(createBookingDto);
+      const result = await controller.create(createBookingDto);
 
       expect(bookingService.createBooking).toHaveBeenCalled();
-      expect(booking).toEqual({...mockBooking, ...createBookingDto});
+      expect(result).toEqual({...mockBooking, ...createBookingDto});
     });
   });
 
@@ -81,19 +81,19 @@ describe("BookingController", () => {
         status: BookingStatus.CANCELLED
       };
 
-      const booking = await controller.update(mockBooking.id, updateBookingDto);
+      const result = await controller.update(mockBooking.id, updateBookingDto);
 
       expect(bookingService.updateBooking).toHaveBeenCalled();
-      expect(booking).toEqual({...mockBooking, ...updateBookingDto});
+      expect(result).toEqual({...mockBooking, ...updateBookingDto});
     });
   });
 
   describe("delete", () => {
     it("should delete a booking", async () => {
-      const booking = await controller.delete(mockBooking.id);
+      const result = await controller.delete(mockBooking.id);
 
       expect(bookingService.deleteBooking).toHaveBeenCalled();
-      expect(booking).toEqual(mockBooking);
+      expect(result).toEqual(mockBooking);
     });
   });
 });

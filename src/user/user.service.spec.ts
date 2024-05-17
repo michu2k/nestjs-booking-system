@@ -25,10 +25,10 @@ describe("UserService", () => {
     it("should get a user", async () => {
       const findOneUserSpy = jest.spyOn(service, "findOneUser").mockResolvedValue(mockUser);
 
-      const user = await service.findOneUser({id: mockUser.id});
+      const result = await service.findOneUser({id: mockUser.id});
 
       expect(findOneUserSpy).toHaveBeenCalledWith({id: mockUser.id});
-      expect(user).toEqual(mockUser);
+      expect(result).toEqual(mockUser);
     });
   });
 
@@ -48,10 +48,10 @@ describe("UserService", () => {
       const createUserAccountResult = {...mockUser, createUserDto};
       const createUserAccountSpy = jest.spyOn(service, "createUserAccount").mockResolvedValue(createUserAccountResult);
 
-      const user = await service.createUserAccount(createUserDto);
+      const result = await service.createUserAccount(createUserDto);
 
       expect(createUserAccountSpy).toHaveBeenCalledWith(createUserDto);
-      expect(user).toEqual(createUserAccountResult);
+      expect(result).toEqual(createUserAccountResult);
     });
   });
 
@@ -79,21 +79,22 @@ describe("UserService", () => {
     it("should delete a user", async () => {
       const deleteUserAccountSpy = jest.spyOn(service, "deleteUserAccount").mockResolvedValue(mockUser);
 
-      const user = await service.deleteUserAccount(mockUser.id);
+      const result = await service.deleteUserAccount(mockUser.id);
 
       expect(deleteUserAccountSpy).toHaveBeenLastCalledWith(mockUser.id);
-      expect(user).toEqual(mockUser);
+      expect(result).toEqual(mockUser);
     });
   });
 
   describe("updateUserRefreshToken", () => {
     it("should update user token", async () => {
+      const newRefreshToken = "new-refresh-token";
       const updateUserRefreshTokenSpy = jest.spyOn(service, "updateUserRefreshToken").mockResolvedValue(mockUser);
 
-      const user = await service.updateUserRefreshToken(mockUser.id, "new-refresh-token");
+      const result = await service.updateUserRefreshToken(mockUser.id, newRefreshToken);
 
-      expect(updateUserRefreshTokenSpy).toHaveBeenLastCalledWith(mockUser.id, "new-refresh-token");
-      expect(user).toEqual(mockUser);
+      expect(updateUserRefreshTokenSpy).toHaveBeenLastCalledWith(mockUser.id, newRefreshToken);
+      expect(result).toEqual(mockUser);
     });
   });
 });
