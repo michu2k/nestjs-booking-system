@@ -37,6 +37,4 @@ export function createAuthCookies({res, accessToken, refreshToken}: CreateAuthCo
     secure: true,
     sameSite: "lax"
   });
-
-  console.log("cookies generated!");
 }
