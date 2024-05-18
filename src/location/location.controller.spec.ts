@@ -41,19 +41,19 @@ describe("LocationController", () => {
 
   describe("findAll", () => {
     it("should get all locations", async () => {
-      const location = await controller.findAll();
+      const result = await controller.findAll();
 
       expect(locationService.findAllLocations).toHaveBeenCalled();
-      expect(location).toEqual([mockLocation, mockLocation]);
+      expect(result).toEqual([mockLocation, mockLocation]);
     });
   });
 
   describe("findOne", () => {
     it("should get a location", async () => {
-      const location = await controller.findOne(mockLocation.id);
+      const result = await controller.findOne(mockLocation.id);
 
       expect(locationService.findOneLocation).toHaveBeenCalled();
-      expect(location).toEqual(mockLocation);
+      expect(result).toEqual(mockLocation);
     });
   });
 
@@ -66,10 +66,10 @@ describe("LocationController", () => {
         lat: 0,
         lng: 0
       };
-      const location = await controller.create(createLocationDto);
+      const result = await controller.create(createLocationDto);
 
       expect(locationService.createLocation).toHaveBeenCalled();
-      expect(location).toEqual({...mockLocation, ...createLocationDto});
+      expect(result).toEqual({...mockLocation, ...createLocationDto});
     });
   });
 
@@ -78,20 +78,19 @@ describe("LocationController", () => {
       const updateLocationDto: UpdateLocationDto = {
         city: "London"
       };
-
-      const location = await controller.update(mockLocation.id, updateLocationDto);
+      const result = await controller.update(mockLocation.id, updateLocationDto);
 
       expect(locationService.updateLocation).toHaveBeenCalled();
-      expect(location).toEqual({...mockLocation, ...updateLocationDto});
+      expect(result).toEqual({...mockLocation, ...updateLocationDto});
     });
   });
 
   describe("delete", () => {
     it("should delete a location", async () => {
-      const location = await controller.delete(mockLocation.id);
+      const result = await controller.delete(mockLocation.id);
 
       expect(locationService.deleteLocation).toHaveBeenCalled();
-      expect(location).toEqual(mockLocation);
+      expect(result).toEqual(mockLocation);
     });
   });
 });

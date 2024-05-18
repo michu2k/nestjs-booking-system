@@ -24,11 +24,10 @@ describe("UserService", () => {
   describe("findOneUser", () => {
     it("should get a user", async () => {
       const findOneUserSpy = jest.spyOn(service, "findOneUser").mockResolvedValue(mockUser);
-
-      const user = await service.findOneUser({id: mockUser.id});
+      const result = await service.findOneUser({id: mockUser.id});
 
       expect(findOneUserSpy).toHaveBeenCalledWith({id: mockUser.id});
-      expect(user).toEqual(mockUser);
+      expect(result).toEqual(mockUser);
     });
   });
 
@@ -44,14 +43,12 @@ describe("UserService", () => {
           providerAccountId: "123xyzabc"
         }
       };
-
-      const createUserAccountResult = {...mockUser, createUserDto};
-      const createUserAccountSpy = jest.spyOn(service, "createUserAccount").mockResolvedValue(createUserAccountResult);
-
-      const user = await service.createUserAccount(createUserDto);
+      const mockCreatedUser = {...mockUser, createUserDto};
+      const createUserAccountSpy = jest.spyOn(service, "createUserAccount").mockResolvedValue(mockCreatedUser);
+      const result = await service.createUserAccount(createUserDto);
 
       expect(createUserAccountSpy).toHaveBeenCalledWith(createUserDto);
-      expect(user).toEqual(createUserAccountResult);
+      expect(result).toEqual(mockCreatedUser);
     });
   });
 
@@ -62,38 +59,35 @@ describe("UserService", () => {
         providerAccountId: "123xyzabc",
         userId: 2
       };
-
-      const createProviderAccountResult = {...mockAccount, ...createAccountDto};
+      const mockCreatedAccount = {...mockAccount, ...createAccountDto};
       const createProviderAccountSpy = jest
         .spyOn(service, "createSSOProviderAccount")
-        .mockResolvedValue(createProviderAccountResult);
-
+        .mockResolvedValue(mockCreatedAccount);
       const providerAccount = await service.createSSOProviderAccount(createAccountDto);
 
       expect(createProviderAccountSpy).toHaveBeenLastCalledWith(createAccountDto);
-      expect(providerAccount).toEqual(createProviderAccountResult);
+      expect(providerAccount).toEqual(mockCreatedAccount);
     });
   });
 
   describe("deleteUserAccount", () => {
     it("should delete a user", async () => {
       const deleteUserAccountSpy = jest.spyOn(service, "deleteUserAccount").mockResolvedValue(mockUser);
-
-      const user = await service.deleteUserAccount(mockUser.id);
+      const result = await service.deleteUserAccount(mockUser.id);
 
       expect(deleteUserAccountSpy).toHaveBeenLastCalledWith(mockUser.id);
-      expect(user).toEqual(mockUser);
+      expect(result).toEqual(mockUser);
     });
   });
 
   describe("updateUserRefreshToken", () => {
     it("should update user token", async () => {
+      const newRefreshToken = "new-refresh-token";
       const updateUserRefreshTokenSpy = jest.spyOn(service, "updateUserRefreshToken").mockResolvedValue(mockUser);
+      const result = await service.updateUserRefreshToken(mockUser.id, newRefreshToken);
 
-      const user = await service.updateUserRefreshToken(mockUser.id, "new-refresh-token");
-
-      expect(updateUserRefreshTokenSpy).toHaveBeenLastCalledWith(mockUser.id, "new-refresh-token");
-      expect(user).toEqual(mockUser);
+      expect(updateUserRefreshTokenSpy).toHaveBeenLastCalledWith(mockUser.id, newRefreshToken);
+      expect(result).toEqual(mockUser);
     });
   });
 });
