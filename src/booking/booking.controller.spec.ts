@@ -67,7 +67,6 @@ describe("BookingController", () => {
         userId: 2,
         serviceId: 1
       };
-
       const result = await controller.create(createBookingDto);
 
       expect(bookingService.createBooking).toHaveBeenCalled();
@@ -80,7 +79,6 @@ describe("BookingController", () => {
       const updateBookingDto: UpdateBookingDto = {
         status: BookingStatus.CANCELLED
       };
-
       const result = await controller.update(mockBooking.id, updateBookingDto);
 
       expect(bookingService.updateBooking).toHaveBeenCalled();

@@ -78,7 +78,6 @@ describe("LocationController", () => {
       const updateLocationDto: UpdateLocationDto = {
         city: "London"
       };
-
       const result = await controller.update(mockLocation.id, updateLocationDto);
 
       expect(locationService.updateLocation).toHaveBeenCalled();

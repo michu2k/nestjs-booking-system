@@ -25,12 +25,12 @@ describe("BookingService", () => {
     let findAllBookingsSpy: jest.SpyInstance;
 
     beforeEach(() => {
-      findAllBookingsSpy = jest.spyOn(service, "findAllBookings");
+      findAllBookingsSpy = jest
+        .spyOn(service, "findAllBookings")
+        .mockResolvedValue([mockBooking, mockBooking, mockBooking]);
     });
 
     it("should get all bookings", async () => {
-      findAllBookingsSpy.mockResolvedValue([mockBooking, mockBooking, mockBooking]);
-
       const result = await service.findAllBookings();
 
       expect(findAllBookingsSpy).toHaveBeenCalled();
@@ -38,23 +38,19 @@ describe("BookingService", () => {
     });
 
     it("should get bookings with the specified limit", async () => {
-      findAllBookingsSpy.mockResolvedValue([mockBooking, mockBooking]);
-
       const limit = 2;
-      const result = await service.findAllBookings(limit);
+
+      await service.findAllBookings(limit);
 
       expect(findAllBookingsSpy).toHaveBeenCalledWith(limit);
-      expect(result).toEqual([mockBooking, mockBooking]);
     });
 
     it("should get bookings with the specified offset", async () => {
-      findAllBookingsSpy.mockResolvedValue([mockBooking]);
-
       const offset = 2;
-      const result = await service.findAllBookings(undefined, offset);
+
+      await service.findAllBookings(undefined, offset);
 
       expect(findAllBookingsSpy).toHaveBeenCalledWith(undefined, offset);
-      expect(result).toEqual([mockBooking]);
     });
   });
 
@@ -77,13 +73,12 @@ describe("BookingService", () => {
         userId: 2,
         serviceId: 1
       };
-      const createBookingResult = {...mockBooking, ...createBookingDto};
-
-      const createBookingSpy = jest.spyOn(service, "createBooking").mockResolvedValue(createBookingResult);
+      const mockCreatedBooking = {...mockBooking, ...createBookingDto};
+      const createBookingSpy = jest.spyOn(service, "createBooking").mockResolvedValue(mockCreatedBooking);
       const result = await service.createBooking(createBookingDto);
 
       expect(createBookingSpy).toHaveBeenCalledWith(createBookingDto);
-      expect(result).toEqual(createBookingResult);
+      expect(result).toEqual(mockCreatedBooking);
     });
   });
 
@@ -92,13 +87,12 @@ describe("BookingService", () => {
       const updateBookingDto: UpdateBookingDto = {
         status: BookingStatus.CANCELLED
       };
-      const createBookingResult = {...mockBooking, ...updateBookingDto};
-
-      const updateBookingSpy = jest.spyOn(service, "updateBooking").mockResolvedValue(createBookingResult);
+      const mockUpdatedBooking = {...mockBooking, ...updateBookingDto};
+      const updateBookingSpy = jest.spyOn(service, "updateBooking").mockResolvedValue(mockUpdatedBooking);
       const result = await service.updateBooking(mockBooking.id, updateBookingDto);
 
       expect(updateBookingSpy).toHaveBeenCalledWith(mockBooking.id, updateBookingDto);
-      expect(result).toEqual(createBookingResult);
+      expect(result).toEqual(mockUpdatedBooking);
     });
   });
 

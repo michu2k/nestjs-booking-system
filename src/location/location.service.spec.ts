@@ -21,39 +21,35 @@ describe("LocationService", () => {
   });
 
   describe("findAllLocations", () => {
-    let findAllLocations: jest.SpyInstance;
+    let findAllLocationsSpy: jest.SpyInstance;
 
     beforeEach(() => {
-      findAllLocations = jest.spyOn(service, "findAllLocations");
+      findAllLocationsSpy = jest
+        .spyOn(service, "findAllLocations")
+        .mockResolvedValue([mockLocation, mockLocation, mockLocation]);
     });
 
     it("should get all locations", async () => {
-      findAllLocations.mockResolvedValue([mockLocation, mockLocation]);
-
       const result = await service.findAllLocations();
 
-      expect(findAllLocations).toHaveBeenCalled();
-      expect(result).toEqual([mockLocation, mockLocation]);
+      expect(findAllLocationsSpy).toHaveBeenCalled();
+      expect(result).toEqual([mockLocation, mockLocation, mockLocation]);
     });
 
     it("should get all locations with specified limit", async () => {
-      findAllLocations.mockResolvedValue([mockLocation]);
-
       const limit = 1;
-      const result = await service.findAllLocations(limit);
 
-      expect(findAllLocations).toHaveBeenCalledWith(limit);
-      expect(result).toEqual([mockLocation]);
+      await service.findAllLocations(limit);
+
+      expect(findAllLocationsSpy).toHaveBeenCalledWith(limit);
     });
 
     it("should get all locations with specified offset", async () => {
-      findAllLocations.mockResolvedValue([mockLocation]);
-
       const offset = 1;
-      const result = await service.findAllLocations(undefined, offset);
 
-      expect(findAllLocations).toHaveBeenCalledWith(undefined, offset);
-      expect(result).toEqual([mockLocation]);
+      await service.findAllLocations(undefined, offset);
+
+      expect(findAllLocationsSpy).toHaveBeenCalledWith(undefined, offset);
     });
   });
 
@@ -76,13 +72,12 @@ describe("LocationService", () => {
         lat: -77.4925,
         lng: -72.1182
       };
-      const createLocationResult = {...mockLocation, ...createLocationDto};
-
-      const createLocationSpy = jest.spyOn(service, "createLocation").mockResolvedValue(createLocationResult);
+      const mockCreatedLocation = {...mockLocation, ...createLocationDto};
+      const createLocationSpy = jest.spyOn(service, "createLocation").mockResolvedValue(mockCreatedLocation);
       const result = await service.createLocation(createLocationDto);
 
       expect(createLocationSpy).toHaveBeenCalledWith(createLocationDto);
-      expect(result).toEqual(createLocationResult);
+      expect(result).toEqual(mockCreatedLocation);
     });
   });
 
@@ -91,13 +86,12 @@ describe("LocationService", () => {
       const updateLocationDto: UpdateLocationDto = {
         city: "London"
       };
-      const updateLocationResult = {...mockLocation, ...updateLocationDto};
-
-      const updateLocationSpy = jest.spyOn(service, "updateLocation").mockResolvedValue(updateLocationResult);
+      const mockUpdatedLocation = {...mockLocation, ...updateLocationDto};
+      const updateLocationSpy = jest.spyOn(service, "updateLocation").mockResolvedValue(mockUpdatedLocation);
       const result = await service.updateLocation(mockLocation.id, updateLocationDto);
 
       expect(updateLocationSpy).toHaveBeenCalledWith(mockLocation.id, updateLocationDto);
-      expect(result).toEqual(updateLocationResult);
+      expect(result).toEqual(mockUpdatedLocation);
     });
   });
 
