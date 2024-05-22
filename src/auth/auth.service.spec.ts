@@ -1,12 +1,12 @@
 import {Test, TestingModule} from "@nestjs/testing";
 import {JwtService} from "@nestjs/jwt";
 import {ConfigService} from "@nestjs/config";
+import {BadRequestException, UnauthorizedException} from "@nestjs/common";
 import {PrismaService} from "../prisma/prisma.service";
 import {UserService} from "../user/user.service";
 import {AuthService} from "./auth.service";
 import {mockAccount, mockGoogleProfile, mockUser} from "../user/user.mocks";
-import {mockAuthToken} from "./auth.mocks";
-import {BadRequestException, UnauthorizedException} from "@nestjs/common";
+import {mockAuthAccessTokens, mockAuthToken} from "./auth.mocks";
 
 describe("AuthService", () => {
   let service: AuthService;
@@ -44,18 +44,12 @@ describe("AuthService", () => {
     });
 
     it("should generate auth tokens and update user's token", async () => {
-      generateAuthTokensSpy.mockResolvedValue({
-        accessToken: mockAuthToken,
-        refreshToken: mockAuthToken
-      });
+      generateAuthTokensSpy.mockResolvedValue(mockAuthAccessTokens);
 
       const result = await service.generateAuthTokens(mockUser);
 
       expect(generateAuthTokensSpy).toHaveBeenCalledWith(mockUser);
-      expect(result).toEqual({
-        accessToken: mockAuthToken,
-        refreshToken: mockAuthToken
-      });
+      expect(result).toEqual(mockAuthAccessTokens);
     });
 
     it("should throw an error if the user refresh token can't be updated", async () => {
@@ -77,18 +71,12 @@ describe("AuthService", () => {
     });
 
     it("should refresh auth tokens", async () => {
-      refreshAuthTokensSpy.mockResolvedValue({
-        accessToken: mockAuthToken,
-        refreshToken: mockAuthToken
-      });
+      refreshAuthTokensSpy.mockResolvedValue(mockAuthAccessTokens);
 
       const result = await service.refreshAuthTokens(mockUser, mockAuthToken);
 
       expect(refreshAuthTokensSpy).toHaveBeenCalledWith(mockUser, mockAuthToken);
-      expect(result).toEqual({
-        accessToken: mockAuthToken,
-        refreshToken: mockAuthToken
-      });
+      expect(result).toEqual(mockAuthAccessTokens);
     });
 
     it("should throw an error if refreshToken is invalid", async () => {
