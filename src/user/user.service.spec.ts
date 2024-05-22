@@ -1,6 +1,6 @@
 import {Test, TestingModule} from "@nestjs/testing";
 import {UserRole} from "@prisma/client";
-import {PrismaModule} from "../prisma/prisma.module";
+import {PrismaService} from "../prisma/prisma.service";
 import {UserService} from "./user.service";
 import {mockAccount, mockUser} from "./user.mocks";
 import {CreateAccountDto, CreateUserDto} from "./user.dto";
@@ -10,8 +10,7 @@ describe("UserService", () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [PrismaModule],
-      providers: [UserService]
+      providers: [UserService, PrismaService]
     }).compile();
 
     service = module.get<UserService>(UserService);

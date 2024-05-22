@@ -1,5 +1,5 @@
 import {Test, TestingModule} from "@nestjs/testing";
-import {PrismaModule} from "../prisma/prisma.module";
+import {PrismaService} from "../prisma/prisma.service";
 import {LocationService} from "./location.service";
 import {mockLocation} from "./location.mocks";
 import {CreateLocationDto, UpdateLocationDto} from "./location.dto";
@@ -9,8 +9,7 @@ describe("LocationService", () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [PrismaModule],
-      providers: [LocationService]
+      providers: [LocationService, PrismaService]
     }).compile();
 
     service = module.get<LocationService>(LocationService);
