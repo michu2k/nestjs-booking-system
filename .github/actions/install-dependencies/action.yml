@@ -24,4 +24,5 @@ runs:
           ${{ runner.os }}-nest-js-
 
     - name: Install dependencies
+      shell: bash
       run: pnpm install
