@@ -1,9 +1,9 @@
 import {PartialType} from "@nestjs/mapped-types";
 import {BookingStatus} from "@prisma/client";
-import {IsDateString, IsEnum, IsInt, IsISO8601} from "class-validator";
+import {IsDateString, IsEnum, IsInt} from "class-validator";
 
 export class CreateBookingDto {
-  @IsISO8601({strict: true, strictSeparator: true})
+  @IsDateString({strict: true, strictSeparator: true})
   from: Date;
 
   @IsDateString({strict: true, strictSeparator: true})
