@@ -28,7 +28,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: ./.github/workflows/install-dependencies
+      - uses: ./.github/actions/install-dependencies
+
+      - name: Check Typescript errors
+        run: pnpm run ts:check
 
       - name: Check ESLint errors
         run: pnpm run lint:check
@@ -51,7 +54,7 @@ jobs:
           POSTGRES_DB: $POSTGRES_DB
 
     steps:
-      - uses: ./.github/workflows/install-dependencies
+      - uses: ./.github/actions/install-dependencies
 
       - name: Generate prisma client
         run: pnpm prisma:gen
