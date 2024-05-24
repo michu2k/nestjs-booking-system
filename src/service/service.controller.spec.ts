@@ -60,9 +60,9 @@ describe("ServiceController", () => {
   describe("create", () => {
     it("should create a service", async () => {
       const createServiceDto: CreateServiceDto = {
-        name: "New",
-        description: "Simple description",
-        price: 27,
+        name: "Service name",
+        description: "Service description",
+        price: 19,
         locationId: 1
       };
       const result = await controller.create(createServiceDto);
