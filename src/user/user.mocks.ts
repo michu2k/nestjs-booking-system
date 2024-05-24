@@ -5,9 +5,14 @@ export const mockUser: User = {
   id: 1,
   email: "john.doe@example.com",
   name: "John Doe",
-  phone: "111-222-333",
-  refreshToken: "xyzabcxyzabcxyzabc",
+  phone: null,
+  refreshToken: "hashedRefreshToken",
   role: UserRole.USER
+};
+
+export const mockAdmin: User = {
+  ...mockUser,
+  role: UserRole.ADMIN
 };
 
 export const mockAccount: Account = {
