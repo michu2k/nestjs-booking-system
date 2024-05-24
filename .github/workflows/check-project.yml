@@ -67,6 +67,9 @@ jobs:
       - name: Generate prisma client
         run: pnpm prisma:gen
 
+      - name: Apply migrations to the database
+        run: npx prisma migrate deploy
+
       - name: Seed database
         run: pnpm prisma:seed
 
