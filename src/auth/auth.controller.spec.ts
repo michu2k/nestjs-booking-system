@@ -76,8 +76,8 @@ describe("AuthController", () => {
     it("should refresh auth token", async () => {
       await controller.refresh(mockResponse, mockRequest, mockUser);
 
-      expect(authService.refreshAuthTokens).toHaveBeenCalled();
       expect(configService.get).toHaveBeenCalled();
+      expect(authService.refreshAuthTokens).toHaveBeenCalled();
     });
   });
 
