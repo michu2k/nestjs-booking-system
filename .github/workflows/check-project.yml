@@ -1,4 +1,4 @@
-name: Check Nest.js project
+name: Check NestJS project
 
 on: pull_request
 
