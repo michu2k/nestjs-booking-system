@@ -45,6 +45,7 @@ jobs:
 
   tests:
     name: Run unit & e2e tests
+    needs: check
     runs-on: ubuntu-latest
 
     services:
