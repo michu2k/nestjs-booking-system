@@ -12,11 +12,13 @@ import {
   Query,
   UseGuards
 } from "@nestjs/common";
+import {ApiTags} from "@nestjs/swagger";
 import {FindAllEntitiesDto} from "../prisma/prisma.dto";
 import {BookingService} from "./booking.service";
 import {CreateBookingDto, UpdateBookingDto} from "./booking.dto";
 import {JwtAuthGuard} from "../auth/guards/jwt.guard";
 
+@ApiTags("Booking")
 @Controller("booking")
 @UseGuards(JwtAuthGuard)
 export class BookingController {

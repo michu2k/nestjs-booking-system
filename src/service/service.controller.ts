@@ -12,6 +12,7 @@ import {
   Query,
   UseGuards
 } from "@nestjs/common";
+import {ApiTags} from "@nestjs/swagger";
 import {FindAllEntitiesDto} from "../prisma/prisma.dto";
 import {ServiceService} from "./service.service";
 import {CreateServiceDto, UpdateServiceDto} from "./service.dto";
@@ -20,6 +21,7 @@ import {RolesGuard} from "../guards/roles.guard";
 import {Roles} from "../decorators/roles.deorator";
 import {UserRole} from "@prisma/client";
 
+@ApiTags("Service")
 @Controller("service")
 export class ServiceController {
   constructor(private serviceService: ServiceService) {}

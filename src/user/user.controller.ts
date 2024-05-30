@@ -8,11 +8,13 @@ import {
   ParseIntPipe,
   UseGuards
 } from "@nestjs/common";
+import {ApiTags} from "@nestjs/swagger";
 import {UserService} from "./user.service";
 import {JwtAuthGuard} from "../auth/guards/jwt.guard";
 
 // TODO: Implement IsMeGuard
 @UseGuards(JwtAuthGuard)
+@ApiTags("User")
 @Controller("user")
 export class UserController {
   constructor(private userService: UserService) {}
