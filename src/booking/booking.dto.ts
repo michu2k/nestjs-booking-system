@@ -1,4 +1,4 @@
-import {PartialType} from "@nestjs/mapped-types";
+import {PartialType} from "@nestjs/swagger";
 import {BookingStatus} from "@prisma/client";
 import {IsDateString, IsEnum, IsInt} from "class-validator";
 

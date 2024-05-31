@@ -12,21 +12,29 @@ import {
   Query,
   UseGuards
 } from "@nestjs/common";
+import {ApiTags} from "@nestjs/swagger";
 import {FindAllEntitiesDto} from "../prisma/prisma.dto";
 import {BookingService} from "./booking.service";
 import {CreateBookingDto, UpdateBookingDto} from "./booking.dto";
 import {JwtAuthGuard} from "../auth/guards/jwt.guard";
 
+@ApiTags("Booking")
 @Controller("booking")
 @UseGuards(JwtAuthGuard)
 export class BookingController {
   constructor(private bookingService: BookingService) {}
 
+  /**
+   * Get a list of bookings
+   */
   @Get()
   findAll(@Query() {limit, offset}: FindAllEntitiesDto = {}) {
     return this.bookingService.findAllBookings(limit, offset);
   }
 
+  /**
+   * Get a booking with a specified `id`
+   */
   @Get(":id")
   async findOne(@Param("id", ParseIntPipe) id: number) {
     const booking = await this.bookingService.findOneBooking(id);
@@ -38,6 +46,9 @@ export class BookingController {
     return booking;
   }
 
+  /**
+   * Create a new booking
+   */
   @Post()
   async create(@Body() data: CreateBookingDto) {
     try {
@@ -48,6 +59,9 @@ export class BookingController {
     }
   }
 
+  /**
+   * Update a booking with a specified `id`
+   */
   @Patch(":id")
   async update(@Param("id", ParseIntPipe) id: number, @Body() data: UpdateBookingDto) {
     try {
@@ -58,6 +72,9 @@ export class BookingController {
     }
   }
 
+  /**
+   * Delete a booking with a specified `id`
+   */
   @Delete(":id")
   async delete(@Param("id", ParseIntPipe) id: number) {
     try {

@@ -1,6 +1,7 @@
 import {Controller, Get, HttpStatus, Req, Res, UseGuards} from "@nestjs/common";
 import {Request, Response} from "express";
 import {ConfigService} from "@nestjs/config";
+import {ApiTags} from "@nestjs/swagger";
 import {UserEntity} from "../user/user.dto";
 import {User} from "../decorators/user.decorator";
 import {AuthService} from "./auth.service";
@@ -9,6 +10,7 @@ import {JwtAuthGuard} from "./guards/jwt.guard";
 import {JwtRefreshAuthGuard} from "./guards/jwt-refresh.guard";
 import {createAuthCookies} from "./auth.utils";
 
+@ApiTags("Auth")
 @Controller("auth")
 export class AuthController {
   constructor(
@@ -16,10 +18,16 @@ export class AuthController {
     private configService: ConfigService
   ) {}
 
+  /**
+   * Google sign in
+   */
   @Get("google")
   @UseGuards(GoogleAuthGuard)
   googleAuth() {}
 
+  /**
+   * Google sign in callback
+   */
   @Get("google/callback")
   @UseGuards(GoogleAuthGuard)
   async googleAuthRedirect(@Res() res: Response, @User() user: UserEntity) {
@@ -30,6 +38,9 @@ export class AuthController {
     return res.status(HttpStatus.OK).redirect(redirectUrl);
   }
 
+  /**
+   * Refresh a JWT token
+   */
   @Get("refresh")
   @UseGuards(JwtRefreshAuthGuard)
   async refresh(@Res() res: Response, @Req() req: Request, @User() user: UserEntity) {
@@ -42,6 +53,9 @@ export class AuthController {
     return res.status(HttpStatus.OK).send();
   }
 
+  /**
+   * Logging a user out of an account
+   */
   @Get("logout")
   @UseGuards(JwtAuthGuard)
   logout(@Res() res: Response) {
