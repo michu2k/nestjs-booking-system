@@ -24,11 +24,17 @@ import {JwtAuthGuard} from "../auth/guards/jwt.guard";
 export class BookingController {
   constructor(private bookingService: BookingService) {}
 
+  /**
+   * Get a list of bookings
+   */
   @Get()
   findAll(@Query() {limit, offset}: FindAllEntitiesDto = {}) {
     return this.bookingService.findAllBookings(limit, offset);
   }
 
+  /**
+   * Get a booking with a specified `id`
+   */
   @Get(":id")
   async findOne(@Param("id", ParseIntPipe) id: number) {
     const booking = await this.bookingService.findOneBooking(id);
@@ -40,6 +46,9 @@ export class BookingController {
     return booking;
   }
 
+  /**
+   * Create a new booking
+   */
   @Post()
   async create(@Body() data: CreateBookingDto) {
     try {
@@ -50,6 +59,9 @@ export class BookingController {
     }
   }
 
+  /**
+   * Update a booking with a specified `id`
+   */
   @Patch(":id")
   async update(@Param("id", ParseIntPipe) id: number, @Body() data: UpdateBookingDto) {
     try {
@@ -60,6 +72,9 @@ export class BookingController {
     }
   }
 
+  /**
+   * Delete a booking with a specified `id`
+   */
   @Delete(":id")
   async delete(@Param("id", ParseIntPipe) id: number) {
     try {

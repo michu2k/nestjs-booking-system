@@ -18,10 +18,16 @@ export class AuthController {
     private configService: ConfigService
   ) {}
 
+  /**
+   * Google sign in
+   */
   @Get("google")
   @UseGuards(GoogleAuthGuard)
   googleAuth() {}
 
+  /**
+   * Google sign in callback
+   */
   @Get("google/callback")
   @UseGuards(GoogleAuthGuard)
   async googleAuthRedirect(@Res() res: Response, @User() user: UserEntity) {
@@ -32,6 +38,9 @@ export class AuthController {
     return res.status(HttpStatus.OK).redirect(redirectUrl);
   }
 
+  /**
+   * Refresh a JWT token
+   */
   @Get("refresh")
   @UseGuards(JwtRefreshAuthGuard)
   async refresh(@Res() res: Response, @Req() req: Request, @User() user: UserEntity) {
@@ -44,6 +53,9 @@ export class AuthController {
     return res.status(HttpStatus.OK).send();
   }
 
+  /**
+   * Logging a user out of an account
+   */
   @Get("logout")
   @UseGuards(JwtAuthGuard)
   logout(@Res() res: Response) {

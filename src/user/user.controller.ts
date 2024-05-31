@@ -19,6 +19,9 @@ import {JwtAuthGuard} from "../auth/guards/jwt.guard";
 export class UserController {
   constructor(private userService: UserService) {}
 
+  /**
+   * Get a user
+   */
   @Get(":id")
   async findOne(@Param("id", ParseIntPipe) id: number) {
     const user = await this.userService.findOneUser({id});
@@ -30,6 +33,9 @@ export class UserController {
     return user;
   }
 
+  /**
+   * Delete a user
+   */
   @Delete(":id")
   async delete(@Param("id", ParseIntPipe) id: number) {
     try {

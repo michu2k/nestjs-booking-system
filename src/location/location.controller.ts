@@ -26,6 +26,9 @@ import {RolesGuard} from "../guards/roles.guard";
 export class LocationController {
   constructor(private locationService: LocationService) {}
 
+  /**
+   * Get a list of locations
+   */
   @Get()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.MANAGER)
@@ -33,6 +36,9 @@ export class LocationController {
     return this.locationService.findAllLocations(limit, offset);
   }
 
+  /**
+   * Get a location with a specified `id`
+   */
   @Get(":id")
   async findOne(@Param("id", ParseIntPipe) id: number) {
     const location = await this.locationService.findOneLocation(id);
@@ -44,6 +50,9 @@ export class LocationController {
     return location;
   }
 
+  /**
+   * Create a new location
+   */
   @Post()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
@@ -56,6 +65,9 @@ export class LocationController {
     }
   }
 
+  /**
+   * Update a location with a specified `id`
+   */
   @Patch(":id")
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
@@ -68,6 +80,9 @@ export class LocationController {
     }
   }
 
+  /**
+   * Delete a location with a specified `id`
+   */
   @Delete(":id")
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
