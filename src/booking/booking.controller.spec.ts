@@ -42,7 +42,7 @@ describe("BookingController", () => {
   });
 
   describe("findAll", () => {
-    it("should get all bookings", async () => {
+    it("should get a list of user's bookings", async () => {
       const result = await controller.findAll(mockUser);
 
       expect(bookingService.findAllBookings).toHaveBeenCalled();
