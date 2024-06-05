@@ -1,4 +1,5 @@
 import {BadRequestException, Injectable} from "@nestjs/common";
+import {Prisma} from "@prisma/client";
 import {PrismaService} from "../prisma/prisma.service";
 import {CreateBookingDto, UpdateBookingDto} from "./booking.dto";
 
@@ -6,16 +7,17 @@ import {CreateBookingDto, UpdateBookingDto} from "./booking.dto";
 export class BookingService {
   constructor(private prisma: PrismaService) {}
 
-  async findAllBookings(limit?: number, offset?: number) {
+  async findAllBookings(limit?: number, offset?: number, where?: Prisma.BookingWhereInput) {
     return this.prisma.booking.findMany({
       take: limit,
-      skip: offset
+      skip: offset,
+      where
     });
   }
 
-  async findOneBooking(id: number) {
+  async findOneBooking(id: number, where?: Prisma.BookingWhereInput) {
     return this.prisma.booking.findUnique({
-      where: {id}
+      where: {...where, id}
     });
   }
 

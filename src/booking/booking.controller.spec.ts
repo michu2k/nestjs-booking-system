@@ -4,6 +4,7 @@ import {BookingController} from "./booking.controller";
 import {BookingService} from "./booking.service";
 import {CreateBookingDto, UpdateBookingDto} from "./booking.dto";
 import {mockBooking} from "./booking.mocks";
+import {mockUser} from "../user/user.mocks";
 
 describe("BookingController", () => {
   let controller: BookingController;
@@ -41,8 +42,8 @@ describe("BookingController", () => {
   });
 
   describe("findAll", () => {
-    it("should get all bookings", async () => {
-      const result = await controller.findAll();
+    it("should get a list of user's bookings", async () => {
+      const result = await controller.findAll(mockUser);
 
       expect(bookingService.findAllBookings).toHaveBeenCalled();
       expect(result).toEqual([mockBooking, mockBooking]);
@@ -51,7 +52,7 @@ describe("BookingController", () => {
 
   describe("findOne", () => {
     it("should get a booking", async () => {
-      const result = await controller.findOne(mockBooking.id);
+      const result = await controller.findOne(mockBooking.id, mockUser);
 
       expect(bookingService.findOneBooking).toHaveBeenCalled();
       expect(result).toEqual(mockBooking);

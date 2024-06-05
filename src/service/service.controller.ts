@@ -35,7 +35,7 @@ export class ServiceController {
   }
 
   /**
-   * Get a service with a specified `id`
+   * Get a service with the specified `id`
    */
   @Get(":id")
   async findOne(@Param("id", ParseIntPipe) id: number) {
@@ -64,11 +64,11 @@ export class ServiceController {
   }
 
   /**
-   * Update a service with a specified `id`
+   * Update a service with the specified `id`
    */
   @Patch(":id")
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.MANAGER)
+  @Roles(UserRole.ADMIN)
   async update(@Param("id", ParseIntPipe) id: number, @Body() data: UpdateServiceDto) {
     try {
       return await this.serviceService.updateService(id, data);
@@ -79,7 +79,7 @@ export class ServiceController {
   }
 
   /**
-   * Delete a service with a specified `id`
+   * Delete a service with the specified `id`
    */
   @Delete(":id")
   @UseGuards(JwtAuthGuard, RolesGuard)

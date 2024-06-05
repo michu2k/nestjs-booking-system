@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Controller,
   Delete,
+  ForbiddenException,
   Get,
   NotFoundException,
   Param,
@@ -11,8 +12,9 @@ import {
 import {ApiTags} from "@nestjs/swagger";
 import {UserService} from "./user.service";
 import {JwtAuthGuard} from "../auth/guards/jwt.guard";
+import {User} from "../decorators/user.decorator";
+import {UserEntity} from "./user.dto";
 
-// TODO: Implement IsMeGuard
 @UseGuards(JwtAuthGuard)
 @ApiTags("User")
 @Controller("user")
@@ -23,21 +25,29 @@ export class UserController {
    * Get a user
    */
   @Get(":id")
-  async findOne(@Param("id", ParseIntPipe) id: number) {
-    const user = await this.userService.findOneUser({id});
+  async findOne(@Param("id", ParseIntPipe) id: number, @User() user: UserEntity) {
+    if (user.id !== id) {
+      throw new ForbiddenException("You are not allowed to perform this operation");
+    }
 
-    if (!user) {
+    const dbUser = await this.userService.findOneUser({id});
+
+    if (!dbUser) {
       throw new NotFoundException("User not found.");
     }
 
-    return user;
+    return dbUser;
   }
 
   /**
    * Delete a user
    */
   @Delete(":id")
-  async delete(@Param("id", ParseIntPipe) id: number) {
+  async delete(@Param("id", ParseIntPipe) id: number, @User() user: UserEntity) {
+    if (user.id !== id) {
+      throw new ForbiddenException("You are not allowed to perform this operation");
+    }
+
     try {
       return await this.userService.deleteUserAccount(id);
     } catch (e) {

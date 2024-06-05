@@ -1,6 +1,7 @@
 import {Test, TestingModule} from "@nestjs/testing";
 import {ExecutionContext, INestApplication} from "@nestjs/common";
 import * as request from "supertest";
+import {Request} from "express";
 import {JwtAuthGuard} from "../src/auth/guards/jwt.guard";
 import {AuthModule} from "../src/auth/auth.module";
 import {mockAdmin} from "../src/user/user.mocks";
@@ -17,7 +18,7 @@ describe("AuthController (e2e)", () => {
       .overrideGuard(JwtAuthGuard)
       .useValue({
         canActivate: (context: ExecutionContext) => {
-          const req = context.switchToHttp().getRequest();
+          const req = context.switchToHttp().getRequest<Request>();
           req.user = mockAdmin;
           return true;
         }
