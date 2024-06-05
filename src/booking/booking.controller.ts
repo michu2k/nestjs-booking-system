@@ -17,6 +17,11 @@ import {FindAllEntitiesDto} from "../prisma/prisma.dto";
 import {BookingService} from "./booking.service";
 import {CreateBookingDto, UpdateBookingDto} from "./booking.dto";
 import {JwtAuthGuard} from "../auth/guards/jwt.guard";
+import {User} from "../decorators/user.decorator";
+import {UserEntity} from "../user/user.dto";
+import {RolesGuard} from "../guards/roles.guard";
+import {Roles} from "../decorators/roles.deorator";
+import {UserRole} from "@prisma/client";
 
 @ApiTags("Booking")
 @Controller("booking")
@@ -25,19 +30,19 @@ export class BookingController {
   constructor(private bookingService: BookingService) {}
 
   /**
-   * Get a list of bookings
+   * Get a list of user's bookings
    */
   @Get()
-  findAll(@Query() {limit, offset}: FindAllEntitiesDto = {}) {
-    return this.bookingService.findAllBookings(limit, offset);
+  findAll(@User() user: UserEntity, @Query() {limit, offset}: FindAllEntitiesDto = {}) {
+    return this.bookingService.findAllBookings(limit, offset, {userId: user.id});
   }
 
   /**
-   * Get a booking with a specified `id`
+   * Get a user's booking with the specified `id`
    */
   @Get(":id")
-  async findOne(@Param("id", ParseIntPipe) id: number) {
-    const booking = await this.bookingService.findOneBooking(id);
+  async findOne(@Param("id", ParseIntPipe) id: number, @User() user: UserEntity) {
+    const booking = await this.bookingService.findOneBooking(id, {userId: user.id});
 
     if (!booking) {
       throw new NotFoundException("Booking not found.");
@@ -60,7 +65,7 @@ export class BookingController {
   }
 
   /**
-   * Update a booking with a specified `id`
+   * Update a booking with the specified `id`
    */
   @Patch(":id")
   async update(@Param("id", ParseIntPipe) id: number, @Body() data: UpdateBookingDto) {
@@ -73,9 +78,11 @@ export class BookingController {
   }
 
   /**
-   * Delete a booking with a specified `id`
+   * Delete a booking with the specified `id`
    */
   @Delete(":id")
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
   async delete(@Param("id", ParseIntPipe) id: number) {
     try {
       return await this.bookingService.deleteBooking(id);
