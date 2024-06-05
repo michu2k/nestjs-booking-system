@@ -37,7 +37,7 @@ export class LocationController {
   }
 
   /**
-   * Get a location with a specified `id`
+   * Get a location with the specified `id`
    */
   @Get(":id")
   async findOne(@Param("id", ParseIntPipe) id: number) {
@@ -55,7 +55,7 @@ export class LocationController {
    */
   @Post()
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.MANAGER)
   async create(@Body() data: CreateLocationDto) {
     try {
       return await this.locationService.createLocation(data);
@@ -66,11 +66,11 @@ export class LocationController {
   }
 
   /**
-   * Update a location with a specified `id`
+   * Update a location with the specified `id`
    */
   @Patch(":id")
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.MANAGER)
   async update(@Param("id", ParseIntPipe) id: number, @Body() data: UpdateLocationDto) {
     try {
       return await this.locationService.updateLocation(id, data);
@@ -81,11 +81,11 @@ export class LocationController {
   }
 
   /**
-   * Delete a location with a specified `id`
+   * Delete a location with the specified `id`
    */
   @Delete(":id")
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.MANAGER)
   async delete(@Param("id", ParseIntPipe) id: number) {
     try {
       return await this.locationService.deleteLocation(id);
