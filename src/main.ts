@@ -1,5 +1,5 @@
 import {NestFactory} from "@nestjs/core";
-import {ValidationPipe} from "@nestjs/common";
+import {ValidationPipe, VersioningType} from "@nestjs/common";
 import {SwaggerModule, DocumentBuilder} from "@nestjs/swagger";
 import {ConfigService} from "@nestjs/config";
 import * as cookieParser from "cookie-parser";
@@ -12,6 +12,11 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe({transform: true, whitelist: true}));
   app.setGlobalPrefix("api");
+
+  app.enableVersioning({
+    type: VersioningType.URI,
+    defaultVersion: "1"
+  });
 
   app.enableCors({
     origin: configService.get("CORS_ORIGINS").split(","),

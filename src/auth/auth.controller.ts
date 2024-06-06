@@ -1,4 +1,4 @@
-import {Controller, Get, HttpStatus, Req, Res, UseGuards} from "@nestjs/common";
+import {Controller, Get, HttpStatus, Req, Res, UseGuards, VERSION_NEUTRAL} from "@nestjs/common";
 import {Request, Response} from "express";
 import {ConfigService} from "@nestjs/config";
 import {ApiTags} from "@nestjs/swagger";
@@ -11,7 +11,7 @@ import {JwtRefreshAuthGuard} from "./guards/jwt-refresh.guard";
 import {createAuthCookies} from "./auth.utils";
 
 @ApiTags("Auth")
-@Controller("auth")
+@Controller({path: "auth", version: VERSION_NEUTRAL})
 export class AuthController {
   constructor(
     private authService: AuthService,
