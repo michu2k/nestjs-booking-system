@@ -15,11 +15,12 @@ import {
 import {ApiTags} from "@nestjs/swagger";
 import {FindAllEntitiesDto} from "../prisma/prisma.dto";
 import {ServiceService} from "./service.service";
-import {CreateServiceDto, UpdateServiceDto} from "./service.dto";
+import {CreateServiceDto, ServiceEntity, UpdateServiceDto} from "./service.dto";
 import {JwtAuthGuard} from "../auth/guards/jwt.guard";
 import {RolesGuard} from "../guards/roles.guard";
 import {Roles} from "../decorators/roles.deorator";
 import {UserRole} from "@prisma/client";
+import {DeleteEntityResponse} from "../dtos/response.dto";
 
 @ApiTags("Service")
 @Controller("service")
@@ -30,7 +31,7 @@ export class ServiceController {
    * Get a list of services
    */
   @Get()
-  findAll(@Query() {limit, offset}: FindAllEntitiesDto = {}) {
+  findAll(@Query() {limit, offset}: FindAllEntitiesDto = {}): Promise<Array<ServiceEntity>> {
     return this.serviceService.findAllServices(limit, offset);
   }
 
@@ -38,7 +39,7 @@ export class ServiceController {
    * Get a service with the specified `id`
    */
   @Get(":id")
-  async findOne(@Param("id", ParseIntPipe) id: number) {
+  async findOne(@Param("id", ParseIntPipe) id: number): Promise<ServiceEntity> {
     const service = await this.serviceService.findOneService(id);
 
     if (!service) {
@@ -54,7 +55,7 @@ export class ServiceController {
   @Post()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
-  async create(@Body() data: CreateServiceDto) {
+  async create(@Body() data: CreateServiceDto): Promise<ServiceEntity> {
     try {
       return await this.serviceService.createService(data);
     } catch (e) {
@@ -69,7 +70,7 @@ export class ServiceController {
   @Patch(":id")
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
-  async update(@Param("id", ParseIntPipe) id: number, @Body() data: UpdateServiceDto) {
+  async update(@Param("id", ParseIntPipe) id: number, @Body() data: UpdateServiceDto): Promise<ServiceEntity> {
     try {
       return await this.serviceService.updateService(id, data);
     } catch (e) {
@@ -84,7 +85,7 @@ export class ServiceController {
   @Delete(":id")
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
-  async delete(@Param("id", ParseIntPipe) id: number) {
+  async delete(@Param("id", ParseIntPipe) id: number): Promise<DeleteEntityResponse> {
     try {
       return await this.serviceService.deleteService(id);
     } catch (e) {

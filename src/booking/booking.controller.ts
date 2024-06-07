@@ -13,15 +13,16 @@ import {
   UseGuards
 } from "@nestjs/common";
 import {ApiTags} from "@nestjs/swagger";
+import {UserRole} from "@prisma/client";
 import {FindAllEntitiesDto} from "../prisma/prisma.dto";
 import {BookingService} from "./booking.service";
-import {CreateBookingDto, UpdateBookingDto} from "./booking.dto";
+import {BookingEntity, CreateBookingDto, UpdateBookingDto} from "./booking.dto";
 import {JwtAuthGuard} from "../auth/guards/jwt.guard";
 import {User} from "../decorators/user.decorator";
 import {UserEntity} from "../user/user.dto";
 import {RolesGuard} from "../guards/roles.guard";
 import {Roles} from "../decorators/roles.deorator";
-import {UserRole} from "@prisma/client";
+import {DeleteEntityResponse} from "../dtos/response.dto";
 
 @ApiTags("Booking")
 @Controller("booking")
@@ -33,7 +34,7 @@ export class BookingController {
    * Get a list of user's bookings
    */
   @Get()
-  findAll(@User() user: UserEntity, @Query() {limit, offset}: FindAllEntitiesDto = {}) {
+  findAll(@User() user: UserEntity, @Query() {limit, offset}: FindAllEntitiesDto = {}): Promise<Array<BookingEntity>> {
     return this.bookingService.findAllBookings(limit, offset, {userId: user.id});
   }
 
@@ -41,7 +42,7 @@ export class BookingController {
    * Get a user's booking with the specified `id`
    */
   @Get(":id")
-  async findOne(@Param("id", ParseIntPipe) id: number, @User() user: UserEntity) {
+  async findOne(@Param("id", ParseIntPipe) id: number, @User() user: UserEntity): Promise<BookingEntity> {
     const booking = await this.bookingService.findOneBooking(id, {userId: user.id});
 
     if (!booking) {
@@ -55,7 +56,7 @@ export class BookingController {
    * Create a new booking
    */
   @Post()
-  async create(@Body() data: CreateBookingDto) {
+  async create(@Body() data: CreateBookingDto): Promise<BookingEntity> {
     try {
       return await this.bookingService.createBooking(data);
     } catch (e) {
@@ -68,7 +69,7 @@ export class BookingController {
    * Update a booking with the specified `id`
    */
   @Patch(":id")
-  async update(@Param("id", ParseIntPipe) id: number, @Body() data: UpdateBookingDto) {
+  async update(@Param("id", ParseIntPipe) id: number, @Body() data: UpdateBookingDto): Promise<BookingEntity> {
     try {
       return await this.bookingService.updateBooking(id, data);
     } catch (e) {
@@ -83,7 +84,7 @@ export class BookingController {
   @Delete(":id")
   @UseGuards(RolesGuard)
   @Roles(UserRole.ADMIN)
-  async delete(@Param("id", ParseIntPipe) id: number) {
+  async delete(@Param("id", ParseIntPipe) id: number): Promise<DeleteEntityResponse> {
     try {
       return await this.bookingService.deleteBooking(id);
     } catch (e) {

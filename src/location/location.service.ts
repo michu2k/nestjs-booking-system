@@ -31,6 +31,9 @@ export class LocationService {
   }
 
   async deleteLocation(id: number) {
-    return this.prisma.location.delete({where: {id}});
+    return this.prisma.location.delete({
+      where: {id},
+      select: {id: true}
+    });
   }
 }

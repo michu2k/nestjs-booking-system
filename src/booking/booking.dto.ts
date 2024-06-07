@@ -1,8 +1,11 @@
 import {ApiProperty, PartialType, PickType} from "@nestjs/swagger";
-import {BookingStatus} from "@prisma/client";
+import {Booking, BookingStatus} from "@prisma/client";
 import {IsDateString, IsEnum, IsInt} from "class-validator";
 
-export class CreateBookingDto {
+export class BookingEntity implements Booking {
+  @IsInt()
+  id: number;
+
   @IsDateString({strict: true, strictSeparator: true})
   from: Date;
 
@@ -13,11 +16,19 @@ export class CreateBookingDto {
   @ApiProperty({enum: [BookingStatus.CONFIRMED, BookingStatus.PENDING, BookingStatus.CANCELLED]})
   status: BookingStatus;
 
-  @IsInt()
-  userId: number;
+  @IsDateString({strict: true, strictSeparator: true})
+  createdAt: Date;
+
+  @IsDateString({strict: true, strictSeparator: true})
+  updatedAt: Date;
 
   @IsInt()
   serviceId: number;
+
+  @IsInt()
+  userId: number;
 }
 
-export class UpdateBookingDto extends PartialType(PickType(CreateBookingDto, ["from", "to", "status"] as const)) {}
+export class CreateBookingDto extends PickType(BookingEntity, ["from", "to", "status", "userId", "serviceId"]) {}
+
+export class UpdateBookingDto extends PartialType(PickType(BookingEntity, ["from", "to", "status"] as const)) {}

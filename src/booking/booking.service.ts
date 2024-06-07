@@ -41,7 +41,10 @@ export class BookingService {
 
   async deleteBooking(id: number) {
     return this.prisma.booking.delete({
-      where: {id}
+      where: {id},
+      select: {
+        id: true
+      }
     });
   }
 }

@@ -14,6 +14,7 @@ import {UserService} from "./user.service";
 import {JwtAuthGuard} from "../auth/guards/jwt.guard";
 import {User} from "../decorators/user.decorator";
 import {UserEntity} from "./user.dto";
+import {DeleteEntityResponse} from "../dtos/response.dto";
 
 @UseGuards(JwtAuthGuard)
 @ApiTags("User")
@@ -25,7 +26,7 @@ export class UserController {
    * Get a user
    */
   @Get(":id")
-  async findOne(@Param("id", ParseIntPipe) id: number, @User() user: UserEntity) {
+  async findOne(@Param("id", ParseIntPipe) id: number, @User() user: UserEntity): Promise<UserEntity> {
     if (user.id !== id) {
       throw new ForbiddenException("You are not allowed to perform this operation");
     }
@@ -43,7 +44,7 @@ export class UserController {
    * Delete a user
    */
   @Delete(":id")
-  async delete(@Param("id", ParseIntPipe) id: number, @User() user: UserEntity) {
+  async delete(@Param("id", ParseIntPipe) id: number, @User() user: UserEntity): Promise<DeleteEntityResponse> {
     if (user.id !== id) {
       throw new ForbiddenException("You are not allowed to perform this operation");
     }
