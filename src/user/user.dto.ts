@@ -1,4 +1,4 @@
-import {PickType} from "@nestjs/mapped-types";
+import {ApiProperty, PickType} from "@nestjs/swagger";
 import {Account, User, UserRole} from "@prisma/client";
 import {IsEnum, IsPhoneNumber, IsString, IsArray, IsInt, IsOptional} from "class-validator";
 
@@ -13,9 +13,11 @@ export class UserEntity implements User {
   email: string;
 
   @IsPhoneNumber()
-  phone: string;
+  @IsOptional()
+  phone: string | null;
 
   @IsEnum(UserRole)
+  @ApiProperty({enum: [UserRole.ADMIN, UserRole.MANAGER, UserRole.USER]})
   role: UserRole;
 
   @IsString()
@@ -23,11 +25,7 @@ export class UserEntity implements User {
   refreshToken: string | null;
 }
 
-export class CreateUserDto extends PickType(UserEntity, ["name", "email", "role"]) {
-  @IsOptional()
-  @IsPhoneNumber()
-  phone?: string;
-
+export class CreateUserDto extends PickType(UserEntity, ["name", "email", "phone", "role"]) {
   @IsArray()
   account: Pick<AccountEntity, "provider" | "providerAccountId">;
 }

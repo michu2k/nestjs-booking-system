@@ -34,6 +34,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
         name: displayName,
         email,
         role: UserRole.USER,
+        phone: null,
         account: {
           provider,
           providerAccountId: providerId

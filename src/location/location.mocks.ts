@@ -1,6 +1,6 @@
-import {Location} from "@prisma/client";
+import {LocationEntity} from "./location.dto";
 
-export const mockLocation: Location = {
+export const mockLocation: LocationEntity = {
   id: 1,
   address: "934 Koelpin Oval",
   city: "Silver Spring",

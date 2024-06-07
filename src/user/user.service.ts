@@ -40,7 +40,10 @@ export class UserService {
 
   async deleteUserAccount(id: number) {
     return this.prisma.user.delete({
-      where: {id}
+      where: {id},
+      select: {
+        id: true
+      }
     });
   }
 
