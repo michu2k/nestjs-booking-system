@@ -3,6 +3,7 @@ import {ValidationPipe, VersioningType} from "@nestjs/common";
 import {SwaggerModule, DocumentBuilder} from "@nestjs/swagger";
 import {ConfigService} from "@nestjs/config";
 import * as cookieParser from "cookie-parser";
+import * as compression from "compression";
 import {AppModule} from "./app.module";
 
 async function bootstrap() {
@@ -24,6 +25,8 @@ async function bootstrap() {
   });
 
   app.use(cookieParser());
+
+  app.use(compression());
 
   const config = new DocumentBuilder()
     .setTitle("Booking system")
