@@ -1,8 +1,9 @@
 import {Test, TestingModule} from "@nestjs/testing";
+
 import {LocationController} from "./location.controller";
-import {LocationService} from "./location.service";
 import {CreateLocationDto, UpdateLocationDto} from "./location.dto";
 import {mockLocation} from "./location.mocks";
+import {LocationService} from "./location.service";
 
 describe("LocationController", () => {
   let controller: LocationController;

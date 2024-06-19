@@ -1,12 +1,13 @@
-import {Test, TestingModule} from "@nestjs/testing";
-import {JwtService} from "@nestjs/jwt";
-import {ConfigService} from "@nestjs/config";
 import {BadRequestException, UnauthorizedException} from "@nestjs/common";
+import {ConfigService} from "@nestjs/config";
+import {JwtService} from "@nestjs/jwt";
+import {Test, TestingModule} from "@nestjs/testing";
+
 import {PrismaService} from "../prisma/prisma.service";
-import {UserService} from "../user/user.service";
-import {AuthService} from "./auth.service";
 import {mockAccount, mockGoogleProfile, mockUser} from "../user/user.mocks";
+import {UserService} from "../user/user.service";
 import {mockAuthAccessTokens, mockAuthToken} from "./auth.mocks";
+import {AuthService} from "./auth.service";
 
 describe("AuthService", () => {
   let service: AuthService;

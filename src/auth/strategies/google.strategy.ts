@@ -1,10 +1,11 @@
 import {Injectable} from "@nestjs/common";
 import {ConfigService} from "@nestjs/config";
-import {UserRole} from "@prisma/client";
 import {PassportStrategy} from "@nestjs/passport";
+import {UserRole} from "@prisma/client";
 import {Profile, Strategy} from "passport-google-oauth20";
-import {UserService} from "../../user/user.service";
+
 import {UserEntity} from "../../user/user.dto";
+import {UserService} from "../../user/user.service";
 import {AuthService} from "../auth.service";
 
 @Injectable()

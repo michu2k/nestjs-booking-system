@@ -1,13 +1,14 @@
-import {Test, TestingModule} from "@nestjs/testing";
 import {ExecutionContext, INestApplication, ValidationPipe} from "@nestjs/common";
-import * as request from "supertest";
-import {Request} from "express";
+import {Test, TestingModule} from "@nestjs/testing";
 import {BookingStatus} from "@prisma/client";
+import {Request} from "express";
+import * as request from "supertest";
+
 import {AppModule} from "../src/app.module";
-import {CreateBookingDto, UpdateBookingDto} from "../src/booking/booking.dto";
 import {JwtAuthGuard} from "../src/auth/guards/jwt.guard";
-import {mockAdmin} from "../src/user/user.mocks";
+import {CreateBookingDto, UpdateBookingDto} from "../src/booking/booking.dto";
 import {PrismaService} from "../src/prisma/prisma.service";
+import {mockAdmin} from "../src/user/user.mocks";
 
 describe("BookingController (e2e)", () => {
   let app: INestApplication;

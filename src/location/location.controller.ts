@@ -14,15 +14,16 @@ import {
   UseGuards,
   UseInterceptors
 } from "@nestjs/common";
-import {UserRole} from "@prisma/client";
 import {ApiTags} from "@nestjs/swagger";
-import {FindAllEntitiesDto} from "../prisma/prisma.dto";
-import {LocationService} from "./location.service";
-import {CreateLocationDto, LocationEntity, UpdateLocationDto} from "./location.dto";
-import {Roles} from "../decorators/roles.deorator";
+import {UserRole} from "@prisma/client";
+
 import {JwtAuthGuard} from "../auth/guards/jwt.guard";
-import {RolesGuard} from "../guards/roles.guard";
+import {Roles} from "../decorators/roles.deorator";
 import {DeleteEntityResponse} from "../dtos/response.dto";
+import {RolesGuard} from "../guards/roles.guard";
+import {FindAllEntitiesDto} from "../prisma/prisma.dto";
+import {CreateLocationDto, LocationEntity, UpdateLocationDto} from "./location.dto";
+import {LocationService} from "./location.service";
 
 @ApiTags("Location")
 @Controller("location")

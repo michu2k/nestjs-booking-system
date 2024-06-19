@@ -1,6 +1,6 @@
 import {PartialType, PickType} from "@nestjs/swagger";
 import {Service} from "@prisma/client";
-import {IsString, Min, IsInt, IsDateString} from "class-validator";
+import {IsDateString, IsInt, IsString, Min} from "class-validator";
 
 export class ServiceEntity implements Service {
   @IsInt()

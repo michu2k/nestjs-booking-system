@@ -1,8 +1,9 @@
 import {Test, TestingModule} from "@nestjs/testing";
+
 import {ServiceController} from "./service.controller";
-import {ServiceService} from "./service.service";
 import {CreateServiceDto, UpdateServiceDto} from "./service.dto";
 import {mockService} from "./service.mocks";
+import {ServiceService} from "./service.service";
 
 describe("ServiceController", () => {
   let controller: ServiceController;

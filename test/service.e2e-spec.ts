@@ -1,12 +1,13 @@
-import {Test, TestingModule} from "@nestjs/testing";
 import {ExecutionContext, INestApplication, ValidationPipe} from "@nestjs/common";
-import * as request from "supertest";
+import {Test, TestingModule} from "@nestjs/testing";
 import {Request} from "express";
+import * as request from "supertest";
+
 import {AppModule} from "../src/app.module";
-import {CreateServiceDto, UpdateServiceDto} from "../src/service/service.dto";
 import {JwtAuthGuard} from "../src/auth/guards/jwt.guard";
-import {mockAdmin} from "../src/user/user.mocks";
 import {PrismaService} from "../src/prisma/prisma.service";
+import {CreateServiceDto, UpdateServiceDto} from "../src/service/service.dto";
+import {mockAdmin} from "../src/user/user.mocks";
 
 describe("ServiceController (e2e)", () => {
   let app: INestApplication;

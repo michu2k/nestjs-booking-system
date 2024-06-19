@@ -1,8 +1,9 @@
 import {Test, TestingModule} from "@nestjs/testing";
+
 import {PrismaService} from "../prisma/prisma.service";
-import {ServiceService} from "./service.service";
-import {mockService} from "./service.mocks";
 import {CreateServiceDto, UpdateServiceDto} from "./service.dto";
+import {mockService} from "./service.mocks";
+import {ServiceService} from "./service.service";
 
 describe("ServiceService", () => {
   let service: ServiceService;

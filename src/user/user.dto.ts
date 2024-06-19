@@ -1,6 +1,6 @@
 import {ApiProperty, PickType} from "@nestjs/swagger";
 import {Account, User, UserRole} from "@prisma/client";
-import {IsEnum, IsPhoneNumber, IsString, IsArray, IsInt, IsOptional} from "class-validator";
+import {IsArray, IsEnum, IsInt, IsOptional, IsPhoneNumber, IsString} from "class-validator";
 
 export class UserEntity implements User {
   @IsInt()

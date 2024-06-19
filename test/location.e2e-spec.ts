@@ -1,10 +1,11 @@
-import {Test, TestingModule} from "@nestjs/testing";
 import {ExecutionContext, INestApplication, ValidationPipe} from "@nestjs/common";
-import * as request from "supertest";
+import {Test, TestingModule} from "@nestjs/testing";
 import {Request} from "express";
+import * as request from "supertest";
+
 import {AppModule} from "../src/app.module";
-import {CreateLocationDto, UpdateLocationDto} from "../src/location/location.dto";
 import {JwtAuthGuard} from "../src/auth/guards/jwt.guard";
+import {CreateLocationDto, UpdateLocationDto} from "../src/location/location.dto";
 import {mockAdmin} from "../src/user/user.mocks";
 
 describe("LocationController (e2e)", () => {

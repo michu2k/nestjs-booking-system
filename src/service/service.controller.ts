@@ -15,14 +15,15 @@ import {
   UseInterceptors
 } from "@nestjs/common";
 import {ApiTags} from "@nestjs/swagger";
-import {FindAllEntitiesDto} from "../prisma/prisma.dto";
-import {ServiceService} from "./service.service";
-import {CreateServiceDto, ServiceEntity, UpdateServiceDto} from "./service.dto";
-import {JwtAuthGuard} from "../auth/guards/jwt.guard";
-import {RolesGuard} from "../guards/roles.guard";
-import {Roles} from "../decorators/roles.deorator";
 import {UserRole} from "@prisma/client";
+
+import {JwtAuthGuard} from "../auth/guards/jwt.guard";
+import {Roles} from "../decorators/roles.deorator";
 import {DeleteEntityResponse} from "../dtos/response.dto";
+import {RolesGuard} from "../guards/roles.guard";
+import {FindAllEntitiesDto} from "../prisma/prisma.dto";
+import {CreateServiceDto, ServiceEntity, UpdateServiceDto} from "./service.dto";
+import {ServiceService} from "./service.service";
 
 @ApiTags("Service")
 @Controller("service")
