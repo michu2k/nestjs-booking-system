@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
@@ -10,7 +11,8 @@ import {
   Patch,
   Post,
   Query,
-  UseGuards
+  UseGuards,
+  UseInterceptors
 } from "@nestjs/common";
 import {UserRole} from "@prisma/client";
 import {ApiTags} from "@nestjs/swagger";
@@ -24,6 +26,7 @@ import {DeleteEntityResponse} from "../dtos/response.dto";
 
 @ApiTags("Location")
 @Controller("location")
+@UseInterceptors(ClassSerializerInterceptor)
 export class LocationController {
   constructor(private locationService: LocationService) {}
 

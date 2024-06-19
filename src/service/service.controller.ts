@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
@@ -10,7 +11,8 @@ import {
   Patch,
   Post,
   Query,
-  UseGuards
+  UseGuards,
+  UseInterceptors
 } from "@nestjs/common";
 import {ApiTags} from "@nestjs/swagger";
 import {FindAllEntitiesDto} from "../prisma/prisma.dto";
@@ -24,6 +26,7 @@ import {DeleteEntityResponse} from "../dtos/response.dto";
 
 @ApiTags("Service")
 @Controller("service")
+@UseInterceptors(ClassSerializerInterceptor)
 export class ServiceController {
   constructor(private serviceService: ServiceService) {}
 

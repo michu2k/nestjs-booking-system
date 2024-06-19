@@ -23,9 +23,13 @@ export class UserEntity implements User {
   @IsString()
   @IsOptional()
   refreshToken: string | null;
+
+  constructor(partial: Partial<UserEntity>) {
+    Object.assign(this, partial);
+  }
 }
 
-export class CreateUserDto extends PickType(UserEntity, ["name", "email", "phone", "role"]) {
+export class CreateUserDto extends PickType(UserEntity, ["name", "email", "phone", "role"] as const) {
   @IsArray()
   account: Pick<AccountEntity, "provider" | "providerAccountId">;
 }
@@ -42,6 +46,10 @@ export class AccountEntity implements Account {
 
   @IsInt()
   userId: number;
+
+  constructor(partial: Partial<AccountEntity>) {
+    Object.assign(this, partial);
+  }
 }
 
-export class CreateAccountDto extends PickType(AccountEntity, ["provider", "providerAccountId", "userId"]) {}
+export class CreateAccountDto extends PickType(AccountEntity, ["provider", "providerAccountId", "userId"] as const) {}

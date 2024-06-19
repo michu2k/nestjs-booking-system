@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ClassSerializerInterceptor,
   Controller,
   Delete,
   ForbiddenException,
@@ -7,7 +8,8 @@ import {
   NotFoundException,
   Param,
   ParseIntPipe,
-  UseGuards
+  UseGuards,
+  UseInterceptors
 } from "@nestjs/common";
 import {ApiTags} from "@nestjs/swagger";
 import {UserService} from "./user.service";
@@ -19,6 +21,7 @@ import {DeleteEntityResponse} from "../dtos/response.dto";
 @UseGuards(JwtAuthGuard)
 @ApiTags("User")
 @Controller("user")
+@UseInterceptors(ClassSerializerInterceptor)
 export class UserController {
   constructor(private userService: UserService) {}
 
@@ -26,7 +29,7 @@ export class UserController {
    * Get a user
    */
   @Get(":id")
-  async findOne(@Param("id", ParseIntPipe) id: number, @User() user: UserEntity): Promise<UserEntity> {
+  async findOne(@Param("id", ParseIntPipe) id: number, @User() user: UserEntity) {
     if (user.id !== id) {
       throw new ForbiddenException("You are not allowed to perform this operation");
     }
@@ -37,20 +40,20 @@ export class UserController {
       throw new NotFoundException("User not found.");
     }
 
-    return dbUser;
+    return new UserEntity(dbUser);
   }
 
   /**
    * Delete a user
    */
   @Delete(":id")
-  async delete(@Param("id", ParseIntPipe) id: number, @User() user: UserEntity): Promise<DeleteEntityResponse> {
+  async delete(@Param("id", ParseIntPipe) id: number, @User() user: UserEntity) {
     if (user.id !== id) {
       throw new ForbiddenException("You are not allowed to perform this operation");
     }
 
     try {
-      return await this.userService.deleteUserAccount(id);
+      return new DeleteEntityResponse(await this.userService.deleteUserAccount(id));
     } catch (e) {
       console.error(e.message);
       throw new BadRequestException("Failed to delete account");
