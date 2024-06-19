@@ -24,8 +24,17 @@ export class ServiceEntity implements Service {
 
   @IsInt()
   locationId: number;
+
+  constructor(partial: Partial<ServiceEntity>) {
+    Object.assign(this, partial);
+  }
 }
 
-export class CreateServiceDto extends PickType(ServiceEntity, ["name", "description", "price", "locationId"]) {}
+export class CreateServiceDto extends PickType(ServiceEntity, [
+  "name",
+  "description",
+  "price",
+  "locationId"
+] as const) {}
 
 export class UpdateServiceDto extends PartialType(ServiceEntity) {}

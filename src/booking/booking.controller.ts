@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
@@ -10,7 +11,8 @@ import {
   Patch,
   Post,
   Query,
-  UseGuards
+  UseGuards,
+  UseInterceptors
 } from "@nestjs/common";
 import {ApiTags} from "@nestjs/swagger";
 import {UserRole} from "@prisma/client";
@@ -26,6 +28,7 @@ import {DeleteEntityResponse} from "../dtos/response.dto";
 
 @ApiTags("Booking")
 @Controller("booking")
+@UseInterceptors(ClassSerializerInterceptor)
 @UseGuards(JwtAuthGuard)
 export class BookingController {
   constructor(private bookingService: BookingService) {}
@@ -34,31 +37,32 @@ export class BookingController {
    * Get a list of user's bookings
    */
   @Get()
-  findAll(@User() user: UserEntity, @Query() {limit, offset}: FindAllEntitiesDto = {}): Promise<Array<BookingEntity>> {
-    return this.bookingService.findAllBookings(limit, offset, {userId: user.id});
+  async findAll(@User() user: UserEntity, @Query() {limit, offset}: FindAllEntitiesDto = {}) {
+    const bookings = await this.bookingService.findAllBookings(limit, offset, {userId: user.id});
+    return bookings.map((bookings) => new BookingEntity(bookings));
   }
 
   /**
    * Get a user's booking with the specified `id`
    */
   @Get(":id")
-  async findOne(@Param("id", ParseIntPipe) id: number, @User() user: UserEntity): Promise<BookingEntity> {
+  async findOne(@Param("id", ParseIntPipe) id: number, @User() user: UserEntity) {
     const booking = await this.bookingService.findOneBooking(id, {userId: user.id});
 
     if (!booking) {
       throw new NotFoundException("Booking not found.");
     }
 
-    return booking;
+    return new BookingEntity(booking);
   }
 
   /**
    * Create a new booking
    */
   @Post()
-  async create(@Body() data: CreateBookingDto): Promise<BookingEntity> {
+  async create(@Body() data: CreateBookingDto) {
     try {
-      return await this.bookingService.createBooking(data);
+      return new BookingEntity(await this.bookingService.createBooking(data));
     } catch (e) {
       console.log(e.message);
       throw new BadRequestException("Failed to create booking.");
@@ -69,9 +73,9 @@ export class BookingController {
    * Update a booking with the specified `id`
    */
   @Patch(":id")
-  async update(@Param("id", ParseIntPipe) id: number, @Body() data: UpdateBookingDto): Promise<BookingEntity> {
+  async update(@Param("id", ParseIntPipe) id: number, @Body() data: UpdateBookingDto) {
     try {
-      return await this.bookingService.updateBooking(id, data);
+      return new BookingEntity(await this.bookingService.updateBooking(id, data));
     } catch (e) {
       console.error(e.message);
       throw new BadRequestException("Failed to update booking.");
@@ -84,9 +88,9 @@ export class BookingController {
   @Delete(":id")
   @UseGuards(RolesGuard)
   @Roles(UserRole.ADMIN)
-  async delete(@Param("id", ParseIntPipe) id: number): Promise<DeleteEntityResponse> {
+  async delete(@Param("id", ParseIntPipe) id: number) {
     try {
-      return await this.bookingService.deleteBooking(id);
+      return new DeleteEntityResponse(await this.bookingService.deleteBooking(id));
     } catch (e) {
       console.error(e.message);
       throw new BadRequestException("Failed to delete booking.");

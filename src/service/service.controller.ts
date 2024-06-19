@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
@@ -10,7 +11,8 @@ import {
   Patch,
   Post,
   Query,
-  UseGuards
+  UseGuards,
+  UseInterceptors
 } from "@nestjs/common";
 import {ApiTags} from "@nestjs/swagger";
 import {FindAllEntitiesDto} from "../prisma/prisma.dto";
@@ -24,6 +26,7 @@ import {DeleteEntityResponse} from "../dtos/response.dto";
 
 @ApiTags("Service")
 @Controller("service")
+@UseInterceptors(ClassSerializerInterceptor)
 export class ServiceController {
   constructor(private serviceService: ServiceService) {}
 
@@ -31,22 +34,23 @@ export class ServiceController {
    * Get a list of services
    */
   @Get()
-  findAll(@Query() {limit, offset}: FindAllEntitiesDto = {}): Promise<Array<ServiceEntity>> {
-    return this.serviceService.findAllServices(limit, offset);
+  async findAll(@Query() {limit, offset}: FindAllEntitiesDto = {}) {
+    const services = await this.serviceService.findAllServices(limit, offset);
+    return services.map((service) => new ServiceEntity(service));
   }
 
   /**
    * Get a service with the specified `id`
    */
   @Get(":id")
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<ServiceEntity> {
+  async findOne(@Param("id", ParseIntPipe) id: number) {
     const service = await this.serviceService.findOneService(id);
 
     if (!service) {
       throw new NotFoundException("Service not found.");
     }
 
-    return service;
+    return new ServiceEntity(service);
   }
 
   /**
@@ -55,9 +59,9 @@ export class ServiceController {
   @Post()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
-  async create(@Body() data: CreateServiceDto): Promise<ServiceEntity> {
+  async create(@Body() data: CreateServiceDto) {
     try {
-      return await this.serviceService.createService(data);
+      return new ServiceEntity(await this.serviceService.createService(data));
     } catch (e) {
       console.error(e.message);
       throw new BadRequestException("Failed to create service.");
@@ -70,9 +74,9 @@ export class ServiceController {
   @Patch(":id")
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
-  async update(@Param("id", ParseIntPipe) id: number, @Body() data: UpdateServiceDto): Promise<ServiceEntity> {
+  async update(@Param("id", ParseIntPipe) id: number, @Body() data: UpdateServiceDto) {
     try {
-      return await this.serviceService.updateService(id, data);
+      return new ServiceEntity(await this.serviceService.updateService(id, data));
     } catch (e) {
       console.error(e.message);
       throw new BadRequestException("Failed to update service.");
@@ -85,9 +89,9 @@ export class ServiceController {
   @Delete(":id")
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
-  async delete(@Param("id", ParseIntPipe) id: number): Promise<DeleteEntityResponse> {
+  async delete(@Param("id", ParseIntPipe) id: number) {
     try {
-      return await this.serviceService.deleteService(id);
+      return new DeleteEntityResponse(await this.serviceService.deleteService(id));
     } catch (e) {
       console.error(e.message);
       throw new BadRequestException("Failed to delete service.");

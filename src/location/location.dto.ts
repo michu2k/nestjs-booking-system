@@ -20,8 +20,18 @@ export class LocationEntity implements Location {
 
   @IsNumber()
   lng: number;
+
+  constructor(partial: Partial<LocationEntity>) {
+    Object.assign(this, partial);
+  }
 }
 
-export class CreateLocationDto extends PickType(LocationEntity, ["address", "city", "country", "lat", "lng"]) {}
+export class CreateLocationDto extends PickType(LocationEntity, [
+  "address",
+  "city",
+  "country",
+  "lat",
+  "lng"
+] as const) {}
 
 export class UpdateLocationDto extends PartialType(CreateLocationDto) {}
