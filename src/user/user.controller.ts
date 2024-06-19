@@ -12,11 +12,12 @@ import {
   UseInterceptors
 } from "@nestjs/common";
 import {ApiTags} from "@nestjs/swagger";
-import {UserService} from "./user.service";
+
 import {JwtAuthGuard} from "../auth/guards/jwt.guard";
 import {User} from "../decorators/user.decorator";
-import {UserEntity} from "./user.dto";
 import {DeleteEntityResponse} from "../dtos/response.dto";
+import {UserEntity} from "./user.dto";
+import {UserService} from "./user.service";
 
 @UseGuards(JwtAuthGuard)
 @ApiTags("User")

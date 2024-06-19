@@ -1,4 +1,5 @@
 import {BookingStatus} from "@prisma/client";
+
 import {BookingEntity} from "./booking.dto";
 
 export const mockBooking: BookingEntity = {

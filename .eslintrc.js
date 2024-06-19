@@ -5,7 +5,7 @@ module.exports = {
     tsconfigRootDir: __dirname,
     sourceType: "module"
   },
-  plugins: ["@typescript-eslint/eslint-plugin"],
+  plugins: ["@typescript-eslint/eslint-plugin", "unused-imports", "simple-import-sort"],
   extends: ["plugin:@typescript-eslint/recommended", "plugin:prettier/recommended", "prettier"],
   root: true,
   env: {
@@ -18,6 +18,27 @@ module.exports = {
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-explicit-any": "off",
-    "prettier/prettier": ["error", {endOfLine: "auto"}]
+    "unused-imports/no-unused-imports": "error",
+    "prettier/prettier": ["error", {endOfLine: "auto"}],
+    "simple-import-sort/imports": [
+      "error",
+      {
+        groups: [
+          // Node.js builtins prefixed with `node:`.
+          ["^node:"],
+          // Packages.
+          // Things that start with a letter (or digit or underscore), or `@` followed by a letter.
+          ["^@?\\w"],
+          // Absolute imports and other imports such as Vue-style `@/foo`.
+          // Anything not matched in another group.
+          ["^"],
+          // Relative imports.
+          // Anything that starts with a dot.
+          ["^\\."],
+          // Side effect imports.
+          ["^\\u0000"]
+        ]
+      }
+    ]
   }
 };

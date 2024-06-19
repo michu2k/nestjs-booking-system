@@ -16,15 +16,16 @@ import {
 } from "@nestjs/common";
 import {ApiTags} from "@nestjs/swagger";
 import {UserRole} from "@prisma/client";
-import {FindAllEntitiesDto} from "../prisma/prisma.dto";
-import {BookingService} from "./booking.service";
-import {BookingEntity, CreateBookingDto, UpdateBookingDto} from "./booking.dto";
+
 import {JwtAuthGuard} from "../auth/guards/jwt.guard";
-import {User} from "../decorators/user.decorator";
-import {UserEntity} from "../user/user.dto";
-import {RolesGuard} from "../guards/roles.guard";
 import {Roles} from "../decorators/roles.deorator";
+import {User} from "../decorators/user.decorator";
 import {DeleteEntityResponse} from "../dtos/response.dto";
+import {RolesGuard} from "../guards/roles.guard";
+import {FindAllEntitiesDto} from "../prisma/prisma.dto";
+import {UserEntity} from "../user/user.dto";
+import {BookingEntity, CreateBookingDto, UpdateBookingDto} from "./booking.dto";
+import {BookingService} from "./booking.service";
 
 @ApiTags("Booking")
 @Controller("booking")

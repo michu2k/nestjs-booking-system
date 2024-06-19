@@ -1,9 +1,10 @@
-import {Test, TestingModule} from "@nestjs/testing";
 import {ExecutionContext, INestApplication} from "@nestjs/common";
-import * as request from "supertest";
+import {Test, TestingModule} from "@nestjs/testing";
 import {Request} from "express";
-import {JwtAuthGuard} from "../src/auth/guards/jwt.guard";
+import * as request from "supertest";
+
 import {AuthModule} from "../src/auth/auth.module";
+import {JwtAuthGuard} from "../src/auth/guards/jwt.guard";
 import {mockAdmin} from "../src/user/user.mocks";
 
 describe("AuthController (e2e)", () => {

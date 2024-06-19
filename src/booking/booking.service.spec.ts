@@ -1,9 +1,10 @@
 import {Test, TestingModule} from "@nestjs/testing";
 import {BookingStatus} from "@prisma/client";
+
 import {PrismaService} from "../prisma/prisma.service";
-import {BookingService} from "./booking.service";
 import {CreateBookingDto, UpdateBookingDto} from "./booking.dto";
 import {mockBooking} from "./booking.mocks";
+import {BookingService} from "./booking.service";
 
 describe("BookingService", () => {
   let service: BookingService;

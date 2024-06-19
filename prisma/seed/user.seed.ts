@@ -1,5 +1,6 @@
-import {PrismaClient, type Prisma, UserRole} from "@prisma/client";
 import {faker} from "@faker-js/faker";
+import {type Prisma, PrismaClient, UserRole} from "@prisma/client";
+
 import {SEED_RECORDS} from "../seed.utils";
 
 function createUser(role: UserRole): Prisma.UserCreateInput {

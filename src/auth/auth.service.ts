@@ -1,8 +1,9 @@
 import {BadRequestException, Injectable, UnauthorizedException} from "@nestjs/common";
-import {Profile} from "passport-google-oauth20";
 import {ConfigService} from "@nestjs/config";
 import {JwtService} from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
+import {Profile} from "passport-google-oauth20";
+
 import {PrismaService} from "../prisma/prisma.service";
 import {UserEntity} from "../user/user.dto";
 import {UserService} from "../user/user.service";

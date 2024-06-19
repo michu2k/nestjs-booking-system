@@ -1,14 +1,15 @@
 import {Controller, Get, HttpStatus, Req, Res, UseGuards, VERSION_NEUTRAL} from "@nestjs/common";
-import {Request, Response} from "express";
 import {ConfigService} from "@nestjs/config";
 import {ApiTags} from "@nestjs/swagger";
-import {UserEntity} from "../user/user.dto";
+import {Request, Response} from "express";
+
 import {User} from "../decorators/user.decorator";
+import {UserEntity} from "../user/user.dto";
 import {AuthService} from "./auth.service";
+import {createAuthCookies} from "./auth.utils";
 import {GoogleAuthGuard} from "./guards/google-auth.guard";
 import {JwtAuthGuard} from "./guards/jwt.guard";
 import {JwtRefreshAuthGuard} from "./guards/jwt-refresh.guard";
-import {createAuthCookies} from "./auth.utils";
 
 @ApiTags("Auth")
 @Controller({path: "auth", version: VERSION_NEUTRAL})

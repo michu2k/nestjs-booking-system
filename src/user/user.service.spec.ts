@@ -1,9 +1,10 @@
 import {Test, TestingModule} from "@nestjs/testing";
 import {UserRole} from "@prisma/client";
+
 import {PrismaService} from "../prisma/prisma.service";
-import {UserService} from "./user.service";
-import {mockAccount, mockUser} from "./user.mocks";
 import {CreateAccountDto, CreateUserDto} from "./user.dto";
+import {mockAccount, mockUser} from "./user.mocks";
+import {UserService} from "./user.service";
 
 describe("UserService", () => {
   let service: UserService;

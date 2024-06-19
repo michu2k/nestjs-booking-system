@@ -1,8 +1,9 @@
 import {Test, TestingModule} from "@nestjs/testing";
+
 import {PrismaService} from "../prisma/prisma.service";
-import {LocationService} from "./location.service";
-import {mockLocation} from "./location.mocks";
 import {CreateLocationDto, UpdateLocationDto} from "./location.dto";
+import {mockLocation} from "./location.mocks";
+import {LocationService} from "./location.service";
 
 describe("LocationService", () => {
   let service: LocationService;
