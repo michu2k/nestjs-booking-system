@@ -1,4 +1,4 @@
-import {ApiProperty, PartialType, PickType} from "@nestjs/swagger";
+import {ApiHideProperty, ApiProperty, PartialType, PickType} from "@nestjs/swagger";
 import {Booking, BookingStatus} from "@prisma/client";
 import {Exclude} from "class-transformer";
 import {IsDateString, IsEnum, IsInt} from "class-validator";
@@ -25,10 +25,12 @@ export class BookingEntity implements Booking {
 
   @IsInt()
   @Exclude()
+  @ApiHideProperty()
   serviceId: number;
 
   @IsInt()
   @Exclude()
+  @ApiHideProperty()
   userId: number;
 
   constructor(partial: Partial<BookingEntity>) {
