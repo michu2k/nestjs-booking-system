@@ -33,22 +33,23 @@ export class LocationController {
   @Get()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.MANAGER)
-  findAll(@Query() {limit, offset}: FindAllEntitiesDto = {}): Promise<Array<LocationEntity>> {
-    return this.locationService.findAllLocations(limit, offset);
+  async findAll(@Query() {limit, offset}: FindAllEntitiesDto = {}) {
+    const locations = await this.locationService.findAllLocations(limit, offset);
+    return locations.map((location) => new LocationEntity(location));
   }
 
   /**
    * Get a location with the specified `id`
    */
   @Get(":id")
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<LocationEntity> {
+  async findOne(@Param("id", ParseIntPipe) id: number) {
     const location = await this.locationService.findOneLocation(id);
 
     if (!location) {
       throw new NotFoundException("Location not found.");
     }
 
-    return location;
+    return new LocationEntity(location);
   }
 
   /**
@@ -57,9 +58,9 @@ export class LocationController {
   @Post()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.MANAGER)
-  async create(@Body() data: CreateLocationDto): Promise<LocationEntity> {
+  async create(@Body() data: CreateLocationDto) {
     try {
-      return await this.locationService.createLocation(data);
+      return new LocationEntity(await this.locationService.createLocation(data));
     } catch (e) {
       console.error(e.message);
       throw new BadRequestException("Failed to create location.");
@@ -72,9 +73,9 @@ export class LocationController {
   @Patch(":id")
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.MANAGER)
-  async update(@Param("id", ParseIntPipe) id: number, @Body() data: UpdateLocationDto): Promise<LocationEntity> {
+  async update(@Param("id", ParseIntPipe) id: number, @Body() data: UpdateLocationDto) {
     try {
-      return await this.locationService.updateLocation(id, data);
+      return new LocationEntity(await this.locationService.updateLocation(id, data));
     } catch (e) {
       console.error(e.message);
       throw new BadRequestException("Failed to update location.");
@@ -87,9 +88,9 @@ export class LocationController {
   @Delete(":id")
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.MANAGER)
-  async delete(@Param("id", ParseIntPipe) id: number): Promise<DeleteEntityResponse> {
+  async delete(@Param("id", ParseIntPipe) id: number) {
     try {
-      return await this.locationService.deleteLocation(id);
+      return new DeleteEntityResponse(await this.locationService.deleteLocation(id));
     } catch (e) {
       console.error(e.message);
       throw new BadRequestException("Failed to delete location.");
