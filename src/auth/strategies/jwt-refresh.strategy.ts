@@ -4,6 +4,7 @@ import {PassportStrategy} from "@nestjs/passport";
 import {Request} from "express";
 import {ExtractJwt, Strategy} from "passport-jwt";
 
+import {UserEntity} from "../../user/user.dto";
 import {UserService} from "../../user/user.service";
 import {JwtPayload} from "../auth.utils";
 
@@ -38,6 +39,6 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, "jwt-refresh"
       throw new UnauthorizedException("User not found");
     }
 
-    return user;
+    return new UserEntity(user);
   }
 }

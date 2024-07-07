@@ -23,7 +23,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
     });
   }
 
-  async validate(_accessToken: string, _refreshToken: string, profile: Profile): Promise<UserEntity> {
+  async validate(_accessToken: string, _refreshToken: string, profile: Profile) {
     const {emails, displayName, provider, id: providerId} = profile;
 
     const email = emails[0].value;
@@ -54,6 +54,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
       });
     }
 
-    return user;
+    return new UserEntity(user);
   }
 }

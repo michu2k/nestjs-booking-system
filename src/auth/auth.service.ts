@@ -7,6 +7,7 @@ import {Profile} from "passport-google-oauth20";
 import {PrismaService} from "../prisma/prisma.service";
 import {UserEntity} from "../user/user.dto";
 import {UserService} from "../user/user.service";
+import {getErrorMessage} from "../utils/getErrorMessage";
 import {JwtPayload} from "./auth.utils";
 
 @Injectable()
@@ -55,7 +56,7 @@ export class AuthService {
         refreshToken
       };
     } catch (e) {
-      console.error(e.message);
+      console.error(getErrorMessage(e));
       throw new BadRequestException("Failed to update user's token");
     }
   }

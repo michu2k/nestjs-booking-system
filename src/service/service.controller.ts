@@ -22,6 +22,7 @@ import {Roles} from "../decorators/roles.deorator";
 import {DeleteEntityResponse} from "../dtos/response.dto";
 import {RolesGuard} from "../guards/roles.guard";
 import {FindAllEntitiesDto} from "../prisma/prisma.dto";
+import {getErrorMessage} from "../utils/getErrorMessage";
 import {CreateServiceDto, ServiceEntity, UpdateServiceDto} from "./service.dto";
 import {ServiceService} from "./service.service";
 
@@ -64,7 +65,7 @@ export class ServiceController {
     try {
       return new ServiceEntity(await this.serviceService.createService(data));
     } catch (e) {
-      console.error(e.message);
+      console.error(getErrorMessage(e));
       throw new BadRequestException("Failed to create service.");
     }
   }
@@ -79,7 +80,7 @@ export class ServiceController {
     try {
       return new ServiceEntity(await this.serviceService.updateService(id, data));
     } catch (e) {
-      console.error(e.message);
+      console.error(getErrorMessage(e));
       throw new BadRequestException("Failed to update service.");
     }
   }
@@ -94,7 +95,7 @@ export class ServiceController {
     try {
       return new DeleteEntityResponse(await this.serviceService.deleteService(id));
     } catch (e) {
-      console.error(e.message);
+      console.error(getErrorMessage(e));
       throw new BadRequestException("Failed to delete service.");
     }
   }
