@@ -22,6 +22,7 @@ import {Roles} from "../decorators/roles.deorator";
 import {DeleteEntityResponse} from "../dtos/response.dto";
 import {RolesGuard} from "../guards/roles.guard";
 import {FindAllEntitiesDto} from "../prisma/prisma.dto";
+import {getErrorMessage} from "../utils/getErrorMessage";
 import {CreateLocationDto, LocationEntity, UpdateLocationDto} from "./location.dto";
 import {LocationService} from "./location.service";
 
@@ -66,7 +67,7 @@ export class LocationController {
     try {
       return new LocationEntity(await this.locationService.createLocation(data));
     } catch (e) {
-      console.error(e.message);
+      console.error(getErrorMessage(e));
       throw new BadRequestException("Failed to create location.");
     }
   }
@@ -81,7 +82,7 @@ export class LocationController {
     try {
       return new LocationEntity(await this.locationService.updateLocation(id, data));
     } catch (e) {
-      console.error(e.message);
+      console.error(getErrorMessage(e));
       throw new BadRequestException("Failed to update location.");
     }
   }
@@ -96,7 +97,7 @@ export class LocationController {
     try {
       return new DeleteEntityResponse(await this.locationService.deleteLocation(id));
     } catch (e) {
-      console.error(e.message);
+      console.error(getErrorMessage(e));
       throw new BadRequestException("Failed to delete location.");
     }
   }

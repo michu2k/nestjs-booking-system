@@ -16,6 +16,7 @@ import {ApiTags} from "@nestjs/swagger";
 import {JwtAuthGuard} from "../auth/guards/jwt.guard";
 import {User} from "../decorators/user.decorator";
 import {DeleteEntityResponse} from "../dtos/response.dto";
+import {getErrorMessage} from "../utils/getErrorMessage";
 import {UserEntity} from "./user.dto";
 import {UserService} from "./user.service";
 
@@ -56,7 +57,7 @@ export class UserController {
     try {
       return new DeleteEntityResponse(await this.userService.deleteUserAccount(id));
     } catch (e) {
-      console.error(e.message);
+      console.error(getErrorMessage(e));
       throw new BadRequestException("Failed to delete account");
     }
   }

@@ -24,6 +24,7 @@ import {DeleteEntityResponse} from "../dtos/response.dto";
 import {RolesGuard} from "../guards/roles.guard";
 import {FindAllEntitiesDto} from "../prisma/prisma.dto";
 import {UserEntity} from "../user/user.dto";
+import {getErrorMessage} from "../utils/getErrorMessage";
 import {BookingEntity, CreateBookingDto, UpdateBookingDto} from "./booking.dto";
 import {BookingService} from "./booking.service";
 
@@ -65,7 +66,7 @@ export class BookingController {
     try {
       return new BookingEntity(await this.bookingService.createBooking(data));
     } catch (e) {
-      console.log(e.message);
+      console.log(getErrorMessage(e));
       throw new BadRequestException("Failed to create booking.");
     }
   }
@@ -78,7 +79,7 @@ export class BookingController {
     try {
       return new BookingEntity(await this.bookingService.updateBooking(id, data));
     } catch (e) {
-      console.error(e.message);
+      console.error(getErrorMessage(e));
       throw new BadRequestException("Failed to update booking.");
     }
   }
@@ -93,7 +94,7 @@ export class BookingController {
     try {
       return new DeleteEntityResponse(await this.bookingService.deleteBooking(id));
     } catch (e) {
-      console.error(e.message);
+      console.error(getErrorMessage(e));
       throw new BadRequestException("Failed to delete booking.");
     }
   }
