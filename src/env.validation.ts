@@ -1,5 +1,5 @@
 import {plainToInstance} from "class-transformer";
-import {IsString, IsUrl, validateSync} from "class-validator";
+import {IsOptional, IsString, IsUrl, validateSync} from "class-validator";
 
 class EnvironmentVariables {
   @IsString()
@@ -13,6 +13,10 @@ class EnvironmentVariables {
 
   @IsString()
   POSTGRES_DB: string;
+
+  @IsString()
+  @IsOptional()
+  POSTGRES_PORT: string;
 
   @IsString()
   GOOGLE_CLIENT_ID: string;
