@@ -5,8 +5,8 @@ on: pull_request
 env:
   DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
-  POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
   POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+  POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
   POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
 
   GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
@@ -64,7 +64,7 @@ jobs:
       - name: Install dependencies
         uses: ./.github/actions/install-dependencies
 
-      - name: Generate prisma client
+      - name: Generate Prisma client
         run: pnpm prisma:gen
 
       - name: Apply migrations to the database
