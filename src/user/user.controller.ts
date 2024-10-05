@@ -16,7 +16,7 @@ import {ApiTags} from "@nestjs/swagger";
 import {JwtAuthGuard} from "../auth/guards/jwt.guard";
 import {User} from "../decorators/user.decorator";
 import {DeleteEntityResponse} from "../dtos/response.dto";
-import {getErrorMessage} from "../utils/getErrorMessage";
+import {getErrorMessage} from "../utils/get-error-message";
 import {UserEntity} from "./user.dto";
 import {UserService} from "./user.service";
 

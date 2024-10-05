@@ -7,7 +7,7 @@ import {Profile} from "passport-google-oauth20";
 import {PrismaService} from "../prisma/prisma.service";
 import {UserEntity} from "../user/user.dto";
 import {UserService} from "../user/user.service";
-import {getErrorMessage} from "../utils/getErrorMessage";
+import {getErrorMessage} from "../utils/get-error-message";
 import {JwtPayload} from "./auth.utils";
 
 @Injectable()

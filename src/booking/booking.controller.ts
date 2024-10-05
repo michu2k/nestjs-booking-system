@@ -24,7 +24,7 @@ import {DeleteEntityResponse} from "../dtos/response.dto";
 import {RolesGuard} from "../guards/roles.guard";
 import {FindAllEntitiesDto} from "../prisma/prisma.dto";
 import {UserEntity} from "../user/user.dto";
-import {getErrorMessage} from "../utils/getErrorMessage";
+import {getErrorMessage} from "../utils/get-error-message";
 import {BookingEntity, CreateBookingDto, UpdateBookingDto} from "./booking.dto";
 import {BookingService} from "./booking.service";
 

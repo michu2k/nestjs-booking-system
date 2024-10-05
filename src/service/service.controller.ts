@@ -22,7 +22,7 @@ import {Roles} from "../decorators/roles.deorator";
 import {DeleteEntityResponse} from "../dtos/response.dto";
 import {RolesGuard} from "../guards/roles.guard";
 import {FindAllEntitiesDto} from "../prisma/prisma.dto";
-import {getErrorMessage} from "../utils/getErrorMessage";
+import {getErrorMessage} from "../utils/get-error-message";
 import {CreateServiceDto, ServiceEntity, UpdateServiceDto} from "./service.dto";
 import {ServiceService} from "./service.service";
 
