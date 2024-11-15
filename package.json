@@ -2,6 +2,7 @@
   "name": "nestjs-booking-system",
   "version": "1.0.0",
   "license": "MIT",
+  "author": "Michał Strumpf",
   "private": true,
   "scripts": {
     "build": "nest build",
