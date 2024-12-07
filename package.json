@@ -1,7 +1,8 @@
 {
   "name": "nestjs-booking-system",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "license": "MIT",
+  "author": "Michał Strumpf",
   "private": true,
   "scripts": {
     "build": "nest build",
@@ -14,7 +15,6 @@
     "lint:fix": "eslint \"{src,prisma,test}/**/*.ts\" --fix",
     "format:check": "prettier --check \"{src,prisma,test}/**/*.ts\"",
     "format:fix": "prettier --write \"{src,prisma,test}/**/*.ts\"",
-    "postinstall": "prisma generate",
     "prisma:gen": "prisma generate",
     "prisma:studio": "npx prisma studio",
     "prisma:seed": "npx prisma db seed",

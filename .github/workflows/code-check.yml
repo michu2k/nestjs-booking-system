@@ -1,4 +1,4 @@
-name: Check NestJS project
+name: Code check
 
 on: pull_request
 
@@ -34,13 +34,16 @@ jobs:
       - name: Install dependencies
         uses: ./.github/actions/install-dependencies
 
-      - name: Check Typescript errors
+      - name: Generate Prisma client
+        run: pnpm prisma:gen
+
+      - name: Run Typescript check
         run: pnpm run ts:check
 
-      - name: Check ESLint errors
+      - name: Run ESLint check
         run: pnpm run lint:check
 
-      - name: Check Prettier errors
+      - name: Run Prettier check
         run: pnpm run format:check
 
   tests:
