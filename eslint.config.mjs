@@ -9,7 +9,6 @@ export default [
   {
     name: "General config",
     plugins: {
-      // "@stylistic/ts": stylisticTsPlugin,
       "unused-imports": unusedImportsPlugin,
       "simple-import-sort": simpleImportSortPlugin,
       "import": importPlugin
@@ -49,8 +48,8 @@ export default [
         }
       ]
     }
-  }
-  /*  {
+  },
+  {
     ignores: ["dist"]
-  } */
+  }
 ];
