@@ -5,11 +5,10 @@
   "author": "Michał Strumpf",
   "private": true,
   "scripts": {
-    "build": "nest build",
-    "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/src/main",
+    "build": "nest build",
     "ts:check": "tsc --noEmit",
     "lint:check": "eslint \"{src,prisma,test}/**/*.ts\"",
     "lint:fix": "eslint \"{src,prisma,test}/**/*.ts\" --fix",
