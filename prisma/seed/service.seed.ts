@@ -21,4 +21,6 @@ export async function seedServices(prisma: PrismaClient) {
   const records = faker.helpers.multiple(() => createService(), {count: SEED_RECORDS.SERVICE});
 
   await prisma.service.createMany({data: records});
+
+  console.log(`${SEED_RECORDS.SERVICE} services have been created.`);
 }

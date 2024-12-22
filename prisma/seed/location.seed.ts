@@ -22,4 +22,6 @@ export async function seedLocations(prisma: PrismaClient) {
   const records = faker.helpers.multiple(() => createLocation(), {count: SEED_RECORDS.LOCATION});
 
   await prisma.location.createMany({data: records});
+
+  console.log(`${SEED_RECORDS.LOCATION} locations have been created.`);
 }
