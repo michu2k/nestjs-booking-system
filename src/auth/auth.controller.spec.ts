@@ -1,5 +1,5 @@
 import {ConfigService} from "@nestjs/config";
-import {Test, TestingModule} from "@nestjs/testing";
+import {Test} from "@nestjs/testing";
 import {Request, Response} from "express";
 
 import {mockUser} from "../user/user.mocks";
@@ -33,7 +33,7 @@ describe("AuthController", () => {
   } as unknown as Request;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    const moduleRef = await Test.createTestingModule({
       providers: [
         {
           provide: ConfigService,
@@ -47,9 +47,9 @@ describe("AuthController", () => {
       controllers: [AuthController]
     }).compile();
 
-    controller = module.get<AuthController>(AuthController);
-    configService = module.get<ConfigService>(ConfigService);
-    authService = module.get<AuthService>(AuthService);
+    controller = moduleRef.get(AuthController);
+    configService = moduleRef.get(ConfigService);
+    authService = moduleRef.get(AuthService);
   });
 
   it("should be defined", () => {

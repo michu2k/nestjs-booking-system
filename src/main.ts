@@ -12,7 +12,7 @@ async function bootstrap() {
 
   const configService = app.get(ConfigService);
 
-  app.useGlobalPipes(new ValidationPipe({transform: true, whitelist: true}));
+  app.useGlobalPipes(new ValidationPipe({whitelist: true, transform: true}));
   app.setGlobalPrefix("api");
 
   app.enableVersioning({

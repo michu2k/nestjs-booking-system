@@ -1,4 +1,4 @@
-import {Test, TestingModule} from "@nestjs/testing";
+import {Test} from "@nestjs/testing";
 import {BookingStatus} from "@prisma/client";
 
 import {mockUser} from "../user/user.mocks";
@@ -20,7 +20,7 @@ describe("BookingController", () => {
   };
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    const moduleRef = await Test.createTestingModule({
       providers: [
         {
           provide: BookingService,
@@ -30,8 +30,8 @@ describe("BookingController", () => {
       controllers: [BookingController]
     }).compile();
 
-    controller = module.get<BookingController>(BookingController);
-    bookingService = module.get<BookingService>(BookingService);
+    controller = moduleRef.get(BookingController);
+    bookingService = moduleRef.get(BookingService);
   });
 
   it("should be defined", () => {

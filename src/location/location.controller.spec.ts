@@ -1,4 +1,4 @@
-import {Test, TestingModule} from "@nestjs/testing";
+import {Test} from "@nestjs/testing";
 
 import {LocationController} from "./location.controller";
 import {CreateLocationDto, UpdateLocationDto} from "./location.dto";
@@ -18,7 +18,7 @@ describe("LocationController", () => {
   };
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    const moduleRef = await Test.createTestingModule({
       providers: [
         {
           provide: LocationService,
@@ -28,8 +28,8 @@ describe("LocationController", () => {
       controllers: [LocationController]
     }).compile();
 
-    controller = module.get<LocationController>(LocationController);
-    locationService = module.get<LocationService>(LocationService);
+    controller = moduleRef.get(LocationController);
+    locationService = moduleRef.get(LocationService);
   });
 
   it("should be defined", () => {
