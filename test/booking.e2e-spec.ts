@@ -1,5 +1,5 @@
 import {ExecutionContext, INestApplication, ValidationPipe} from "@nestjs/common";
-import {Test, TestingModule} from "@nestjs/testing";
+import {Test} from "@nestjs/testing";
 import {BookingStatus} from "@prisma/client";
 import {Request} from "express";
 import * as request from "supertest";
@@ -18,7 +18,7 @@ describe("BookingController (e2e)", () => {
   const BOOKING_URL = "/api/booking";
 
   beforeAll(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
+    const moduleRef = await Test.createTestingModule({
       imports: [AppModule]
     })
       .overrideGuard(JwtAuthGuard)
@@ -31,8 +31,8 @@ describe("BookingController (e2e)", () => {
       })
       .compile();
 
-    app = moduleFixture.createNestApplication();
-    prismaService = moduleFixture.get<PrismaService>(PrismaService);
+    app = moduleRef.createNestApplication();
+    prismaService = moduleRef.get<PrismaService>(PrismaService);
 
     app.useGlobalPipes(new ValidationPipe({transform: true, whitelist: true}));
     app.setGlobalPrefix("api");

@@ -1,5 +1,5 @@
 import {ExecutionContext, INestApplication} from "@nestjs/common";
-import {Test, TestingModule} from "@nestjs/testing";
+import {Test} from "@nestjs/testing";
 import {Request} from "express";
 import * as request from "supertest";
 
@@ -13,7 +13,7 @@ describe("AuthController (e2e)", () => {
   const AUTH_URL = "/api/auth";
 
   beforeEach(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
+    const moduleRef = await Test.createTestingModule({
       imports: [AuthModule]
     })
       .overrideGuard(JwtAuthGuard)
@@ -26,7 +26,7 @@ describe("AuthController (e2e)", () => {
       })
       .compile();
 
-    app = moduleFixture.createNestApplication();
+    app = moduleRef.createNestApplication();
     app.setGlobalPrefix("api");
 
     await app.init();

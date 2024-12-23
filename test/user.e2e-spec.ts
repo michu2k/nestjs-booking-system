@@ -1,5 +1,5 @@
 import {ExecutionContext, INestApplication, ValidationPipe} from "@nestjs/common";
-import {Test, TestingModule} from "@nestjs/testing";
+import {Test} from "@nestjs/testing";
 import {Request} from "express";
 import * as request from "supertest";
 
@@ -16,7 +16,7 @@ describe("UserController (e2e)", () => {
   const USER_URL = "/api/user";
 
   beforeAll(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
+    const moduleRef = await Test.createTestingModule({
       imports: [AppModule]
     })
       .overrideGuard(JwtAuthGuard)
@@ -29,8 +29,8 @@ describe("UserController (e2e)", () => {
       })
       .compile();
 
-    app = moduleFixture.createNestApplication();
-    prismaService = moduleFixture.get<PrismaService>(PrismaService);
+    app = moduleRef.createNestApplication();
+    prismaService = moduleRef.get<PrismaService>(PrismaService);
 
     app.useGlobalPipes(new ValidationPipe({transform: true, whitelist: true}));
     app.setGlobalPrefix("api");
