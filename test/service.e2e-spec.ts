@@ -31,7 +31,7 @@ describe("ServiceController (e2e)", () => {
       .compile();
 
     app = moduleRef.createNestApplication();
-    prismaService = moduleRef.get<PrismaService>(PrismaService);
+    prismaService = moduleRef.get(PrismaService);
 
     app.useGlobalPipes(new ValidationPipe({transform: true, whitelist: true}));
     app.setGlobalPrefix("api");

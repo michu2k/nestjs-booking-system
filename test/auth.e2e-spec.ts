@@ -3,7 +3,7 @@ import {Test} from "@nestjs/testing";
 import {Request} from "express";
 import * as request from "supertest";
 
-import {AuthModule} from "../src/auth/auth.module";
+import {AppModule} from "../src/app.module";
 import {JwtAuthGuard} from "../src/auth/guards/jwt.guard";
 import {mockAdmin} from "../src/user/user.mocks";
 
@@ -14,7 +14,7 @@ describe("AuthController (e2e)", () => {
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      imports: [AuthModule]
+      imports: [AppModule]
     })
       .overrideGuard(JwtAuthGuard)
       .useValue({

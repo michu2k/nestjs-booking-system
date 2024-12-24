@@ -23,19 +23,21 @@ describe("UserController (e2e)", () => {
       .useValue({
         canActivate: (context: ExecutionContext) => {
           const req = context.switchToHttp().getRequest<Request>();
-          req.user = mockAdmin;
+          // Override the mocked id with the actual userId
+          req.user = {...mockAdmin, id: userId};
           return true;
         }
       })
       .compile();
 
     app = moduleRef.createNestApplication();
-    prismaService = moduleRef.get<PrismaService>(PrismaService);
+    prismaService = moduleRef.get(PrismaService);
 
     app.useGlobalPipes(new ValidationPipe({transform: true, whitelist: true}));
     app.setGlobalPrefix("api");
 
-    userId = (await prismaService.user.findFirst()).id;
+    // Get the id of the last user
+    userId = (await prismaService.user.findFirst({orderBy: {id: "desc"}})).id;
 
     await app.init();
   });

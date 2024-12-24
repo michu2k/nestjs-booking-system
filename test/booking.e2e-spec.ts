@@ -14,6 +14,7 @@ describe("BookingController (e2e)", () => {
   let app: INestApplication;
   let prismaService: PrismaService;
   let bookingId: number;
+  let userId: number;
 
   const BOOKING_URL = "/api/booking";
 
@@ -25,17 +26,20 @@ describe("BookingController (e2e)", () => {
       .useValue({
         canActivate: (context: ExecutionContext) => {
           const req = context.switchToHttp().getRequest<Request>();
-          req.user = mockAdmin;
+          // Override the mocked id with the actual userId
+          req.user = {...mockAdmin, id: userId};
           return true;
         }
       })
       .compile();
 
     app = moduleRef.createNestApplication();
-    prismaService = moduleRef.get<PrismaService>(PrismaService);
+    prismaService = moduleRef.get(PrismaService);
 
     app.useGlobalPipes(new ValidationPipe({transform: true, whitelist: true}));
     app.setGlobalPrefix("api");
+
+    userId = (await prismaService.user.findFirst()).id;
 
     await app.init();
   });
@@ -46,7 +50,6 @@ describe("BookingController (e2e)", () => {
 
   it(`${BOOKING_URL} (POST)`, async () => {
     const serviceId = (await prismaService.service.findFirst()).id;
-    const userId = (await prismaService.user.findFirst()).id;
 
     const createBookingDto: CreateBookingDto = {
       from: new Date(),
