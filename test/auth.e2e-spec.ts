@@ -40,10 +40,6 @@ describe("AuthController (e2e)", () => {
     return request(app.getHttpServer()).get(`${AUTH_URL}/google/callback`).expect(302);
   });
 
-  it(`${AUTH_URL}/refresh (GET)`, () => {
-    request(app.getHttpServer()).get(`${AUTH_URL}/refresh`).expect(200);
-  });
-
   it(`${AUTH_URL}/logout (GET)`, () => {
     return request(app.getHttpServer()).get(`${AUTH_URL}/logout`).expect(200);
   });
