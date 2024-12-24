@@ -1,4 +1,4 @@
-import {Test, TestingModule} from "@nestjs/testing";
+import {Test} from "@nestjs/testing";
 
 import {ServiceController} from "./service.controller";
 import {CreateServiceDto, UpdateServiceDto} from "./service.dto";
@@ -18,7 +18,7 @@ describe("ServiceController", () => {
   };
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    const moduleRef = await Test.createTestingModule({
       providers: [
         {
           provide: ServiceService,
@@ -28,8 +28,8 @@ describe("ServiceController", () => {
       controllers: [ServiceController]
     }).compile();
 
-    controller = module.get<ServiceController>(ServiceController);
-    serviceService = module.get<ServiceService>(ServiceService);
+    controller = moduleRef.get(ServiceController);
+    serviceService = moduleRef.get(ServiceService);
   });
 
   it("should be defined", () => {

@@ -22,4 +22,6 @@ export async function seedBookings(prisma: PrismaClient) {
   const records = faker.helpers.multiple(() => createBooking(), {count: SEED_RECORDS.BOOKING});
 
   await prisma.booking.createMany({data: records});
+
+  console.log(`${SEED_RECORDS.BOOKING} bookings have been created.`);
 }

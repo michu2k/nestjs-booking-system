@@ -1,4 +1,4 @@
-import {Test, TestingModule} from "@nestjs/testing";
+import {Test} from "@nestjs/testing";
 
 import {PrismaService} from "../prisma/prisma.service";
 import {CreateLocationDto, UpdateLocationDto} from "./location.dto";
@@ -9,11 +9,11 @@ describe("LocationService", () => {
   let service: LocationService;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    const moduleRef = await Test.createTestingModule({
       providers: [LocationService, PrismaService]
     }).compile();
 
-    service = module.get<LocationService>(LocationService);
+    service = moduleRef.get(LocationService);
   });
 
   it("should be defined", () => {

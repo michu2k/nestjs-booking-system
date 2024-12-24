@@ -1,5 +1,5 @@
 import {ExecutionContext, INestApplication, ValidationPipe} from "@nestjs/common";
-import {Test, TestingModule} from "@nestjs/testing";
+import {Test} from "@nestjs/testing";
 import {Request} from "express";
 import * as request from "supertest";
 
@@ -16,26 +16,28 @@ describe("UserController (e2e)", () => {
   const USER_URL = "/api/user";
 
   beforeAll(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
+    const moduleRef = await Test.createTestingModule({
       imports: [AppModule]
     })
       .overrideGuard(JwtAuthGuard)
       .useValue({
         canActivate: (context: ExecutionContext) => {
           const req = context.switchToHttp().getRequest<Request>();
-          req.user = mockAdmin;
+          // Override the mocked id with the actual userId
+          req.user = {...mockAdmin, id: userId};
           return true;
         }
       })
       .compile();
 
-    app = moduleFixture.createNestApplication();
-    prismaService = moduleFixture.get<PrismaService>(PrismaService);
+    app = moduleRef.createNestApplication();
+    prismaService = moduleRef.get(PrismaService);
 
     app.useGlobalPipes(new ValidationPipe({transform: true, whitelist: true}));
     app.setGlobalPrefix("api");
 
-    userId = (await prismaService.user.findFirst()).id;
+    // Get the id of the last user
+    userId = (await prismaService.user.findFirst({orderBy: {id: "desc"}})).id;
 
     await app.init();
   });
@@ -46,5 +48,9 @@ describe("UserController (e2e)", () => {
 
   it(`${USER_URL}/:id (DELETE)`, () => {
     return request(app.getHttpServer()).delete(`${USER_URL}/${userId}`).expect(200);
+  });
+
+  afterAll(async () => {
+    await app.close();
   });
 });

@@ -1,5 +1,5 @@
 import {ExecutionContext, INestApplication, ValidationPipe} from "@nestjs/common";
-import {Test, TestingModule} from "@nestjs/testing";
+import {Test} from "@nestjs/testing";
 import {BookingStatus} from "@prisma/client";
 import {Request} from "express";
 import * as request from "supertest";
@@ -14,28 +14,32 @@ describe("BookingController (e2e)", () => {
   let app: INestApplication;
   let prismaService: PrismaService;
   let bookingId: number;
+  let userId: number;
 
   const BOOKING_URL = "/api/booking";
 
   beforeAll(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
+    const moduleRef = await Test.createTestingModule({
       imports: [AppModule]
     })
       .overrideGuard(JwtAuthGuard)
       .useValue({
         canActivate: (context: ExecutionContext) => {
           const req = context.switchToHttp().getRequest<Request>();
-          req.user = mockAdmin;
+          // Override the mocked id with the actual userId
+          req.user = {...mockAdmin, id: userId};
           return true;
         }
       })
       .compile();
 
-    app = moduleFixture.createNestApplication();
-    prismaService = moduleFixture.get<PrismaService>(PrismaService);
+    app = moduleRef.createNestApplication();
+    prismaService = moduleRef.get(PrismaService);
 
     app.useGlobalPipes(new ValidationPipe({transform: true, whitelist: true}));
     app.setGlobalPrefix("api");
+
+    userId = (await prismaService.user.findFirst()).id;
 
     await app.init();
   });
@@ -46,7 +50,6 @@ describe("BookingController (e2e)", () => {
 
   it(`${BOOKING_URL} (POST)`, async () => {
     const serviceId = (await prismaService.service.findFirst()).id;
-    const userId = (await prismaService.user.findFirst()).id;
 
     const createBookingDto: CreateBookingDto = {
       from: new Date(),
@@ -75,5 +78,9 @@ describe("BookingController (e2e)", () => {
 
   it(`${BOOKING_URL}/:id (DELETE)`, () => {
     return request(app.getHttpServer()).delete(`${BOOKING_URL}/${bookingId}`).expect(200);
+  });
+
+  afterAll(async () => {
+    await app.close();
   });
 });

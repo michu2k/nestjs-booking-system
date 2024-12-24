@@ -36,7 +36,7 @@ export class BookingController {
   constructor(private bookingService: BookingService) {}
 
   /**
-   * Get a list of user's bookings
+   * Get a list of current user's bookings
    */
   @Get()
   async findAll(@User() user: UserEntity, @Query() {limit, offset}: FindAllEntitiesDto = {}) {

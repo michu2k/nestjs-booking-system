@@ -1,5 +1,5 @@
 import {Module} from "@nestjs/common";
-import {ConfigModule, ConfigService} from "@nestjs/config";
+import {ConfigService} from "@nestjs/config";
 import {JwtModule} from "@nestjs/jwt";
 
 import {PrismaModule} from "../prisma/prisma.module";
@@ -14,9 +14,7 @@ import {JwtRefreshStrategy} from "./strategies/jwt-refresh.strategy";
   imports: [
     PrismaModule,
     UserModule,
-    ConfigModule,
     JwtModule.registerAsync({
-      imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         global: true,

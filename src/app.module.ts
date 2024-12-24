@@ -11,7 +11,11 @@ import {UserModule} from "./user/user.module";
 
 @Module({
   imports: [
-    ConfigModule.forRoot({validate: validateEnvs}),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      validate: validateEnvs,
+      envFilePath: [".env", ".env.development", ".env.production"]
+    }),
     AuthModule,
     UserModule,
     LocationModule,

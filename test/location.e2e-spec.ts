@@ -1,5 +1,5 @@
 import {ExecutionContext, INestApplication, ValidationPipe} from "@nestjs/common";
-import {Test, TestingModule} from "@nestjs/testing";
+import {Test} from "@nestjs/testing";
 import {Request} from "express";
 import * as request from "supertest";
 
@@ -15,7 +15,7 @@ describe("LocationController (e2e)", () => {
   const LOCATION_URL = "/api/location";
 
   beforeAll(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
+    const moduleRef = await Test.createTestingModule({
       imports: [AppModule]
     })
       .overrideGuard(JwtAuthGuard)
@@ -28,7 +28,7 @@ describe("LocationController (e2e)", () => {
       })
       .compile();
 
-    app = moduleFixture.createNestApplication();
+    app = moduleRef.createNestApplication();
 
     app.useGlobalPipes(new ValidationPipe({transform: true, whitelist: true}));
     app.setGlobalPrefix("api");
@@ -68,5 +68,9 @@ describe("LocationController (e2e)", () => {
 
   it(`${LOCATION_URL}/:id (DELETE)`, () => {
     return request(app.getHttpServer()).delete(`${LOCATION_URL}/${locationId}`).expect(200);
+  });
+
+  afterAll(async () => {
+    await app.close();
   });
 });

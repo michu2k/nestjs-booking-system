@@ -1,7 +1,7 @@
 import {BadRequestException, UnauthorizedException} from "@nestjs/common";
 import {ConfigService} from "@nestjs/config";
 import {JwtService} from "@nestjs/jwt";
-import {Test, TestingModule} from "@nestjs/testing";
+import {Test} from "@nestjs/testing";
 
 import {PrismaService} from "../prisma/prisma.service";
 import {mockAccount, mockGoogleProfile, mockUser} from "../user/user.mocks";
@@ -13,11 +13,11 @@ describe("AuthService", () => {
   let service: AuthService;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    const moduleRef = await Test.createTestingModule({
       providers: [AuthService, PrismaService, JwtService, ConfigService, UserService]
     }).compile();
 
-    service = module.get<AuthService>(AuthService);
+    service = moduleRef.get(AuthService);
   });
 
   it("should be defined", () => {

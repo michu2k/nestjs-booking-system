@@ -37,4 +37,6 @@ export async function seedUsers(prisma: PrismaClient) {
   const createdUsers = [...admins, ...managers, ...users];
 
   await Promise.all(createdUsers.map(async (data) => await prisma.user.create({data})));
+
+  console.log(`${SEED_RECORDS.SERVICE} users have been created.`);
 }
