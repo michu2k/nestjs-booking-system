@@ -43,4 +43,8 @@ describe("AuthController (e2e)", () => {
   it(`${AUTH_URL}/logout (GET)`, () => {
     return request(app.getHttpServer()).get(`${AUTH_URL}/logout`).expect(200);
   });
+
+  afterAll(async () => {
+    await app.close();
+  });
 });

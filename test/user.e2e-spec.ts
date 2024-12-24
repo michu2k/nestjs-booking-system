@@ -49,4 +49,8 @@ describe("UserController (e2e)", () => {
   it(`${USER_URL}/:id (DELETE)`, () => {
     return request(app.getHttpServer()).delete(`${USER_URL}/${userId}`).expect(200);
   });
+
+  afterAll(async () => {
+    await app.close();
+  });
 });

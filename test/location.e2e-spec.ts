@@ -69,4 +69,8 @@ describe("LocationController (e2e)", () => {
   it(`${LOCATION_URL}/:id (DELETE)`, () => {
     return request(app.getHttpServer()).delete(`${LOCATION_URL}/${locationId}`).expect(200);
   });
+
+  afterAll(async () => {
+    await app.close();
+  });
 });

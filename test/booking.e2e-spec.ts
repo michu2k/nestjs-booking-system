@@ -79,4 +79,8 @@ describe("BookingController (e2e)", () => {
   it(`${BOOKING_URL}/:id (DELETE)`, () => {
     return request(app.getHttpServer()).delete(`${BOOKING_URL}/${bookingId}`).expect(200);
   });
+
+  afterAll(async () => {
+    await app.close();
+  });
 });

@@ -73,4 +73,8 @@ describe("ServiceController (e2e)", () => {
   it(`${SERVICE_URL}/:id (DELETE)`, () => {
     return request(app.getHttpServer()).delete(`${SERVICE_URL}/${serviceId}`).expect(200);
   });
+
+  afterAll(async () => {
+    await app.close();
+  });
 });
