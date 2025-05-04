@@ -12,7 +12,7 @@ The project uses a PostgreSQL database running in Docker. Athentication has been
 
 This project requires [Node.js 20+](https://nodejs.org/en), [pnpm 9+](https://pnpm.io/) and [docker](https://www.docker.com/) to run.
 
-## How to run the project
+## Getting started
 
 1. Clone the repository and install all dependencies using pnpm
 2. Copy the values from the `.env.example` to the `.env` file and update the variables
