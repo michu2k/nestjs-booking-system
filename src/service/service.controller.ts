@@ -18,7 +18,7 @@ import { ApiTags } from "@nestjs/swagger";
 import { UserRole } from "@prisma/client";
 
 import { JwtAuthGuard } from "../auth/guards/jwt.guard";
-import { Roles } from "../decorators/roles.deorator";
+import { Roles } from "../decorators/roles.decorator";
 import { DeleteEntityResponse } from "../dtos/response.dto";
 import { RolesGuard } from "../guards/roles.guard";
 import { FindAllEntitiesDto } from "../prisma/prisma.dto";

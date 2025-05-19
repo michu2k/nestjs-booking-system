@@ -3,7 +3,7 @@ import { Reflector } from "@nestjs/core";
 import { UserRole } from "@prisma/client";
 import { Request } from "express";
 
-import { ROLES_KEY } from "../decorators/roles.deorator";
+import { ROLES_KEY } from "../decorators/roles.decorator";
 import { UserEntity } from "../user/user.dto";
 
 @Injectable()
