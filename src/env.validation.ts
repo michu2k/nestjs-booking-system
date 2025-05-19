@@ -1,5 +1,5 @@
-import {plainToInstance} from "class-transformer";
-import {IsString, IsUrl, validateSync} from "class-validator";
+import { plainToInstance } from "class-transformer";
+import { IsString, IsUrl, validateSync } from "class-validator";
 
 class EnvironmentVariables {
   @IsString()
@@ -20,7 +20,7 @@ class EnvironmentVariables {
   @IsString()
   GOOGLE_CLIENT_SECRET: string;
 
-  @IsUrl({require_tld: false})
+  @IsUrl({ require_tld: false })
   GOOGLE_CALLBACK_URL: string;
 
   @IsString()
@@ -38,7 +38,7 @@ class EnvironmentVariables {
   @IsString()
   REFRESH_TOKEN_VALIDITY: string;
 
-  @IsUrl({require_tld: false})
+  @IsUrl({ require_tld: false })
   AUTH_REDIRECT_URL: string;
 
   @IsString()
@@ -48,7 +48,7 @@ class EnvironmentVariables {
 export function validateEnvs(config: Record<string, unknown>) {
   const validatedConfig = plainToInstance(EnvironmentVariables, config);
 
-  const errors = validateSync(validatedConfig, {skipMissingProperties: false});
+  const errors = validateSync(validatedConfig, { skipMissingProperties: false });
 
   if (errors.length > 0) {
     throw new Error(errors.toString());

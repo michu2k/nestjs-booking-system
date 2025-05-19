@@ -1,10 +1,10 @@
-import {Test} from "@nestjs/testing";
-import {UserRole} from "@prisma/client";
+import { Test } from "@nestjs/testing";
+import { UserRole } from "@prisma/client";
 
-import {PrismaService} from "../prisma/prisma.service";
-import {CreateAccountDto, CreateUserDto} from "./user.dto";
-import {mockAccount, mockUser} from "./user.mocks";
-import {UserService} from "./user.service";
+import { PrismaService } from "../prisma/prisma.service";
+import { CreateAccountDto, CreateUserDto } from "./user.dto";
+import { mockAccount, mockUser } from "./user.mocks";
+import { UserService } from "./user.service";
 
 describe("UserService", () => {
   let service: UserService;
@@ -24,9 +24,9 @@ describe("UserService", () => {
   describe("findOneUser", () => {
     it("should get a user", async () => {
       const findOneUserSpy = jest.spyOn(service, "findOneUser").mockResolvedValue(mockUser);
-      const result = await service.findOneUser({id: mockUser.id});
+      const result = await service.findOneUser({ id: mockUser.id });
 
-      expect(findOneUserSpy).toHaveBeenCalledWith({id: mockUser.id});
+      expect(findOneUserSpy).toHaveBeenCalledWith({ id: mockUser.id });
       expect(result).toEqual(mockUser);
     });
   });
@@ -43,7 +43,7 @@ describe("UserService", () => {
           providerAccountId: "123xyzabc"
         }
       };
-      const mockCreatedUser = {...mockUser, createUserDto};
+      const mockCreatedUser = { ...mockUser, createUserDto };
       const createUserAccountSpy = jest.spyOn(service, "createUserAccount").mockResolvedValue(mockCreatedUser);
       const result = await service.createUserAccount(createUserDto);
 
@@ -59,7 +59,7 @@ describe("UserService", () => {
         providerAccountId: "123xyzabc",
         userId: 2
       };
-      const mockCreatedAccount = {...mockAccount, ...createAccountDto};
+      const mockCreatedAccount = { ...mockAccount, ...createAccountDto };
       const createProviderAccountSpy = jest
         .spyOn(service, "createSSOProviderAccount")
         .mockResolvedValue(mockCreatedAccount);

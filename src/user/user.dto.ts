@@ -1,6 +1,6 @@
-import {ApiProperty, PickType} from "@nestjs/swagger";
-import {Account, User, UserRole} from "@prisma/client";
-import {IsArray, IsEnum, IsInt, IsOptional, IsPhoneNumber, IsString} from "class-validator";
+import { ApiProperty, PickType } from "@nestjs/swagger";
+import { Account, User, UserRole } from "@prisma/client";
+import { IsArray, IsEnum, IsInt, IsOptional, IsPhoneNumber, IsString } from "class-validator";
 
 export class UserEntity implements User {
   @IsInt()
@@ -17,7 +17,7 @@ export class UserEntity implements User {
   phone: string | null;
 
   @IsEnum(UserRole)
-  @ApiProperty({enum: [UserRole.ADMIN, UserRole.MANAGER, UserRole.USER]})
+  @ApiProperty({ enum: [UserRole.ADMIN, UserRole.MANAGER, UserRole.USER] })
   role: UserRole;
 
   @IsString()

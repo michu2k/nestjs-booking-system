@@ -1,10 +1,10 @@
-import {Test} from "@nestjs/testing";
-import {BookingStatus} from "@prisma/client";
+import { Test } from "@nestjs/testing";
+import { BookingStatus } from "@prisma/client";
 
-import {PrismaService} from "../prisma/prisma.service";
-import {CreateBookingDto, UpdateBookingDto} from "./booking.dto";
-import {mockBooking} from "./booking.mocks";
-import {BookingService} from "./booking.service";
+import { PrismaService } from "../prisma/prisma.service";
+import { CreateBookingDto, UpdateBookingDto } from "./booking.dto";
+import { mockBooking } from "./booking.mocks";
+import { BookingService } from "./booking.service";
 
 describe("BookingService", () => {
   let service: BookingService;
@@ -73,7 +73,7 @@ describe("BookingService", () => {
         userId: 2,
         serviceId: 1
       };
-      const mockCreatedBooking = {...mockBooking, ...createBookingDto};
+      const mockCreatedBooking = { ...mockBooking, ...createBookingDto };
       const createBookingSpy = jest.spyOn(service, "createBooking").mockResolvedValue(mockCreatedBooking);
       const result = await service.createBooking(createBookingDto);
 
@@ -87,7 +87,7 @@ describe("BookingService", () => {
       const updateBookingDto: UpdateBookingDto = {
         status: BookingStatus.CANCELLED
       };
-      const mockUpdatedBooking = {...mockBooking, ...updateBookingDto};
+      const mockUpdatedBooking = { ...mockBooking, ...updateBookingDto };
       const updateBookingSpy = jest.spyOn(service, "updateBooking").mockResolvedValue(mockUpdatedBooking);
       const result = await service.updateBooking(mockBooking.id, updateBookingDto);
 

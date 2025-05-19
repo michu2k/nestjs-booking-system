@@ -1,11 +1,11 @@
-import {Test} from "@nestjs/testing";
-import {BookingStatus} from "@prisma/client";
+import { Test } from "@nestjs/testing";
+import { BookingStatus } from "@prisma/client";
 
-import {mockUser} from "../user/user.mocks";
-import {BookingController} from "./booking.controller";
-import {CreateBookingDto, UpdateBookingDto} from "./booking.dto";
-import {mockBooking} from "./booking.mocks";
-import {BookingService} from "./booking.service";
+import { mockUser } from "../user/user.mocks";
+import { BookingController } from "./booking.controller";
+import { CreateBookingDto, UpdateBookingDto } from "./booking.dto";
+import { mockBooking } from "./booking.mocks";
+import { BookingService } from "./booking.service";
 
 describe("BookingController", () => {
   let controller: BookingController;
@@ -14,8 +14,8 @@ describe("BookingController", () => {
   const mockBookingService = {
     findAllBookings: jest.fn().mockResolvedValue([mockBooking, mockBooking]),
     findOneBooking: jest.fn().mockResolvedValue(mockBooking),
-    createBooking: jest.fn((data: CreateBookingDto) => Promise.resolve({...mockBooking, ...data})),
-    updateBooking: jest.fn((_, data: UpdateBookingDto) => Promise.resolve({...mockBooking, ...data})),
+    createBooking: jest.fn((data: CreateBookingDto) => Promise.resolve({ ...mockBooking, ...data })),
+    updateBooking: jest.fn((_, data: UpdateBookingDto) => Promise.resolve({ ...mockBooking, ...data })),
     deleteBooking: jest.fn().mockResolvedValue(mockBooking)
   };
 
@@ -72,7 +72,7 @@ describe("BookingController", () => {
       const result = await controller.create(createBookingDto);
 
       expect(bookingService.createBooking).toHaveBeenCalled();
-      expect(result).toEqual({...mockBooking, ...createBookingDto});
+      expect(result).toEqual({ ...mockBooking, ...createBookingDto });
     });
   });
 
@@ -84,7 +84,7 @@ describe("BookingController", () => {
       const result = await controller.update(mockBooking.id, updateBookingDto);
 
       expect(bookingService.updateBooking).toHaveBeenCalled();
-      expect(result).toEqual({...mockBooking, ...updateBookingDto});
+      expect(result).toEqual({ ...mockBooking, ...updateBookingDto });
     });
   });
 

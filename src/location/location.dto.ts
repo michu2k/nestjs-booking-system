@@ -1,6 +1,6 @@
-import {PartialType, PickType} from "@nestjs/swagger";
-import {Location} from "@prisma/client";
-import {IsInt, IsNumber, IsString} from "class-validator";
+import { PartialType, PickType } from "@nestjs/swagger";
+import { Location } from "@prisma/client";
+import { IsInt, IsNumber, IsString } from "class-validator";
 
 export class LocationEntity implements Location {
   @IsInt()

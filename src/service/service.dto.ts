@@ -1,6 +1,6 @@
-import {PartialType, PickType} from "@nestjs/swagger";
-import {Service} from "@prisma/client";
-import {IsDateString, IsInt, IsString, Min} from "class-validator";
+import { PartialType, PickType } from "@nestjs/swagger";
+import { Service } from "@prisma/client";
+import { IsDateString, IsInt, IsString, Min } from "class-validator";
 
 export class ServiceEntity implements Service {
   @IsInt()
@@ -16,10 +16,10 @@ export class ServiceEntity implements Service {
   @IsInt()
   price: number;
 
-  @IsDateString({strict: true, strictSeparator: true})
+  @IsDateString({ strict: true, strictSeparator: true })
   createdAt: Date;
 
-  @IsDateString({strict: true, strictSeparator: true})
+  @IsDateString({ strict: true, strictSeparator: true })
   updatedAt: Date;
 
   @IsInt()

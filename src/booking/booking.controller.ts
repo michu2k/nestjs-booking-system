@@ -14,19 +14,19 @@ import {
   UseGuards,
   UseInterceptors
 } from "@nestjs/common";
-import {ApiTags} from "@nestjs/swagger";
-import {UserRole} from "@prisma/client";
+import { ApiTags } from "@nestjs/swagger";
+import { UserRole } from "@prisma/client";
 
-import {JwtAuthGuard} from "../auth/guards/jwt.guard";
-import {Roles} from "../decorators/roles.deorator";
-import {User} from "../decorators/user.decorator";
-import {DeleteEntityResponse} from "../dtos/response.dto";
-import {RolesGuard} from "../guards/roles.guard";
-import {FindAllEntitiesDto} from "../prisma/prisma.dto";
-import {UserEntity} from "../user/user.dto";
-import {getErrorMessage} from "../utils/get-error-message";
-import {BookingEntity, CreateBookingDto, UpdateBookingDto} from "./booking.dto";
-import {BookingService} from "./booking.service";
+import { JwtAuthGuard } from "../auth/guards/jwt.guard";
+import { Roles } from "../decorators/roles.deorator";
+import { User } from "../decorators/user.decorator";
+import { DeleteEntityResponse } from "../dtos/response.dto";
+import { RolesGuard } from "../guards/roles.guard";
+import { FindAllEntitiesDto } from "../prisma/prisma.dto";
+import { UserEntity } from "../user/user.dto";
+import { getErrorMessage } from "../utils/get-error-message";
+import { BookingEntity, CreateBookingDto, UpdateBookingDto } from "./booking.dto";
+import { BookingService } from "./booking.service";
 
 @ApiTags("Booking")
 @Controller("booking")
@@ -39,8 +39,8 @@ export class BookingController {
    * Get a list of current user's bookings
    */
   @Get()
-  async findAll(@User() user: UserEntity, @Query() {limit, offset}: FindAllEntitiesDto = {}) {
-    const bookings = await this.bookingService.findAllBookings(limit, offset, {userId: user.id});
+  async findAll(@User() user: UserEntity, @Query() { limit, offset }: FindAllEntitiesDto = {}) {
+    const bookings = await this.bookingService.findAllBookings(limit, offset, { userId: user.id });
     return bookings.map((bookings) => new BookingEntity(bookings));
   }
 
@@ -49,7 +49,7 @@ export class BookingController {
    */
   @Get(":id")
   async findOne(@Param("id", ParseIntPipe) id: number, @User() user: UserEntity) {
-    const booking = await this.bookingService.findOneBooking(id, {userId: user.id});
+    const booking = await this.bookingService.findOneBooking(id, { userId: user.id });
 
     if (!booking) {
       throw new NotFoundException("Booking not found.");

@@ -1,8 +1,8 @@
-import {BadRequestException, Injectable} from "@nestjs/common";
-import {Prisma} from "@prisma/client";
+import { BadRequestException, Injectable } from "@nestjs/common";
+import { Prisma } from "@prisma/client";
 
-import {PrismaService} from "../prisma/prisma.service";
-import {CreateBookingDto, UpdateBookingDto} from "./booking.dto";
+import { PrismaService } from "../prisma/prisma.service";
+import { CreateBookingDto, UpdateBookingDto } from "./booking.dto";
 
 @Injectable()
 export class BookingService {
@@ -18,7 +18,7 @@ export class BookingService {
 
   async findOneBooking(id: number, where?: Prisma.BookingWhereInput) {
     return this.prisma.booking.findUnique({
-      where: {...where, id}
+      where: { ...where, id }
     });
   }
 
@@ -31,7 +31,7 @@ export class BookingService {
   async updateBooking(id: number, data: UpdateBookingDto) {
     return this.prisma.booking
       .update({
-        where: {id},
+        where: { id },
         data
       })
       .catch((e) => {
@@ -42,7 +42,7 @@ export class BookingService {
 
   async deleteBooking(id: number) {
     return this.prisma.booking.delete({
-      where: {id},
+      where: { id },
       select: {
         id: true
       }

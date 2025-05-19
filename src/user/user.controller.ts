@@ -11,14 +11,14 @@ import {
   UseGuards,
   UseInterceptors
 } from "@nestjs/common";
-import {ApiTags} from "@nestjs/swagger";
+import { ApiTags } from "@nestjs/swagger";
 
-import {JwtAuthGuard} from "../auth/guards/jwt.guard";
-import {User} from "../decorators/user.decorator";
-import {DeleteEntityResponse} from "../dtos/response.dto";
-import {getErrorMessage} from "../utils/get-error-message";
-import {UserEntity} from "./user.dto";
-import {UserService} from "./user.service";
+import { JwtAuthGuard } from "../auth/guards/jwt.guard";
+import { User } from "../decorators/user.decorator";
+import { DeleteEntityResponse } from "../dtos/response.dto";
+import { getErrorMessage } from "../utils/get-error-message";
+import { UserEntity } from "./user.dto";
+import { UserService } from "./user.service";
 
 @UseGuards(JwtAuthGuard)
 @ApiTags("User")
@@ -36,7 +36,7 @@ export class UserController {
       throw new ForbiddenException("You are not allowed to perform this operation");
     }
 
-    const dbUser = await this.userService.findOneUser({id});
+    const dbUser = await this.userService.findOneUser({ id });
 
     if (!dbUser) {
       throw new NotFoundException("User not found.");

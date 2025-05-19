@@ -1,7 +1,7 @@
-import {Injectable} from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 
-import {PrismaService} from "../prisma/prisma.service";
-import {CreateServiceDto, UpdateServiceDto} from "./service.dto";
+import { PrismaService } from "../prisma/prisma.service";
+import { CreateServiceDto, UpdateServiceDto } from "./service.dto";
 
 @Injectable()
 export class ServiceService {
@@ -16,25 +16,25 @@ export class ServiceService {
 
   async findOneService(id: number) {
     return this.prisma.service.findUnique({
-      where: {id}
+      where: { id }
     });
   }
 
   async createService(data: CreateServiceDto) {
-    return this.prisma.service.create({data});
+    return this.prisma.service.create({ data });
   }
 
   async updateService(id: number, data: UpdateServiceDto) {
     return this.prisma.service.update({
-      where: {id},
+      where: { id },
       data
     });
   }
 
   async deleteService(id: number) {
     return this.prisma.service.delete({
-      where: {id},
-      select: {id: true}
+      where: { id },
+      select: { id: true }
     });
   }
 }

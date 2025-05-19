@@ -1,9 +1,9 @@
-import {Test} from "@nestjs/testing";
+import { Test } from "@nestjs/testing";
 
-import {PrismaService} from "../prisma/prisma.service";
-import {CreateLocationDto, UpdateLocationDto} from "./location.dto";
-import {mockLocation} from "./location.mocks";
-import {LocationService} from "./location.service";
+import { PrismaService } from "../prisma/prisma.service";
+import { CreateLocationDto, UpdateLocationDto } from "./location.dto";
+import { mockLocation } from "./location.mocks";
+import { LocationService } from "./location.service";
 
 describe("LocationService", () => {
   let service: LocationService;
@@ -72,7 +72,7 @@ describe("LocationService", () => {
         lat: -77.4925,
         lng: -72.1182
       };
-      const mockCreatedLocation = {...mockLocation, ...createLocationDto};
+      const mockCreatedLocation = { ...mockLocation, ...createLocationDto };
       const createLocationSpy = jest.spyOn(service, "createLocation").mockResolvedValue(mockCreatedLocation);
       const result = await service.createLocation(createLocationDto);
 
@@ -86,7 +86,7 @@ describe("LocationService", () => {
       const updateLocationDto: UpdateLocationDto = {
         city: "London"
       };
-      const mockUpdatedLocation = {...mockLocation, ...updateLocationDto};
+      const mockUpdatedLocation = { ...mockLocation, ...updateLocationDto };
       const updateLocationSpy = jest.spyOn(service, "updateLocation").mockResolvedValue(mockUpdatedLocation);
       const result = await service.updateLocation(mockLocation.id, updateLocationDto);
 

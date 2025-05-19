@@ -1,8 +1,8 @@
-import {Test} from "@nestjs/testing";
+import { Test } from "@nestjs/testing";
 
-import {UserController} from "./user.controller";
-import {mockUser} from "./user.mocks";
-import {UserService} from "./user.service";
+import { UserController } from "./user.controller";
+import { mockUser } from "./user.mocks";
+import { UserService } from "./user.service";
 
 describe("UserController", () => {
   let controller: UserController;

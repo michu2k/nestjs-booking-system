@@ -1,9 +1,9 @@
-import {Test} from "@nestjs/testing";
+import { Test } from "@nestjs/testing";
 
-import {LocationController} from "./location.controller";
-import {CreateLocationDto, UpdateLocationDto} from "./location.dto";
-import {mockLocation} from "./location.mocks";
-import {LocationService} from "./location.service";
+import { LocationController } from "./location.controller";
+import { CreateLocationDto, UpdateLocationDto } from "./location.dto";
+import { mockLocation } from "./location.mocks";
+import { LocationService } from "./location.service";
 
 describe("LocationController", () => {
   let controller: LocationController;
@@ -12,8 +12,8 @@ describe("LocationController", () => {
   const mockLocationService = {
     findAllLocations: jest.fn().mockResolvedValue([mockLocation, mockLocation]),
     findOneLocation: jest.fn().mockResolvedValue(mockLocation),
-    createLocation: jest.fn((data: CreateLocationDto) => Promise.resolve({...mockLocation, ...data})),
-    updateLocation: jest.fn((_, data: UpdateLocationDto) => Promise.resolve({...mockLocation, ...data})),
+    createLocation: jest.fn((data: CreateLocationDto) => Promise.resolve({ ...mockLocation, ...data })),
+    updateLocation: jest.fn((_, data: UpdateLocationDto) => Promise.resolve({ ...mockLocation, ...data })),
     deleteLocation: jest.fn().mockResolvedValue(mockLocation)
   };
 
@@ -70,7 +70,7 @@ describe("LocationController", () => {
       const result = await controller.create(createLocationDto);
 
       expect(locationService.createLocation).toHaveBeenCalled();
-      expect(result).toEqual({...mockLocation, ...createLocationDto});
+      expect(result).toEqual({ ...mockLocation, ...createLocationDto });
     });
   });
 
@@ -82,7 +82,7 @@ describe("LocationController", () => {
       const result = await controller.update(mockLocation.id, updateLocationDto);
 
       expect(locationService.updateLocation).toHaveBeenCalled();
-      expect(result).toEqual({...mockLocation, ...updateLocationDto});
+      expect(result).toEqual({ ...mockLocation, ...updateLocationDto });
     });
   });
 

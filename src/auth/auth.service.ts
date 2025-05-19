@@ -1,14 +1,14 @@
-import {BadRequestException, Injectable, UnauthorizedException} from "@nestjs/common";
-import {ConfigService} from "@nestjs/config";
-import {JwtService} from "@nestjs/jwt";
+import { BadRequestException, Injectable, UnauthorizedException } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
-import {Profile} from "passport-google-oauth20";
+import { Profile } from "passport-google-oauth20";
 
-import {PrismaService} from "../prisma/prisma.service";
-import {UserEntity} from "../user/user.dto";
-import {UserService} from "../user/user.service";
-import {getErrorMessage} from "../utils/get-error-message";
-import {JwtPayload} from "./auth.utils";
+import { PrismaService } from "../prisma/prisma.service";
+import { UserEntity } from "../user/user.dto";
+import { UserService } from "../user/user.service";
+import { getErrorMessage } from "../utils/get-error-message";
+import { JwtPayload } from "./auth.utils";
 
 @Injectable()
 export class AuthService {
@@ -22,7 +22,7 @@ export class AuthService {
   /**
    * Check if the user account exists in the database
    */
-  async checkIfProviderAccountExists(userId: number, {id, provider}: Profile) {
+  async checkIfProviderAccountExists(userId: number, { id, provider }: Profile) {
     return this.prisma.account.findFirst({
       where: {
         userId,
@@ -35,8 +35,8 @@ export class AuthService {
   /**
    * Generate JWT tokens for the user
    */
-  async generateAuthTokens({id, email}: UserEntity) {
-    const payload: JwtPayload = {sub: id, email};
+  async generateAuthTokens({ id, email }: UserEntity) {
+    const payload: JwtPayload = { sub: id, email };
 
     const accessToken = await this.jwtService.signAsync(payload, {
       expiresIn: this.configService.get("ACCESS_TOKEN_VALIDITY")
