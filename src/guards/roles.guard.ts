@@ -10,7 +10,8 @@ import { UserEntity } from "../user/user.dto";
 export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
-  canActivate(context: ExecutionContext): boolean {
+  canActivate(context: ExecutionContext) {
+    // Get the roles metadata from the route handler or class
     const roles = this.reflector.getAllAndOverride<Array<UserRole>>(ROLES_KEY, [
       context.getHandler(),
       context.getClass()
