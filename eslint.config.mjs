@@ -3,7 +3,7 @@ import simpleImportSortPlugin from "eslint-plugin-simple-import-sort";
 import unusedImportsPlugin from "eslint-plugin-unused-imports";
 import eslintTs from "typescript-eslint";
 
-/** @type {import("eslint").Linter.Config} */
+/** @type {import("eslint").Linter.Config[]} */
 export default [
   ...eslintTs.configs.recommended,
   {
