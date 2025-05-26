@@ -1,11 +1,11 @@
-import {ExecutionContext, INestApplication} from "@nestjs/common";
-import {Test} from "@nestjs/testing";
-import {Request} from "express";
+import { ExecutionContext, INestApplication } from "@nestjs/common";
+import { Test } from "@nestjs/testing";
+import { Request } from "express";
 import * as request from "supertest";
 
-import {AppModule} from "../src/app.module";
-import {JwtAuthGuard} from "../src/auth/guards/jwt.guard";
-import {mockAdmin} from "../src/user/user.mocks";
+import { AppModule } from "../src/app.module";
+import { JwtAuthGuard } from "../src/auth/guards/jwt.guard";
+import { mockAdmin } from "../src/user/user.mocks";
 
 describe("AuthController (e2e)", () => {
   let app: INestApplication;

@@ -1,4 +1,4 @@
-import {LocationEntity} from "./location.dto";
+import { LocationEntity } from "./location.dto";
 
 export const mockLocation: LocationEntity = {
   id: 1,

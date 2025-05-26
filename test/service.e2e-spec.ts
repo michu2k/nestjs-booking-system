@@ -1,13 +1,13 @@
-import {ExecutionContext, INestApplication, ValidationPipe} from "@nestjs/common";
-import {Test} from "@nestjs/testing";
-import {Request} from "express";
+import { ExecutionContext, INestApplication, ValidationPipe } from "@nestjs/common";
+import { Test } from "@nestjs/testing";
+import { Request } from "express";
 import * as request from "supertest";
 
-import {AppModule} from "../src/app.module";
-import {JwtAuthGuard} from "../src/auth/guards/jwt.guard";
-import {PrismaService} from "../src/prisma/prisma.service";
-import {CreateServiceDto, UpdateServiceDto} from "../src/service/service.dto";
-import {mockAdmin} from "../src/user/user.mocks";
+import { AppModule } from "../src/app.module";
+import { JwtAuthGuard } from "../src/auth/guards/jwt.guard";
+import { PrismaService } from "../src/prisma/prisma.service";
+import { CreateServiceDto, UpdateServiceDto } from "../src/service/service.dto";
+import { mockAdmin } from "../src/user/user.mocks";
 
 describe("ServiceController (e2e)", () => {
   let app: INestApplication;
@@ -33,7 +33,7 @@ describe("ServiceController (e2e)", () => {
     app = moduleRef.createNestApplication();
     prismaService = moduleRef.get(PrismaService);
 
-    app.useGlobalPipes(new ValidationPipe({transform: true, whitelist: true}));
+    app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
     app.setGlobalPrefix("api");
 
     await app.init();
@@ -53,7 +53,7 @@ describe("ServiceController (e2e)", () => {
       locationId
     };
 
-    const {body} = await request(app.getHttpServer()).post(SERVICE_URL).send(createServiceDto).expect(201);
+    const { body } = await request(app.getHttpServer()).post(SERVICE_URL).send(createServiceDto).expect(201);
     // Save the serviceId for the next tests
     serviceId = body.id;
   });

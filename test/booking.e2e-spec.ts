@@ -1,14 +1,14 @@
-import {ExecutionContext, INestApplication, ValidationPipe} from "@nestjs/common";
-import {Test} from "@nestjs/testing";
-import {BookingStatus} from "@prisma/client";
-import {Request} from "express";
+import { ExecutionContext, INestApplication, ValidationPipe } from "@nestjs/common";
+import { Test } from "@nestjs/testing";
+import { BookingStatus } from "@prisma/client";
+import { Request } from "express";
 import * as request from "supertest";
 
-import {AppModule} from "../src/app.module";
-import {JwtAuthGuard} from "../src/auth/guards/jwt.guard";
-import {CreateBookingDto, UpdateBookingDto} from "../src/booking/booking.dto";
-import {PrismaService} from "../src/prisma/prisma.service";
-import {mockAdmin} from "../src/user/user.mocks";
+import { AppModule } from "../src/app.module";
+import { JwtAuthGuard } from "../src/auth/guards/jwt.guard";
+import { CreateBookingDto, UpdateBookingDto } from "../src/booking/booking.dto";
+import { PrismaService } from "../src/prisma/prisma.service";
+import { mockAdmin } from "../src/user/user.mocks";
 
 describe("BookingController (e2e)", () => {
   let app: INestApplication;
@@ -27,7 +27,7 @@ describe("BookingController (e2e)", () => {
         canActivate: (context: ExecutionContext) => {
           const req = context.switchToHttp().getRequest<Request>();
           // Override the mocked id with the actual userId
-          req.user = {...mockAdmin, id: userId};
+          req.user = { ...mockAdmin, id: userId };
           return true;
         }
       })
@@ -36,7 +36,7 @@ describe("BookingController (e2e)", () => {
     app = moduleRef.createNestApplication();
     prismaService = moduleRef.get(PrismaService);
 
-    app.useGlobalPipes(new ValidationPipe({transform: true, whitelist: true}));
+    app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
     app.setGlobalPrefix("api");
 
     userId = (await prismaService.user.findFirst()).id;
@@ -59,7 +59,7 @@ describe("BookingController (e2e)", () => {
       serviceId
     };
 
-    const {body} = await request(app.getHttpServer()).post(BOOKING_URL).send(createBookingDto).expect(201);
+    const { body } = await request(app.getHttpServer()).post(BOOKING_URL).send(createBookingDto).expect(201);
     // Save the bookingId for the next tests
     bookingId = body.id;
   });

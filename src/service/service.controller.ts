@@ -14,17 +14,17 @@ import {
   UseGuards,
   UseInterceptors
 } from "@nestjs/common";
-import {ApiTags} from "@nestjs/swagger";
-import {UserRole} from "@prisma/client";
+import { ApiTags } from "@nestjs/swagger";
+import { UserRole } from "@prisma/client";
 
-import {JwtAuthGuard} from "../auth/guards/jwt.guard";
-import {Roles} from "../decorators/roles.deorator";
-import {DeleteEntityResponse} from "../dtos/response.dto";
-import {RolesGuard} from "../guards/roles.guard";
-import {FindAllEntitiesDto} from "../prisma/prisma.dto";
-import {getErrorMessage} from "../utils/get-error-message";
-import {CreateServiceDto, ServiceEntity, UpdateServiceDto} from "./service.dto";
-import {ServiceService} from "./service.service";
+import { JwtAuthGuard } from "../auth/guards/jwt.guard";
+import { Roles } from "../decorators/roles.decorator";
+import { DeleteEntityResponse } from "../dtos/response.dto";
+import { RolesGuard } from "../guards/roles.guard";
+import { FindAllEntitiesDto } from "../prisma/prisma.dto";
+import { getErrorMessage } from "../utils/get-error-message";
+import { CreateServiceDto, ServiceEntity, UpdateServiceDto } from "./service.dto";
+import { ServiceService } from "./service.service";
 
 @ApiTags("Service")
 @Controller("service")
@@ -36,7 +36,7 @@ export class ServiceController {
    * Get a list of services
    */
   @Get()
-  async findAll(@Query() {limit, offset}: FindAllEntitiesDto = {}) {
+  async findAll(@Query() { limit, offset }: FindAllEntitiesDto = {}) {
     const services = await this.serviceService.findAllServices(limit, offset);
     return services.map((service) => new ServiceEntity(service));
   }

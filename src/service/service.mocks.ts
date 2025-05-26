@@ -1,4 +1,4 @@
-import {Service} from "@prisma/client";
+import { Service } from "@prisma/client";
 
 export const mockService: Service = {
   id: 1,

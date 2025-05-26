@@ -14,17 +14,17 @@ import {
   UseGuards,
   UseInterceptors
 } from "@nestjs/common";
-import {ApiTags} from "@nestjs/swagger";
-import {UserRole} from "@prisma/client";
+import { ApiTags } from "@nestjs/swagger";
+import { UserRole } from "@prisma/client";
 
-import {JwtAuthGuard} from "../auth/guards/jwt.guard";
-import {Roles} from "../decorators/roles.deorator";
-import {DeleteEntityResponse} from "../dtos/response.dto";
-import {RolesGuard} from "../guards/roles.guard";
-import {FindAllEntitiesDto} from "../prisma/prisma.dto";
-import {getErrorMessage} from "../utils/get-error-message";
-import {CreateLocationDto, LocationEntity, UpdateLocationDto} from "./location.dto";
-import {LocationService} from "./location.service";
+import { JwtAuthGuard } from "../auth/guards/jwt.guard";
+import { Roles } from "../decorators/roles.decorator";
+import { DeleteEntityResponse } from "../dtos/response.dto";
+import { RolesGuard } from "../guards/roles.guard";
+import { FindAllEntitiesDto } from "../prisma/prisma.dto";
+import { getErrorMessage } from "../utils/get-error-message";
+import { CreateLocationDto, LocationEntity, UpdateLocationDto } from "./location.dto";
+import { LocationService } from "./location.service";
 
 @ApiTags("Location")
 @Controller("location")
@@ -38,7 +38,7 @@ export class LocationController {
   @Get()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.MANAGER)
-  async findAll(@Query() {limit, offset}: FindAllEntitiesDto = {}) {
+  async findAll(@Query() { limit, offset }: FindAllEntitiesDto = {}) {
     const locations = await this.locationService.findAllLocations(limit, offset);
     return locations.map((location) => new LocationEntity(location));
   }

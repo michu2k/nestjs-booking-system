@@ -1,11 +1,11 @@
-import {ConfigService} from "@nestjs/config";
-import {Test} from "@nestjs/testing";
-import {Request, Response} from "express";
+import { ConfigService } from "@nestjs/config";
+import { Test } from "@nestjs/testing";
+import { Request, Response } from "express";
 
-import {mockUser} from "../user/user.mocks";
-import {AuthController} from "./auth.controller";
-import {mockAuthAccessTokens} from "./auth.mocks";
-import {AuthService} from "./auth.service";
+import { mockUser } from "../user/user.mocks";
+import { AuthController } from "./auth.controller";
+import { mockAuthAccessTokens } from "./auth.mocks";
+import { AuthService } from "./auth.service";
 
 describe("AuthController", () => {
   let controller: AuthController;
@@ -22,7 +22,7 @@ describe("AuthController", () => {
   };
 
   const mockResponse = {
-    status: jest.fn().mockReturnValue({send: jest.fn(), redirect: jest.fn()}),
+    status: jest.fn().mockReturnValue({ send: jest.fn(), redirect: jest.fn() }),
     json: jest.fn().mockReturnValue({}),
     clearCookie: jest.fn().mockReturnValue({}),
     cookie: jest.fn().mockReturnValue({})

@@ -1,9 +1,9 @@
-import {Test} from "@nestjs/testing";
+import { Test } from "@nestjs/testing";
 
-import {ServiceController} from "./service.controller";
-import {CreateServiceDto, UpdateServiceDto} from "./service.dto";
-import {mockService} from "./service.mocks";
-import {ServiceService} from "./service.service";
+import { ServiceController } from "./service.controller";
+import { CreateServiceDto, UpdateServiceDto } from "./service.dto";
+import { mockService } from "./service.mocks";
+import { ServiceService } from "./service.service";
 
 describe("ServiceController", () => {
   let controller: ServiceController;
@@ -12,8 +12,8 @@ describe("ServiceController", () => {
   const mockServiceService = {
     findAllServices: jest.fn().mockResolvedValue([mockService, mockService]),
     findOneService: jest.fn().mockResolvedValue(mockService),
-    createService: jest.fn((data: CreateServiceDto) => Promise.resolve({...mockService, ...data})),
-    updateService: jest.fn((_, data: UpdateServiceDto) => Promise.resolve({...mockService, ...data})),
+    createService: jest.fn((data: CreateServiceDto) => Promise.resolve({ ...mockService, ...data })),
+    updateService: jest.fn((_, data: UpdateServiceDto) => Promise.resolve({ ...mockService, ...data })),
     deleteService: jest.fn().mockResolvedValue(mockService)
   };
 
@@ -69,7 +69,7 @@ describe("ServiceController", () => {
       const result = await controller.create(createServiceDto);
 
       expect(serviceService.createService).toHaveBeenCalled();
-      expect(result).toEqual({...mockService, ...createServiceDto});
+      expect(result).toEqual({ ...mockService, ...createServiceDto });
     });
   });
 
@@ -78,7 +78,7 @@ describe("ServiceController", () => {
       const updateServiceDto: UpdateServiceDto = {
         description: "Updated description"
       };
-      const mockUpdatedService = {...mockService, ...updateServiceDto};
+      const mockUpdatedService = { ...mockService, ...updateServiceDto };
       const result = await controller.update(mockService.id, updateServiceDto);
 
       expect(result).toEqual(mockUpdatedService);

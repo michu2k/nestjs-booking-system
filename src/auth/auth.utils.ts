@@ -1,5 +1,5 @@
-import {ConfigService} from "@nestjs/config";
-import {Response} from "express";
+import { ConfigService } from "@nestjs/config";
+import { Response } from "express";
 
 export type JwtPayload = {
   sub: number;
@@ -15,7 +15,7 @@ type CreateAuthCookiesArgs = {
 /**
  * Generate authorization cookies
  */
-export function createAuthCookies({res, accessToken, refreshToken}: CreateAuthCookiesArgs) {
+export function createAuthCookies({ res, accessToken, refreshToken }: CreateAuthCookiesArgs) {
   const configService = new ConfigService();
 
   const accessTokenCookie = configService.get("ACCESS_TOKEN");

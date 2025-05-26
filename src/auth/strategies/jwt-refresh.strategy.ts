@@ -1,12 +1,12 @@
-import {Injectable, UnauthorizedException} from "@nestjs/common";
-import {ConfigService} from "@nestjs/config";
-import {PassportStrategy} from "@nestjs/passport";
-import {Request} from "express";
-import {ExtractJwt, Strategy} from "passport-jwt";
+import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { PassportStrategy } from "@nestjs/passport";
+import { Request } from "express";
+import { ExtractJwt, Strategy } from "passport-jwt";
 
-import {UserEntity} from "../../user/user.dto";
-import {UserService} from "../../user/user.service";
-import {JwtPayload} from "../auth.utils";
+import { UserEntity } from "../../user/user.dto";
+import { UserService } from "../../user/user.service";
+import { JwtPayload } from "../auth.utils";
 
 @Injectable()
 export class JwtRefreshStrategy extends PassportStrategy(Strategy, "jwt-refresh") {
@@ -32,8 +32,8 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, "jwt-refresh"
     return cookie;
   }
 
-  async validate({sub: id, email}: JwtPayload) {
-    const user = await this.userService.findOneUser({id, email});
+  async validate({ sub: id, email }: JwtPayload) {
+    const user = await this.userService.findOneUser({ id, email });
 
     if (!user) {
       throw new UnauthorizedException("User not found");

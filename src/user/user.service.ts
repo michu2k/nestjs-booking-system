@@ -1,8 +1,8 @@
-import {Injectable} from "@nestjs/common";
-import {Prisma} from "@prisma/client";
+import { Injectable } from "@nestjs/common";
+import { Prisma } from "@prisma/client";
 
-import {PrismaService} from "../prisma/prisma.service";
-import {CreateAccountDto, CreateUserDto} from "./user.dto";
+import { PrismaService } from "../prisma/prisma.service";
+import { CreateAccountDto, CreateUserDto } from "./user.dto";
 
 @Injectable()
 export class UserService {
@@ -14,7 +14,7 @@ export class UserService {
     });
   }
 
-  async createUserAccount({account, ...data}: CreateUserDto) {
+  async createUserAccount({ account, ...data }: CreateUserDto) {
     return this.prisma.user.create({
       data: {
         ...data,
@@ -25,7 +25,7 @@ export class UserService {
     });
   }
 
-  async createSSOProviderAccount({provider, providerAccountId, userId}: CreateAccountDto) {
+  async createSSOProviderAccount({ provider, providerAccountId, userId }: CreateAccountDto) {
     return this.prisma.account.create({
       data: {
         provider,
@@ -41,7 +41,7 @@ export class UserService {
 
   async deleteUserAccount(id: number) {
     return this.prisma.user.delete({
-      where: {id},
+      where: { id },
       select: {
         id: true
       }
@@ -53,7 +53,7 @@ export class UserService {
    */
   async updateUserRefreshToken(userId: number, refreshToken: string) {
     return this.prisma.user.update({
-      where: {id: userId},
+      where: { id: userId },
       data: {
         refreshToken
       }

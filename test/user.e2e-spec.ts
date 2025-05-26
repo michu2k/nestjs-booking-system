@@ -1,12 +1,12 @@
-import {ExecutionContext, INestApplication, ValidationPipe} from "@nestjs/common";
-import {Test} from "@nestjs/testing";
-import {Request} from "express";
+import { ExecutionContext, INestApplication, ValidationPipe } from "@nestjs/common";
+import { Test } from "@nestjs/testing";
+import { Request } from "express";
 import * as request from "supertest";
 
-import {AppModule} from "../src/app.module";
-import {JwtAuthGuard} from "../src/auth/guards/jwt.guard";
-import {PrismaService} from "../src/prisma/prisma.service";
-import {mockAdmin} from "../src/user/user.mocks";
+import { AppModule } from "../src/app.module";
+import { JwtAuthGuard } from "../src/auth/guards/jwt.guard";
+import { PrismaService } from "../src/prisma/prisma.service";
+import { mockAdmin } from "../src/user/user.mocks";
 
 describe("UserController (e2e)", () => {
   let app: INestApplication;
@@ -24,7 +24,7 @@ describe("UserController (e2e)", () => {
         canActivate: (context: ExecutionContext) => {
           const req = context.switchToHttp().getRequest<Request>();
           // Override the mocked id with the actual userId
-          req.user = {...mockAdmin, id: userId};
+          req.user = { ...mockAdmin, id: userId };
           return true;
         }
       })
@@ -33,11 +33,11 @@ describe("UserController (e2e)", () => {
     app = moduleRef.createNestApplication();
     prismaService = moduleRef.get(PrismaService);
 
-    app.useGlobalPipes(new ValidationPipe({transform: true, whitelist: true}));
+    app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
     app.setGlobalPrefix("api");
 
     // Get the id of the last user
-    userId = (await prismaService.user.findFirst({orderBy: {id: "desc"}})).id;
+    userId = (await prismaService.user.findFirst({ orderBy: { id: "desc" } })).id;
 
     await app.init();
   });

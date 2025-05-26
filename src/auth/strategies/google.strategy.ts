@@ -1,12 +1,12 @@
-import {Injectable} from "@nestjs/common";
-import {ConfigService} from "@nestjs/config";
-import {PassportStrategy} from "@nestjs/passport";
-import {UserRole} from "@prisma/client";
-import {Profile, Strategy} from "passport-google-oauth20";
+import { Injectable } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { PassportStrategy } from "@nestjs/passport";
+import { UserRole } from "@prisma/client";
+import { Profile, Strategy } from "passport-google-oauth20";
 
-import {UserEntity} from "../../user/user.dto";
-import {UserService} from "../../user/user.service";
-import {AuthService} from "../auth.service";
+import { UserEntity } from "../../user/user.dto";
+import { UserService } from "../../user/user.service";
+import { AuthService } from "../auth.service";
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
@@ -24,10 +24,10 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
   }
 
   async validate(_accessToken: string, _refreshToken: string, profile: Profile) {
-    const {emails, displayName, provider, id: providerId} = profile;
+    const { emails, displayName, provider, id: providerId } = profile;
 
     const email = emails[0].value;
-    const user = await this.userService.findOneUser({email});
+    const user = await this.userService.findOneUser({ email });
 
     // If user does not exist, create a new user account
     if (!user) {

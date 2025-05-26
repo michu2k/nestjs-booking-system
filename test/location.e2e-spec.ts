@@ -1,12 +1,12 @@
-import {ExecutionContext, INestApplication, ValidationPipe} from "@nestjs/common";
-import {Test} from "@nestjs/testing";
-import {Request} from "express";
+import { ExecutionContext, INestApplication, ValidationPipe } from "@nestjs/common";
+import { Test } from "@nestjs/testing";
+import { Request } from "express";
 import * as request from "supertest";
 
-import {AppModule} from "../src/app.module";
-import {JwtAuthGuard} from "../src/auth/guards/jwt.guard";
-import {CreateLocationDto, UpdateLocationDto} from "../src/location/location.dto";
-import {mockAdmin} from "../src/user/user.mocks";
+import { AppModule } from "../src/app.module";
+import { JwtAuthGuard } from "../src/auth/guards/jwt.guard";
+import { CreateLocationDto, UpdateLocationDto } from "../src/location/location.dto";
+import { mockAdmin } from "../src/user/user.mocks";
 
 describe("LocationController (e2e)", () => {
   let app: INestApplication;
@@ -30,7 +30,7 @@ describe("LocationController (e2e)", () => {
 
     app = moduleRef.createNestApplication();
 
-    app.useGlobalPipes(new ValidationPipe({transform: true, whitelist: true}));
+    app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
     app.setGlobalPrefix("api");
 
     await app.init();
@@ -49,7 +49,7 @@ describe("LocationController (e2e)", () => {
       lng: 0
     };
 
-    const {body} = await request(app.getHttpServer()).post(LOCATION_URL).send(createLocationDto).expect(201);
+    const { body } = await request(app.getHttpServer()).post(LOCATION_URL).send(createLocationDto).expect(201);
     // Save the locationId for the next tests
     locationId = body.id;
   });
