@@ -47,20 +47,20 @@ model Booking {
 }
 
 model Service {
-  id                  Int                   @id @default(autoincrement())
-  name                String
-  description         String
-  price               Int
-  createdAt           DateTime              @default(now())
-  updatedAt           DateTime              @default(now())
-  status              ServiceStatus         @default(ACTIVE)
-  locationId          Int?
-  Booking             Booking[]
-  location            Location?             @relation(fields: [locationId], references: [id])
-  ServiceAvailability ServiceAvailability[]
+  id              Int               @id @default(autoincrement())
+  name            String
+  description     String
+  price           Int
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @default(now())
+  status          ServiceStatus     @default(ACTIVE)
+  locationId      Int?
+  Booking         Booking[]
+  location        Location?         @relation(fields: [locationId], references: [id])
+  ServiceSchedule ServiceSchedule[]
 }
 
-model ServiceAvailability {
+model ServiceSchedule {
   id        Int      @id @default(autoincrement())
   day       Int
   startTime DateTime
