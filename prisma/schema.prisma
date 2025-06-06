@@ -61,12 +61,12 @@ model Service {
 }
 
 model ServiceSchedule {
-  id        Int      @id @default(autoincrement())
+  id        Int     @id @default(autoincrement())
   day       Int
-  startTime DateTime
-  endTime   DateTime
+  startTime String
+  endTime   String
   serviceId Int
-  service   Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  service   Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
 
   @@unique([serviceId, day])
 }
