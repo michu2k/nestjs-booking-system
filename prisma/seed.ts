@@ -1,17 +1,18 @@
-import { PrismaClient } from "@prisma/client";
-
+import { prisma } from "./seed.utils";
 import { seedBookings } from "./seed/booking.seed";
 import { seedLocations } from "./seed/location.seed";
 import { seedServices } from "./seed/service.seed";
 import { seedUsers } from "./seed/user.seed";
 
-const prisma = new PrismaClient();
-
 async function seed() {
-  await seedUsers(prisma);
-  await seedLocations(prisma);
-  await seedServices(prisma);
-  await seedBookings(prisma);
+  console.time("Seeding database");
+
+  await seedUsers();
+  await seedLocations();
+  await seedServices();
+  await seedBookings();
+
+  console.timeEnd("Seeding database");
 }
 
 seed()

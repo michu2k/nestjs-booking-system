@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
-import { type Prisma, PrismaClient, ServiceStatus } from "@prisma/client";
+import { type Prisma, ServiceStatus } from "@prisma/client";
 
-import { SEED_RECORDS } from "../seed.utils";
+import { prisma, SEED_RECORDS } from "../seed.utils";
 
 function createService(): Prisma.ServiceCreateManyInput {
   return {
@@ -13,7 +13,7 @@ function createService(): Prisma.ServiceCreateManyInput {
   };
 }
 
-export async function seedServices(prisma: PrismaClient) {
+export async function seedServices() {
   console.log("Seeding services...");
 
   await prisma.service.deleteMany();
