@@ -8,8 +8,8 @@ ALTER TABLE "Service" ADD COLUMN     "status" "ServiceStatus" NOT NULL DEFAULT '
 CREATE TABLE "ServiceSchedule" (
     "id" SERIAL NOT NULL,
     "day" INTEGER NOT NULL,
-    "startTime" TEXT NOT NULL,
-    "endTime" TEXT NOT NULL,
+    "startTime" TEXT,
+    "endTime" TEXT,
     "serviceId" INTEGER NOT NULL,
 
     CONSTRAINT "ServiceSchedule_pkey" PRIMARY KEY ("id")
