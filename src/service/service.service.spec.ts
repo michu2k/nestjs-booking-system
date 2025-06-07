@@ -1,4 +1,5 @@
 import { Test } from "@nestjs/testing";
+import { ServiceStatus } from "@prisma/client";
 
 import { PrismaService } from "../prisma/prisma.service";
 import { CreateServiceDto, UpdateServiceDto } from "./service.dto";
@@ -69,6 +70,7 @@ describe("ServiceService", () => {
         name: "Service name",
         description: "Service description",
         price: 19,
+        status: ServiceStatus.ACTIVE,
         locationId: 1
       };
       const mockCreatedService = { ...mockService, ...createServiceDto };

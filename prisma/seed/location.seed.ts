@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
-import { type Prisma, PrismaClient } from "@prisma/client";
+import { type Prisma } from "@prisma/client";
 
-import { SEED_RECORDS } from "../seed.utils";
+import { prisma, SEED_RECORDS } from "../seed.utils";
 
 function createLocation(): Prisma.LocationCreateManyInput {
   return {
@@ -13,7 +13,7 @@ function createLocation(): Prisma.LocationCreateManyInput {
   };
 }
 
-export async function seedLocations(prisma: PrismaClient) {
+export async function seedLocations() {
   console.log("Seeding locations...");
 
   await prisma.location.deleteMany();

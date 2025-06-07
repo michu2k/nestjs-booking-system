@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
-import { BookingStatus, type Prisma, PrismaClient } from "@prisma/client";
+import { BookingStatus, type Prisma } from "@prisma/client";
 
-import { SEED_RECORDS } from "../seed.utils";
+import { prisma, SEED_RECORDS } from "../seed.utils";
 
 function createBooking(): Prisma.BookingCreateManyInput {
   return {
@@ -13,7 +13,7 @@ function createBooking(): Prisma.BookingCreateManyInput {
   };
 }
 
-export async function seedBookings(prisma: PrismaClient) {
+export async function seedBookings() {
   console.log("Seeding bookings...");
 
   await prisma.booking.deleteMany();
