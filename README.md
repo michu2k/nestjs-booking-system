@@ -22,6 +22,10 @@ This project requires [Node.js 20+](https://nodejs.org/en), [pnpm 9+](https://pn
 6. If necessary, run prisma studio to check the db data `pnpm run prisma:studio`
 7. You can also populate the database with test data using `pnpm run prisma:seed`
 
+## Database diagram
+
+Each time you run the `prisma:gen` command, a new DBML diagram will be generated in the `prisma/schema.dbml` file. You can use [dbdiagram.io](https://dbdiagram.io/home) to visualize the database schema as an Entity-Relationship diagram.
+
 ## License
 
 This project is under the MIT license.
