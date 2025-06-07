@@ -1,6 +1,6 @@
-import { PartialType, PickType } from "@nestjs/swagger";
-import { Service } from "@prisma/client";
-import { IsDateString, IsInt, IsString, Min } from "class-validator";
+import { ApiProperty, PartialType, PickType } from "@nestjs/swagger";
+import { Service, ServiceStatus } from "@prisma/client";
+import { IsDateString, IsEnum, IsInt, IsString, Min } from "class-validator";
 
 export class ServiceEntity implements Service {
   @IsInt()
@@ -22,6 +22,10 @@ export class ServiceEntity implements Service {
   @IsDateString({ strict: true, strictSeparator: true })
   updatedAt: Date;
 
+  @IsEnum(ServiceStatus)
+  @ApiProperty({ enum: ServiceStatus })
+  status: ServiceStatus;
+
   @IsInt()
   locationId: number;
 
@@ -34,6 +38,7 @@ export class CreateServiceDto extends PickType(ServiceEntity, [
   "name",
   "description",
   "price",
+  "status",
   "locationId"
 ] as const) {}
 
