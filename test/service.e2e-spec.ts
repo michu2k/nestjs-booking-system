@@ -1,5 +1,6 @@
 import { ExecutionContext, INestApplication, ValidationPipe } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
+import { ServiceStatus } from "@prisma/client";
 import { Request } from "express";
 import * as request from "supertest";
 
@@ -50,6 +51,7 @@ describe("ServiceController (e2e)", () => {
       name: "Service name",
       description: "Service description",
       price: 19,
+      status: ServiceStatus.ACTIVE,
       locationId
     };
 

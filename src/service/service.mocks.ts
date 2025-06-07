@@ -1,4 +1,4 @@
-import { Service } from "@prisma/client";
+import { Service, ServiceStatus } from "@prisma/client";
 
 export const mockService: Service = {
   id: 1,
@@ -7,5 +7,6 @@ export const mockService: Service = {
   price: 27,
   createdAt: new Date(),
   updatedAt: new Date(),
+  status: ServiceStatus.ACTIVE,
   locationId: 1
 };
