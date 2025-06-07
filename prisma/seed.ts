@@ -2,6 +2,7 @@ import { prisma } from "./seed.utils";
 import { seedBookings } from "./seed/booking.seed";
 import { seedLocations } from "./seed/location.seed";
 import { seedServices } from "./seed/service.seed";
+import { seedServiceSchedules } from "./seed/service-schedule.seed";
 import { seedUsers } from "./seed/user.seed";
 
 async function seed() {
@@ -10,6 +11,7 @@ async function seed() {
   await seedUsers();
   await seedLocations();
   await seedServices();
+  await seedServiceSchedules();
   await seedBookings();
 
   console.timeEnd("Seeding database");
