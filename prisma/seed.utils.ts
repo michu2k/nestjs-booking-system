@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 
-/** Prisma client instance used fpr the seed operations. */
+/** Prisma client instance used for the seed operations. */
 export const prisma = new PrismaClient();
 
 export const SEED_RECORDS = {
