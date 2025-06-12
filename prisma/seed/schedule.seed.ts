@@ -26,7 +26,7 @@ function getServiceTimeSlot() {
   };
 }
 
-function createServiceSchedule(day: number, serviceId: number): Prisma.ServiceScheduleCreateManyInput {
+function createSchedule(day: number, serviceId: number): Prisma.ServiceScheduleCreateManyInput {
   // For even services, set Sunday as a day off
   const isSunday = day === 6;
 
@@ -49,7 +49,7 @@ function createServiceSchedule(day: number, serviceId: number): Prisma.ServiceSc
   };
 }
 
-export async function seedServiceSchedules() {
+export async function seedSchedules() {
   console.log("Seeding service schedules...");
 
   const DAYS_IN_WEEK = 7;
@@ -60,7 +60,7 @@ export async function seedServiceSchedules() {
   const services = await prisma.service.findMany({ select: { id: true }, orderBy: { id: "asc" } });
 
   for (const service of services) {
-    const records = faker.helpers.multiple((_, index) => createServiceSchedule(index, service.id), {
+    const records = faker.helpers.multiple((_, index) => createSchedule(index, service.id), {
       count: DAYS_IN_WEEK
     });
 
