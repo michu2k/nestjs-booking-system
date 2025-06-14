@@ -52,8 +52,6 @@ function createSchedule(day: number, serviceId: number): Prisma.ServiceScheduleC
 export async function seedSchedules() {
   console.log("Seeding service schedules...");
 
-  const DAYS_IN_WEEK = 7;
-
   await prisma.serviceSchedule.deleteMany();
   await prisma.$queryRaw`ALTER SEQUENCE "ServiceSchedule_id_seq" RESTART WITH 1;`;
 
@@ -61,11 +59,11 @@ export async function seedSchedules() {
 
   for (const service of services) {
     const records = faker.helpers.multiple((_, index) => createSchedule(index, service.id), {
-      count: DAYS_IN_WEEK
+      count: 7
     });
 
     await prisma.serviceSchedule.createMany({ data: records });
 
-    console.log(`Service id ${service.id}: ${records.length} service schedules have been created.`);
+    console.log(`Service id ${service.id}: Schedule have been created.`);
   }
 }

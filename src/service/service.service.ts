@@ -1,11 +1,15 @@
 import { Injectable } from "@nestjs/common";
 
 import { PrismaService } from "../prisma/prisma.service";
+import { ScheduleService } from "../schedule/schedule.service";
 import { CreateServiceDto, UpdateServiceDto } from "./service.dto";
 
 @Injectable()
 export class ServiceService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private scheduleService: ScheduleService
+  ) {}
 
   async findAllServices(limit?: number, offset?: number) {
     return this.prisma.service.findMany({
@@ -21,7 +25,12 @@ export class ServiceService {
   }
 
   async createService(data: CreateServiceDto) {
-    return this.prisma.service.create({ data });
+    return this.prisma.$transaction(async (tx) => {
+      const service = await tx.service.create({ data });
+      const schedule = await this.scheduleService.createScheduleForService(service.id, tx);
+
+      return { ...service, ServiceSchedule: schedule };
+    });
   }
 
   async updateService(id: number, data: UpdateServiceDto) {
