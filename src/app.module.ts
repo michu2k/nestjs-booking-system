@@ -6,6 +6,7 @@ import { BookingModule } from "./booking/booking.module";
 import { validateEnvs } from "./env.validation";
 import { LocationModule } from "./location/location.module";
 import { PrismaModule } from "./prisma/prisma.module";
+import { ScheduleModule } from "./schedule/schedule.module";
 import { ServiceModule } from "./service/service.module";
 import { UserModule } from "./user/user.module";
 
@@ -20,6 +21,7 @@ import { UserModule } from "./user/user.module";
     UserModule,
     LocationModule,
     ServiceModule,
+    ScheduleModule,
     PrismaModule,
     BookingModule
   ],
