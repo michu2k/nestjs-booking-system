@@ -44,7 +44,7 @@ export class LocationController {
   }
 
   /**
-   * Get a location with the specified `id`
+   * Get a location with the specified id
    */
   @Get(":id")
   async findOne(@Param("id", ParseIntPipe) id: number) {
@@ -73,7 +73,7 @@ export class LocationController {
   }
 
   /**
-   * Update a location with the specified `id`
+   * Update a location with the specified id
    */
   @Patch(":id")
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -88,7 +88,7 @@ export class LocationController {
   }
 
   /**
-   * Delete a location with the specified `id`
+   * Delete a location with the specified id
    */
   @Delete(":id")
   @UseGuards(JwtAuthGuard, RolesGuard)

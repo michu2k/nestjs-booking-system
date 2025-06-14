@@ -17,7 +17,7 @@ export class UserEntity implements User {
   phone: string | null;
 
   @IsEnum(UserRole)
-  @ApiProperty({ enum: [UserRole.ADMIN, UserRole.MANAGER, UserRole.USER] })
+  @ApiProperty({ enum: UserRole })
   role: UserRole;
 
   @IsString()

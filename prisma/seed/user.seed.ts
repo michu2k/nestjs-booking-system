@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
-import { type Prisma, PrismaClient, UserRole } from "@prisma/client";
+import { type Prisma, UserRole } from "@prisma/client";
 
-import { SEED_RECORDS } from "../seed.utils";
+import { prisma, SEED_RECORDS } from "../seed.utils";
 
 function createUser(role: UserRole): Prisma.UserCreateInput {
   return {
@@ -18,7 +18,7 @@ function createUser(role: UserRole): Prisma.UserCreateInput {
   };
 }
 
-export async function seedUsers(prisma: PrismaClient) {
+export async function seedUsers() {
   console.log("Seeding users...");
 
   await prisma.account.deleteMany();

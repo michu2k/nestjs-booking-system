@@ -1,4 +1,5 @@
 import { Test } from "@nestjs/testing";
+import { ServiceStatus } from "@prisma/client";
 
 import { ServiceController } from "./service.controller";
 import { CreateServiceDto, UpdateServiceDto } from "./service.dto";
@@ -64,6 +65,7 @@ describe("ServiceController", () => {
         name: "Service name",
         description: "Service description",
         price: 19,
+        status: ServiceStatus.ACTIVE,
         locationId: 1
       };
       const result = await controller.create(createServiceDto);
