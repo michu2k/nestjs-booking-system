@@ -1,8 +1,7 @@
 import { Test } from "@nestjs/testing";
 
 import { LocationController } from "./location.controller";
-import { CreateLocationDto, UpdateLocationDto } from "./location.dto";
-import { mockLocation } from "./location.mocks";
+import { mockCreateLocation, mockLocation, mockUpdateLocation } from "./location.mocks";
 import { LocationService } from "./location.service";
 
 describe("LocationController", () => {
@@ -12,8 +11,8 @@ describe("LocationController", () => {
   const mockLocationService = {
     findAllLocations: jest.fn().mockResolvedValue([mockLocation, mockLocation]),
     findOneLocation: jest.fn().mockResolvedValue(mockLocation),
-    createLocation: jest.fn((data: CreateLocationDto) => Promise.resolve({ ...mockLocation, ...data })),
-    updateLocation: jest.fn((_, data: UpdateLocationDto) => Promise.resolve({ ...mockLocation, ...data })),
+    createLocation: jest.fn((data) => Promise.resolve({ ...mockLocation, ...data })),
+    updateLocation: jest.fn((_, data) => Promise.resolve({ ...mockLocation, ...data })),
     deleteLocation: jest.fn().mockResolvedValue(mockLocation)
   };
 
@@ -60,29 +59,19 @@ describe("LocationController", () => {
 
   describe("create", () => {
     it("should create a location", async () => {
-      const createLocationDto: CreateLocationDto = {
-        address: "934 Koelpin Oval",
-        city: "Silver Spring",
-        country: "Norway",
-        lat: 0,
-        lng: 0
-      };
-      const result = await controller.create(createLocationDto);
+      const result = await controller.create(mockCreateLocation);
 
       expect(locationService.createLocation).toHaveBeenCalled();
-      expect(result).toEqual({ ...mockLocation, ...createLocationDto });
+      expect(result).toEqual({ ...mockLocation, ...mockCreateLocation });
     });
   });
 
   describe("update", () => {
     it("should update a location", async () => {
-      const updateLocationDto: UpdateLocationDto = {
-        city: "London"
-      };
-      const result = await controller.update(mockLocation.id, updateLocationDto);
+      const result = await controller.update(mockLocation.id, mockUpdateLocation);
 
       expect(locationService.updateLocation).toHaveBeenCalled();
-      expect(result).toEqual({ ...mockLocation, ...updateLocationDto });
+      expect(result).toEqual({ ...mockLocation, ...mockUpdateLocation });
     });
   });
 

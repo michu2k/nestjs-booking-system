@@ -1,9 +1,7 @@
 import { Test } from "@nestjs/testing";
-import { ServiceStatus } from "@prisma/client";
 
 import { PrismaService } from "../prisma/prisma.service";
-import { CreateServiceDto, UpdateServiceDto } from "./service.dto";
-import { mockService } from "./service.mocks";
+import { mockCreateService, mockService, mockUpdateService } from "./service.mocks";
 import { ServiceService } from "./service.service";
 
 describe("ServiceService", () => {
@@ -66,32 +64,22 @@ describe("ServiceService", () => {
 
   describe("createService", () => {
     it("should create a service", async () => {
-      const createServiceDto: CreateServiceDto = {
-        name: "Service name",
-        description: "Service description",
-        price: 19,
-        status: ServiceStatus.ACTIVE,
-        locationId: 1
-      };
-      const mockCreatedService = { ...mockService, ...createServiceDto };
+      const mockCreatedService = { ...mockService, ...mockCreateService };
       const createServiceSpy = jest.spyOn(service, "createService").mockResolvedValue(mockCreatedService);
-      const result = await service.createService(createServiceDto);
+      const result = await service.createService(mockCreateService);
 
-      expect(createServiceSpy).toHaveBeenCalledWith(createServiceDto);
+      expect(createServiceSpy).toHaveBeenCalledWith(mockCreateService);
       expect(result).toEqual(mockCreatedService);
     });
   });
 
   describe("updateService", () => {
     it("should update a service", async () => {
-      const updateServiceDto: UpdateServiceDto = {
-        description: "Updated description"
-      };
-      const mockUpdatedService = { ...mockService, ...updateServiceDto };
+      const mockUpdatedService = { ...mockService, ...mockUpdateService };
       const updateServiceSpy = jest.spyOn(service, "updateService").mockResolvedValue(mockUpdatedService);
-      const result = await service.updateService(mockService.id, updateServiceDto);
+      const result = await service.updateService(mockService.id, mockUpdateService);
 
-      expect(updateServiceSpy).toHaveBeenCalledWith(mockService.id, updateServiceDto);
+      expect(updateServiceSpy).toHaveBeenCalledWith(mockService.id, mockUpdateService);
       expect(result).toEqual(mockUpdatedService);
     });
   });

@@ -1,10 +1,8 @@
 import { Test } from "@nestjs/testing";
-import { BookingStatus } from "@prisma/client";
 
 import { mockUser } from "../user/user.mocks";
 import { BookingController } from "./booking.controller";
-import { CreateBookingDto, UpdateBookingDto } from "./booking.dto";
-import { mockBooking } from "./booking.mocks";
+import { mockBooking, mockCreateBooking, mockUpdateBooking } from "./booking.mocks";
 import { BookingService } from "./booking.service";
 
 describe("BookingController", () => {
@@ -14,8 +12,8 @@ describe("BookingController", () => {
   const mockBookingService = {
     findAllBookings: jest.fn().mockResolvedValue([mockBooking, mockBooking]),
     findOneBooking: jest.fn().mockResolvedValue(mockBooking),
-    createBooking: jest.fn((data: CreateBookingDto) => Promise.resolve({ ...mockBooking, ...data })),
-    updateBooking: jest.fn((_, data: UpdateBookingDto) => Promise.resolve({ ...mockBooking, ...data })),
+    createBooking: jest.fn((data) => Promise.resolve({ ...mockBooking, ...data })),
+    updateBooking: jest.fn((_, data) => Promise.resolve({ ...mockBooking, ...data })),
     deleteBooking: jest.fn().mockResolvedValue(mockBooking)
   };
 
@@ -62,29 +60,19 @@ describe("BookingController", () => {
 
   describe("create", () => {
     it("should create a booking", async () => {
-      const createBookingDto: CreateBookingDto = {
-        from: new Date(),
-        to: new Date(),
-        status: BookingStatus.PENDING,
-        userId: 2,
-        serviceId: 1
-      };
-      const result = await controller.create(createBookingDto);
+      const result = await controller.create(mockCreateBooking);
 
       expect(bookingService.createBooking).toHaveBeenCalled();
-      expect(result).toEqual({ ...mockBooking, ...createBookingDto });
+      expect(result).toEqual({ ...mockBooking, ...mockCreateBooking });
     });
   });
 
   describe("update", () => {
     it("should update a booking", async () => {
-      const updateBookingDto: UpdateBookingDto = {
-        status: BookingStatus.CANCELLED
-      };
-      const result = await controller.update(mockBooking.id, updateBookingDto);
+      const result = await controller.update(mockBooking.id, mockUpdateBooking);
 
       expect(bookingService.updateBooking).toHaveBeenCalled();
-      expect(result).toEqual({ ...mockBooking, ...updateBookingDto });
+      expect(result).toEqual({ ...mockBooking, ...mockUpdateBooking });
     });
   });
 

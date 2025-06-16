@@ -1,8 +1,7 @@
 import { Test } from "@nestjs/testing";
 
 import { PrismaService } from "../prisma/prisma.service";
-import { CreateLocationDto, UpdateLocationDto } from "./location.dto";
-import { mockLocation } from "./location.mocks";
+import { mockCreateLocation, mockLocation, mockUpdateLocation } from "./location.mocks";
 import { LocationService } from "./location.service";
 
 describe("LocationService", () => {
@@ -65,32 +64,22 @@ describe("LocationService", () => {
 
   describe("createLocation", () => {
     it("should create a location", async () => {
-      const createLocationDto: CreateLocationDto = {
-        address: "934 Koelpin Oval",
-        city: "Silver Spring",
-        country: "Poland",
-        lat: -77.4925,
-        lng: -72.1182
-      };
-      const mockCreatedLocation = { ...mockLocation, ...createLocationDto };
+      const mockCreatedLocation = { ...mockLocation, ...mockCreateLocation };
       const createLocationSpy = jest.spyOn(service, "createLocation").mockResolvedValue(mockCreatedLocation);
-      const result = await service.createLocation(createLocationDto);
+      const result = await service.createLocation(mockCreateLocation);
 
-      expect(createLocationSpy).toHaveBeenCalledWith(createLocationDto);
+      expect(createLocationSpy).toHaveBeenCalledWith(mockCreateLocation);
       expect(result).toEqual(mockCreatedLocation);
     });
   });
 
   describe("updateLocation", () => {
     it("should update a location", async () => {
-      const updateLocationDto: UpdateLocationDto = {
-        city: "London"
-      };
-      const mockUpdatedLocation = { ...mockLocation, ...updateLocationDto };
+      const mockUpdatedLocation = { ...mockLocation, ...mockUpdateLocation };
       const updateLocationSpy = jest.spyOn(service, "updateLocation").mockResolvedValue(mockUpdatedLocation);
-      const result = await service.updateLocation(mockLocation.id, updateLocationDto);
+      const result = await service.updateLocation(mockLocation.id, mockUpdateLocation);
 
-      expect(updateLocationSpy).toHaveBeenCalledWith(mockLocation.id, updateLocationDto);
+      expect(updateLocationSpy).toHaveBeenCalledWith(mockLocation.id, mockUpdateLocation);
       expect(result).toEqual(mockUpdatedLocation);
     });
   });

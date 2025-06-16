@@ -3,7 +3,7 @@ import { type Prisma } from "@prisma/client";
 
 import { prisma } from "../seed.utils";
 
-function getServiceTimeSlot() {
+function getScheduleTimeSlot() {
   const startHour = faker.number.int({ min: 6, max: 10 }); // e.g. 6 AM to 10 AM
   const startMinutes = faker.helpers.arrayElement([0, 15, 30, 45]);
   const availabilitySlot = faker.number.int({ min: 6, max: 8 });
@@ -39,7 +39,7 @@ function createSchedule(day: number, serviceId: number): Prisma.ServiceScheduleC
     };
   }
 
-  const { startTime, endTime } = getServiceTimeSlot();
+  const { startTime, endTime } = getScheduleTimeSlot();
 
   return {
     day,

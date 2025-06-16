@@ -1,9 +1,7 @@
 import { Test } from "@nestjs/testing";
-import { ServiceStatus } from "@prisma/client";
 
 import { ServiceController } from "./service.controller";
-import { CreateServiceDto, UpdateServiceDto } from "./service.dto";
-import { mockService } from "./service.mocks";
+import { mockCreateService, mockService, mockUpdateService } from "./service.mocks";
 import { ServiceService } from "./service.service";
 
 describe("ServiceController", () => {
@@ -13,8 +11,8 @@ describe("ServiceController", () => {
   const mockServiceService = {
     findAllServices: jest.fn().mockResolvedValue([mockService, mockService]),
     findOneService: jest.fn().mockResolvedValue(mockService),
-    createService: jest.fn((data: CreateServiceDto) => Promise.resolve({ ...mockService, ...data })),
-    updateService: jest.fn((_, data: UpdateServiceDto) => Promise.resolve({ ...mockService, ...data })),
+    createService: jest.fn((data) => Promise.resolve({ ...mockService, ...data })),
+    updateService: jest.fn((_, data) => Promise.resolve({ ...mockService, ...data })),
     deleteService: jest.fn().mockResolvedValue(mockService)
   };
 
@@ -43,10 +41,10 @@ describe("ServiceController", () => {
 
   describe("findAll", () => {
     it("should get all services", async () => {
-      const result = await controller.findOne(mockService.id);
+      const result = await controller.findAll();
 
-      expect(serviceService.findOneService).toHaveBeenCalled();
-      expect(result).toEqual(mockService);
+      expect(serviceService.findAllServices).toHaveBeenCalled();
+      expect(result).toEqual([mockService, mockService]);
     });
   });
 
@@ -61,27 +59,17 @@ describe("ServiceController", () => {
 
   describe("create", () => {
     it("should create a service", async () => {
-      const createServiceDto: CreateServiceDto = {
-        name: "Service name",
-        description: "Service description",
-        price: 19,
-        status: ServiceStatus.ACTIVE,
-        locationId: 1
-      };
-      const result = await controller.create(createServiceDto);
+      const result = await controller.create(mockCreateService);
 
       expect(serviceService.createService).toHaveBeenCalled();
-      expect(result).toEqual({ ...mockService, ...createServiceDto });
+      expect(result).toEqual({ ...mockService, ...mockCreateService });
     });
   });
 
   describe("update", () => {
     it("should update a service", async () => {
-      const updateServiceDto: UpdateServiceDto = {
-        description: "Updated description"
-      };
-      const mockUpdatedService = { ...mockService, ...updateServiceDto };
-      const result = await controller.update(mockService.id, updateServiceDto);
+      const mockUpdatedService = { ...mockService, ...mockUpdateService };
+      const result = await controller.update(mockService.id, mockUpdateService);
 
       expect(result).toEqual(mockUpdatedService);
     });

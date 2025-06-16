@@ -1,9 +1,7 @@
 import { Test } from "@nestjs/testing";
-import { BookingStatus } from "@prisma/client";
 
 import { PrismaService } from "../prisma/prisma.service";
-import { CreateBookingDto, UpdateBookingDto } from "./booking.dto";
-import { mockBooking } from "./booking.mocks";
+import { mockBooking, mockCreateBooking, mockUpdateBooking } from "./booking.mocks";
 import { BookingService } from "./booking.service";
 
 describe("BookingService", () => {
@@ -66,32 +64,22 @@ describe("BookingService", () => {
 
   describe("createBooking", () => {
     it("should create a booking", async () => {
-      const createBookingDto: CreateBookingDto = {
-        from: new Date(),
-        to: new Date(),
-        status: BookingStatus.PENDING,
-        userId: 2,
-        serviceId: 1
-      };
-      const mockCreatedBooking = { ...mockBooking, ...createBookingDto };
+      const mockCreatedBooking = { ...mockBooking, ...mockCreateBooking };
       const createBookingSpy = jest.spyOn(service, "createBooking").mockResolvedValue(mockCreatedBooking);
-      const result = await service.createBooking(createBookingDto);
+      const result = await service.createBooking(mockCreateBooking);
 
-      expect(createBookingSpy).toHaveBeenCalledWith(createBookingDto);
+      expect(createBookingSpy).toHaveBeenCalledWith(mockCreateBooking);
       expect(result).toEqual(mockCreatedBooking);
     });
   });
 
   describe("updateBooking", () => {
     it("should update a booking", async () => {
-      const updateBookingDto: UpdateBookingDto = {
-        status: BookingStatus.CANCELLED
-      };
-      const mockUpdatedBooking = { ...mockBooking, ...updateBookingDto };
+      const mockUpdatedBooking = { ...mockBooking, ...mockUpdateBooking };
       const updateBookingSpy = jest.spyOn(service, "updateBooking").mockResolvedValue(mockUpdatedBooking);
-      const result = await service.updateBooking(mockBooking.id, updateBookingDto);
+      const result = await service.updateBooking(mockBooking.id, mockUpdateBooking);
 
-      expect(updateBookingSpy).toHaveBeenCalledWith(mockBooking.id, updateBookingDto);
+      expect(updateBookingSpy).toHaveBeenCalledWith(mockBooking.id, mockUpdateBooking);
       expect(result).toEqual(mockUpdatedBooking);
     });
   });
