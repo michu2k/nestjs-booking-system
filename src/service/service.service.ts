@@ -27,7 +27,7 @@ export class ServiceService {
   async createService(data: CreateServiceDto) {
     return this.prisma.$transaction(async (tx) => {
       const service = await tx.service.create({ data });
-      const schedule = await this.scheduleService.createScheduleForService(service.id, tx);
+      const schedule = await this.scheduleService.createSchedule(service.id, tx);
 
       return { ...service, ServiceSchedule: schedule };
     });

@@ -29,7 +29,7 @@ export class ScheduleController {
   /**
    * Get a schedule for a service with the specified id
    */
-  @Get()
+  @Get(":serviceId")
   async findAll(@Param("serviceId", ParseIntPipe) serviceId: number) {
     const schedule = await this.scheduleService.findSchedule({ serviceId });
     return schedule.map((s) => new ScheduleEntity(s));

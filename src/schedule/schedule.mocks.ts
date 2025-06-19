@@ -1,8 +1,6 @@
-import { ServiceSchedule } from "@prisma/client";
+import { ScheduleEntity, UpdateScheduleDto } from "./schedule.dto";
 
-import { UpdateScheduleDto } from "./schedule.dto";
-
-export const mockSchedule: ServiceSchedule = {
+export const mockSchedule: ScheduleEntity = {
   id: 1,
   day: 0,
   startTime: "08:00",

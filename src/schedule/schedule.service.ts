@@ -25,7 +25,7 @@ export class ScheduleService {
     });
   }
 
-  async createScheduleForService(serviceId: number, tx?: Prisma.TransactionClient) {
+  async createSchedule(serviceId: number, tx?: Prisma.TransactionClient) {
     return (tx ?? this.prisma).serviceSchedule.createManyAndReturn({
       data: this.buildScheduleData(serviceId)
     });

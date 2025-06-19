@@ -1,9 +1,9 @@
-import { Service, ServiceSchedule, ServiceStatus } from "@prisma/client";
-import { mockSchedule } from "src/schedule/schedule.mocks";
+import { ServiceSchedule, ServiceStatus } from "@prisma/client";
 
-import { CreateServiceDto, UpdateServiceDto } from "./service.dto";
+import { mockSchedule } from "../schedule/schedule.mocks";
+import { CreateServiceDto, ServiceEntity, UpdateServiceDto } from "./service.dto";
 
-export const mockService: Service = {
+export const mockService: ServiceEntity = {
   id: 1,
   name: "Lorem Ipsum",
   description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
