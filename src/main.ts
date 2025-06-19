@@ -32,7 +32,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle("Booking system")
     .setDescription("Booking system API documentation")
-    .setVersion("1.0")
+    .setVersion("1.1")
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
