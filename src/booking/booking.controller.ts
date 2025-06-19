@@ -45,7 +45,7 @@ export class BookingController {
   }
 
   /**
-   * Get a user's booking with the specified `id`
+   * Get a user's booking with the specified id
    */
   @Get(":id")
   async findOne(@Param("id", ParseIntPipe) id: number, @User() user: UserEntity) {
@@ -72,7 +72,7 @@ export class BookingController {
   }
 
   /**
-   * Update a booking with the specified `id`
+   * Update a booking with the specified id
    */
   @Patch(":id")
   async update(@Param("id", ParseIntPipe) id: number, @Body() data: UpdateBookingDto) {
@@ -85,7 +85,7 @@ export class BookingController {
   }
 
   /**
-   * Delete a booking with the specified `id`
+   * Delete a booking with the specified id
    */
   @Delete(":id")
   @UseGuards(RolesGuard)

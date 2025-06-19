@@ -1,9 +1,7 @@
 import { Test } from "@nestjs/testing";
-import { UserRole } from "@prisma/client";
 
 import { PrismaService } from "../prisma/prisma.service";
-import { CreateAccountDto, CreateUserDto } from "./user.dto";
-import { mockAccount, mockUser } from "./user.mocks";
+import { mockAccount, mockCreateAccount, mockCreateUser, mockUser } from "./user.mocks";
 import { UserService } from "./user.service";
 
 describe("UserService", () => {
@@ -33,39 +31,24 @@ describe("UserService", () => {
 
   describe("createUserAccount", () => {
     it("should create an account", async () => {
-      const createUserDto: CreateUserDto = {
-        name: "Allison Doe",
-        email: "allison.doe@example.com",
-        role: UserRole.USER,
-        phone: "555-222-777",
-        account: {
-          provider: "google",
-          providerAccountId: "123xyzabc"
-        }
-      };
-      const mockCreatedUser = { ...mockUser, createUserDto };
+      const mockCreatedUser = { ...mockUser, mockCreateUser };
       const createUserAccountSpy = jest.spyOn(service, "createUserAccount").mockResolvedValue(mockCreatedUser);
-      const result = await service.createUserAccount(createUserDto);
+      const result = await service.createUserAccount(mockCreateUser);
 
-      expect(createUserAccountSpy).toHaveBeenCalledWith(createUserDto);
+      expect(createUserAccountSpy).toHaveBeenCalledWith(mockCreateUser);
       expect(result).toEqual(mockCreatedUser);
     });
   });
 
   describe("createSSOProviderAccount", () => {
     it("should create a SSO provider account", async () => {
-      const createAccountDto: CreateAccountDto = {
-        provider: "google",
-        providerAccountId: "123xyzabc",
-        userId: 2
-      };
-      const mockCreatedAccount = { ...mockAccount, ...createAccountDto };
+      const mockCreatedAccount = { ...mockAccount, ...mockCreateAccount };
       const createProviderAccountSpy = jest
         .spyOn(service, "createSSOProviderAccount")
         .mockResolvedValue(mockCreatedAccount);
-      const providerAccount = await service.createSSOProviderAccount(createAccountDto);
+      const providerAccount = await service.createSSOProviderAccount(mockCreateAccount);
 
-      expect(createProviderAccountSpy).toHaveBeenLastCalledWith(createAccountDto);
+      expect(createProviderAccountSpy).toHaveBeenLastCalledWith(mockCreateAccount);
       expect(providerAccount).toEqual(mockCreatedAccount);
     });
   });

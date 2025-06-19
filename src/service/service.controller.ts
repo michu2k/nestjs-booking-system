@@ -42,7 +42,7 @@ export class ServiceController {
   }
 
   /**
-   * Get a service with the specified `id`
+   * Get a service with the specified id
    */
   @Get(":id")
   async findOne(@Param("id", ParseIntPipe) id: number) {
@@ -71,7 +71,7 @@ export class ServiceController {
   }
 
   /**
-   * Update a service with the specified `id`
+   * Update a service with the specified id
    */
   @Patch(":id")
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -86,7 +86,7 @@ export class ServiceController {
   }
 
   /**
-   * Delete a service with the specified `id`
+   * Delete a service with the specified id
    */
   @Delete(":id")
   @UseGuards(JwtAuthGuard, RolesGuard)

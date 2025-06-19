@@ -1,0 +1,106 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table Account {
+  id Int [pk, increment]
+  userId Int [not null]
+  provider String [not null]
+  providerAccountId String [not null]
+  user User [not null]
+
+  indexes {
+    (provider, providerAccountId) [unique]
+  }
+}
+
+Table User {
+  id Int [pk, increment]
+  name String [not null]
+  email String [unique, not null]
+  phone String
+  role UserRole [not null]
+  refreshToken String
+  accounts Account [not null]
+  Booking Booking [not null]
+}
+
+Table Booking {
+  id Int [pk, increment]
+  from DateTime [not null]
+  to DateTime [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+  status BookingStatus [not null]
+  userId Int [not null]
+  serviceId Int [not null]
+  service Service [not null]
+  user User [not null]
+}
+
+Table Service {
+  id Int [pk, increment]
+  name String [not null]
+  description String [not null]
+  price Int [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+  status ServiceStatus [not null, default: 'ACTIVE']
+  locationId Int
+  Booking Booking [not null]
+  location Location
+  ServiceSchedule ServiceSchedule [not null]
+}
+
+Table ServiceSchedule {
+  id Int [pk, increment]
+  day Int [not null]
+  startTime String
+  endTime String
+  serviceId Int [not null]
+  service Service [not null]
+
+  indexes {
+    (serviceId, day) [unique]
+  }
+}
+
+Table Location {
+  id Int [pk, increment]
+  city String [not null]
+  address String [not null]
+  country String [not null]
+  lat Float
+  lng Float
+  Service Service [not null]
+}
+
+Enum UserRole {
+  ADMIN
+  MANAGER
+  USER
+}
+
+Enum BookingStatus {
+  CONFIRMED
+  PENDING
+  CANCELLED
+}
+
+Enum ServiceStatus {
+  ACTIVE
+  INACTIVE
+  UNAVAILABLE
+  DRAFT
+  ARCHIVED
+}
+
+Ref: Account.userId > User.id [delete: Cascade]
+
+Ref: Booking.serviceId > Service.id [delete: Cascade]
+
+Ref: Booking.userId > User.id [delete: Cascade]
+
+Ref: Service.locationId > Location.id
+
+Ref: ServiceSchedule.serviceId > Service.id [delete: Cascade]

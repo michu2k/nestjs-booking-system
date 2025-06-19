@@ -2,6 +2,11 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator dbml {
+  provider = "prisma-dbml-generator"
+  output   = "./"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -34,23 +39,36 @@ model Booking {
   to        DateTime
   createdAt DateTime      @default(now())
   updatedAt DateTime      @default(now())
+  status    BookingStatus
   userId    Int
   serviceId Int
-  status    BookingStatus
   service   Service       @relation(fields: [serviceId], references: [id], onDelete: Cascade)
   user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Service {
-  id          Int       @id @default(autoincrement())
-  name        String
-  description String
-  price       Int
-  locationId  Int?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now())
-  Booking     Booking[]
-  location    Location? @relation(fields: [locationId], references: [id])
+  id              Int               @id @default(autoincrement())
+  name            String
+  description     String
+  price           Int
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @default(now())
+  status          ServiceStatus     @default(ACTIVE)
+  locationId      Int?
+  Booking         Booking[]
+  location        Location?         @relation(fields: [locationId], references: [id])
+  ServiceSchedule ServiceSchedule[]
+}
+
+model ServiceSchedule {
+  id        Int     @id @default(autoincrement())
+  day       Int
+  startTime String?
+  endTime   String?
+  serviceId Int
+  service   Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@unique([serviceId, day])
 }
 
 model Location {
@@ -73,4 +91,12 @@ enum BookingStatus {
   CONFIRMED
   PENDING
   CANCELLED
+}
+
+enum ServiceStatus {
+  ACTIVE
+  INACTIVE
+  UNAVAILABLE
+  DRAFT
+  ARCHIVED
 }

@@ -1,7 +1,7 @@
 import { UserRole } from "@prisma/client";
 import { Profile } from "passport-google-oauth20";
 
-import { AccountEntity, UserEntity } from "./user.dto";
+import { AccountEntity, CreateAccountDto, CreateUserDto, UserEntity } from "./user.dto";
 
 export const mockUser: UserEntity = {
   id: 1,
@@ -38,4 +38,21 @@ export const mockGoogleProfile: Profile = {
     iat: 123,
     exp: 123
   }
+};
+
+export const mockCreateUser: CreateUserDto = {
+  name: "Allison Doe",
+  email: "allison.doe@example.com",
+  role: UserRole.USER,
+  phone: "555-222-777",
+  account: {
+    provider: "google",
+    providerAccountId: "123xyzabc"
+  }
+};
+
+export const mockCreateAccount: CreateAccountDto = {
+  provider: "google",
+  providerAccountId: "123xyzabc",
+  userId: 2
 };

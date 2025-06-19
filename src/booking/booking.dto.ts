@@ -14,7 +14,7 @@ export class BookingEntity implements Booking {
   to: Date;
 
   @IsEnum(BookingStatus)
-  @ApiProperty({ enum: [BookingStatus.CONFIRMED, BookingStatus.PENDING, BookingStatus.CANCELLED] })
+  @ApiProperty({ enum: BookingStatus })
   status: BookingStatus;
 
   @IsDateString({ strict: true, strictSeparator: true })

@@ -6,7 +6,7 @@
 
 A simple booking system built with NestJS 11 & Prisma. This project was created to test the NestJS framework, and additional changes or new features may appear over time.
 
-The project uses a PostgreSQL database running in Docker. Athentication has been implemented using the Google Auth0 with the JWT tokens. Each module features multiple unit and e2e tests.
+The project uses a PostgreSQL database running in Docker. Authentication has been implemented using the Google Auth0 with the JWT tokens. Each module features multiple unit and e2e tests.
 
 ## Requirements
 
@@ -21,6 +21,10 @@ This project requires [Node.js 20+](https://nodejs.org/en), [pnpm 9+](https://pn
 5. Start the development server `pnpm run start:dev`
 6. If necessary, run prisma studio to check the db data `pnpm run prisma:studio`
 7. You can also populate the database with test data using `pnpm run prisma:seed`
+
+## Database diagram
+
+Each time you run the `prisma:gen` command, a new DBML diagram will be generated in the `prisma/schema.dbml` file. You can use [dbdiagram.io](https://dbdiagram.io/home) to visualize the database schema as an Entity-Relationship diagram.
 
 ## License
 
