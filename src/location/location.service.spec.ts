@@ -23,16 +23,14 @@ describe("LocationService", () => {
     let findAllLocationsSpy: jest.SpyInstance;
 
     beforeEach(() => {
-      findAllLocationsSpy = jest
-        .spyOn(service, "findAllLocations")
-        .mockResolvedValue([mockLocation, mockLocation, mockLocation]);
+      findAllLocationsSpy = jest.spyOn(service, "findAllLocations").mockResolvedValue([mockLocation, mockLocation]);
     });
 
     it("should get all locations", async () => {
       const result = await service.findAllLocations();
 
       expect(findAllLocationsSpy).toHaveBeenCalled();
-      expect(result).toEqual([mockLocation, mockLocation, mockLocation]);
+      expect(result).toEqual([mockLocation, mockLocation]);
     });
 
     it("should get all locations with specified limit", async () => {

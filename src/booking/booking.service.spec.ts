@@ -23,16 +23,14 @@ describe("BookingService", () => {
     let findAllBookingsSpy: jest.SpyInstance;
 
     beforeEach(() => {
-      findAllBookingsSpy = jest
-        .spyOn(service, "findAllBookings")
-        .mockResolvedValue([mockBooking, mockBooking, mockBooking]);
+      findAllBookingsSpy = jest.spyOn(service, "findAllBookings").mockResolvedValue([mockBooking, mockBooking]);
     });
 
     it("should get all bookings", async () => {
       const result = await service.findAllBookings();
 
       expect(findAllBookingsSpy).toHaveBeenCalled();
-      expect(result).toEqual([mockBooking, mockBooking, mockBooking]);
+      expect(result).toEqual([mockBooking, mockBooking]);
     });
 
     it("should get bookings with the specified limit", async () => {

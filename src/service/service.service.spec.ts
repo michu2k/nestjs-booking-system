@@ -1,6 +1,7 @@
 import { Test } from "@nestjs/testing";
 
 import { PrismaService } from "../prisma/prisma.service";
+import { ScheduleService } from "../schedule/schedule.service";
 import { mockCreateService, mockService, mockUpdateService } from "./service.mocks";
 import { ServiceService } from "./service.service";
 
@@ -9,7 +10,7 @@ describe("ServiceService", () => {
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      providers: [ServiceService, PrismaService]
+      providers: [ServiceService, PrismaService, ScheduleService]
     }).compile();
 
     service = moduleRef.get(ServiceService);
@@ -23,16 +24,14 @@ describe("ServiceService", () => {
     let findAllServicesSpy: jest.SpyInstance;
 
     beforeEach(() => {
-      findAllServicesSpy = jest
-        .spyOn(service, "findAllServices")
-        .mockResolvedValue([mockService, mockService, mockService]);
+      findAllServicesSpy = jest.spyOn(service, "findAllServices").mockResolvedValue([mockService, mockService]);
     });
 
     it("should get all services", async () => {
       const result = await service.findAllServices();
 
       expect(findAllServicesSpy).toHaveBeenCalled();
-      expect(result).toEqual([mockService, mockService, mockService]);
+      expect(result).toEqual([mockService, mockService]);
     });
 
     it("should get all services with specified limit", async () => {
