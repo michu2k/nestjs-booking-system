@@ -36,8 +36,6 @@ export class LocationController {
    * Get a list of locations
    */
   @Get()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.MANAGER)
   async findAll(@Query() { limit, offset }: FindAllEntitiesDto = {}) {
     const locations = await this.locationService.findAllLocations(limit, offset);
     return locations.map((location) => new LocationEntity(location));

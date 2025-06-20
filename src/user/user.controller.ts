@@ -20,10 +20,10 @@ import { getErrorMessage } from "../utils/get-error-message";
 import { UserEntity } from "./user.dto";
 import { UserService } from "./user.service";
 
-@UseGuards(JwtAuthGuard)
 @ApiTags("User")
 @Controller("user")
 @UseInterceptors(ClassSerializerInterceptor)
+@UseGuards(JwtAuthGuard)
 export class UserController {
   constructor(private userService: UserService) {}
 
