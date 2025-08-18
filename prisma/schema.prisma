@@ -88,9 +88,12 @@ enum UserRole {
 }
 
 enum BookingStatus {
-  CONFIRMED
   PENDING
+  CONFIRMED
   CANCELLED
+  NO_SHOW
+  EXPIRED
+  COMPLETED
 }
 
 enum ServiceStatus {
