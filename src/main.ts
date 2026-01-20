@@ -20,6 +20,7 @@ async function bootstrap() {
     defaultVersion: "1"
   });
 
+  // Credentials
   app.enableCors({
     origin: configService.get("CORS_ORIGINS").split(","),
     credentials: true
@@ -29,14 +30,17 @@ async function bootstrap() {
 
   app.use(compression());
 
-  const config = new DocumentBuilder()
-    .setTitle("Booking system")
-    .setDescription("Booking system API documentation")
-    .setVersion("1.1")
-    .build();
+  if (process.env.NODE_ENV !== "production") {
+    // Swagger configuration
+    const config = new DocumentBuilder()
+      .setTitle("Booking system")
+      .setDescription("Booking system API documentation")
+      .setVersion("1.1")
+      .build();
 
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup("api", app, document);
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup("api", app, document);
+  }
 
   await app.listen(3000);
 }
