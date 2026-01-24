@@ -10,7 +10,7 @@ The project uses a PostgreSQL database running in Docker. Authentication has bee
 
 ## Requirements
 
-This project requires [Node.js 20+](https://nodejs.org/en), [pnpm 9+](https://pnpm.io/) and [docker](https://www.docker.com/) to run.
+This project requires [Node.js 20+](https://nodejs.org/en), [pnpm 10+](https://pnpm.io/) and [Docker](https://www.docker.com/) to run.
 
 ## Getting started
 
