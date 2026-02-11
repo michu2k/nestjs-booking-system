@@ -15,13 +15,13 @@ import {
   UseInterceptors
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { UserRole } from "@prisma/client";
 
 import { JwtAuthGuard } from "../auth/guards/jwt.guard";
 import { Roles } from "../decorators/roles.decorator";
 import { User } from "../decorators/user.decorator";
 import { DeleteEntityResponse } from "../dtos/response.dto";
 import { RolesGuard } from "../guards/roles.guard";
+import { UserRole } from "../prisma/generated/client";
 import { FindAllEntitiesDto } from "../prisma/prisma.dto";
 import { UserEntity } from "../user/user.dto";
 import { getErrorMessage } from "../utils/get-error-message";

@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
-import { BookingStatus, type Prisma } from "@prisma/client";
 
+import { BookingStatus, type Prisma } from "../../src/prisma/generated/client";
 import { prisma, SEED_RECORDS } from "../seed.utils";
 
 function createBooking(): Prisma.BookingCreateManyInput {

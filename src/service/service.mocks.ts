@@ -1,5 +1,4 @@
-import { ServiceSchedule, ServiceStatus } from "@prisma/client";
-
+import { ServiceSchedule, ServiceStatus } from "../prisma/generated/client";
 import { mockSchedule } from "../schedule/schedule.mocks";
 import { CreateServiceDto, ServiceEntity, UpdateServiceDto } from "./service.dto";
 

@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
-import { type Prisma } from "@prisma/client";
 
+import { type Prisma } from "../../src/prisma/generated/client";
 import { prisma } from "../seed.utils";
 
 function getScheduleTimeSlot() {

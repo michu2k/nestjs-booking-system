@@ -11,11 +11,11 @@ import {
   UseInterceptors
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { UserRole } from "@prisma/client";
 
 import { JwtAuthGuard } from "../auth/guards/jwt.guard";
 import { Roles } from "../decorators/roles.decorator";
 import { RolesGuard } from "../guards/roles.guard";
+import { UserRole } from "../prisma/generated/client";
 import { getErrorMessage } from "../utils/get-error-message";
 import { ScheduleEntity, UpdateScheduleDto } from "./schedule.dto";
 import { ScheduleService } from "./schedule.service";
