@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
-import { type Prisma } from "@prisma/client";
 
+import { type Prisma } from "../../src/prisma/generated/client";
 import { prisma, SEED_RECORDS } from "../seed.utils";
 
 function createLocation(): Prisma.LocationCreateManyInput {

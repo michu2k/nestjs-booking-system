@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
-import { type Prisma, ServiceStatus } from "@prisma/client";
 
+import { type Prisma, ServiceStatus } from "../../src/prisma/generated/client";
 import { prisma, SEED_RECORDS } from "../seed.utils";
 
 function createService(): Prisma.ServiceCreateManyInput {

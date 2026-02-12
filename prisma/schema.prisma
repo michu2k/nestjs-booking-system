@@ -1,5 +1,8 @@
 generator client {
-  provider = "prisma-client-js"
+  provider     = "prisma-client"
+  output       = "../src/prisma/generated"
+  moduleFormat = "cjs"
+  engineType   = "client"
 }
 
 generator dbml {
@@ -9,7 +12,6 @@ generator dbml {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model Account {

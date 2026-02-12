@@ -1,5 +1,4 @@
-import { BookingStatus } from "@prisma/client";
-
+import { BookingStatus } from "../prisma/generated/client";
 import { BookingEntity, CreateBookingDto, UpdateBookingDto } from "./booking.dto";
 
 export const mockBooking: BookingEntity = {

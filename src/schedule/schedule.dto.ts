@@ -1,6 +1,7 @@
 import { PartialType, PickType } from "@nestjs/swagger";
-import { ServiceSchedule } from "@prisma/client";
 import { IsInt, IsString, Max, Min } from "class-validator";
+
+import { ServiceSchedule } from "../prisma/generated/client";
 
 export class ScheduleEntity implements ServiceSchedule {
   @IsInt()

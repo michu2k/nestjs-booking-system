@@ -1,7 +1,8 @@
 import { ApiHideProperty, ApiProperty, PartialType, PickType } from "@nestjs/swagger";
-import { Booking, BookingStatus } from "@prisma/client";
 import { Exclude } from "class-transformer";
 import { IsDateString, IsEnum, IsInt } from "class-validator";
+
+import { Booking, BookingStatus } from "../prisma/generated/client";
 
 export class BookingEntity implements Booking {
   @IsInt()

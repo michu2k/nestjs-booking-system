@@ -1,6 +1,7 @@
 import { ApiProperty, PartialType, PickType } from "@nestjs/swagger";
-import { Service, ServiceStatus } from "@prisma/client";
 import { IsDateString, IsEnum, IsInt, IsString, Min } from "class-validator";
+
+import { Service, ServiceStatus } from "../prisma/generated/client";
 
 export class ServiceEntity implements Service {
   @IsInt()

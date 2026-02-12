@@ -50,6 +50,6 @@ export default [
     }
   },
   {
-    ignores: ["dist"]
+    ignores: ["dist", "prisma/generated", "prisma/migrations"]
   }
 ];

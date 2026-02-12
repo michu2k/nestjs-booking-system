@@ -1,6 +1,6 @@
-import { UserRole } from "@prisma/client";
 import { Profile } from "passport-google-oauth20";
 
+import { UserRole } from "../prisma/generated/client";
 import { AccountEntity, CreateAccountDto, CreateUserDto, UserEntity } from "./user.dto";
 
 export const mockUser: UserEntity = {

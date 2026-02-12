@@ -1,12 +1,12 @@
 import { ExecutionContext, INestApplication, ValidationPipe } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
-import { BookingStatus } from "@prisma/client";
 import { Request } from "express";
 import * as request from "supertest";
 
 import { AppModule } from "../src/app.module";
 import { JwtAuthGuard } from "../src/auth/guards/jwt.guard";
 import { CreateBookingDto, UpdateBookingDto } from "../src/booking/booking.dto";
+import { BookingStatus } from "../src/prisma/generated/client";
 import { PrismaService } from "../src/prisma/prisma.service";
 import { mockAdmin } from "../src/user/user.mocks";
 
