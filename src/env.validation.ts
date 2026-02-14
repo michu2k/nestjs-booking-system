@@ -6,15 +6,6 @@ class EnvironmentVariables {
   DATABASE_URL: string;
 
   @IsString()
-  POSTGRES_PASSWORD: string;
-
-  @IsString()
-  POSTGRES_USER: string;
-
-  @IsString()
-  POSTGRES_DB: string;
-
-  @IsString()
   GOOGLE_CLIENT_ID: string;
 
   @IsString()
