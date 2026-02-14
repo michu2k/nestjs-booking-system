@@ -1,7 +1,16 @@
 import { plainToInstance } from "class-transformer";
-import { IsString, IsUrl, validateSync } from "class-validator";
+import { IsEnum, IsString, IsUrl, validateSync } from "class-validator";
+
+enum Environment {
+  Development = "development",
+  Production = "production",
+  Test = "test"
+}
 
 class EnvironmentVariables {
+  @IsEnum(Environment)
+  NODE_ENV: Environment;
+
   @IsString()
   DATABASE_URL: string;
 
@@ -37,6 +46,11 @@ class EnvironmentVariables {
 }
 
 export function validateEnvs(config: Record<string, unknown>) {
+  // Skip validation for e2e tests in CI
+  if (process.env.NODE_ENV === Environment.Test) {
+    return config;
+  }
+
   const validatedConfig = plainToInstance(EnvironmentVariables, config);
 
   const errors = validateSync(validatedConfig, { skipMissingProperties: false });

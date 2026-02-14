@@ -3,20 +3,16 @@ name: Code check
 on: pull_request
 
 env:
-  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+  NODE_ENV: test
 
+  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+  POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+  POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+  POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
   GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
   GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
   GOOGLE_CALLBACK_URL: ${{ secrets.GOOGLE_CALLBACK_URL }}
-
   JWT_SECRET: ${{ secrets.JWT_SECRET }}
-  ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-  ACCESS_TOKEN_VALIDITY: ${{ secrets.ACCESS_TOKEN_VALIDITY }}
-  REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
-  REFRESH_TOKEN_VALIDITY: ${{ secrets.REFRESH_TOKEN_VALIDITY }}
-
-  AUTH_REDIRECT_URL: ${{ secrets.AUTH_REDIRECT_URL }}
-  CORS_ORIGINS: ${{ secrets.CORS_ORIGINS }}
 
 jobs:
   check:
@@ -69,9 +65,9 @@ jobs:
         ports:
           - 5432:5432
         env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: booking-system-tests
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ env.POSTGRES_DB }}
 
     steps:
       - name: Checkout
