@@ -29,7 +29,7 @@ USER node
 
 EXPOSE 3000
 
-# # Copy only the necessary files to run the application
+# Copy only the necessary files to run the application
 COPY --from=builder --chown=node:node /app/package.json ./package.json
 COPY --from=builder --chown=node:node /app/dist ./dist
 COPY --from=builder --chown=node:node /app/node_modules ./node_modules
