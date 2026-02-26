@@ -16,7 +16,7 @@ This project requires [Node.js 20+](https://nodejs.org/en), [pnpm 10+](https://p
 
 1. Clone the repository and install all dependencies using pnpm
 2. Copy the values from the `.env.example` to the `.env` file and update the variables
-3. Start the database using the `docker:db` script
+3. Start the database using the `pnpm docker:db` script, it will start a PostgreSQL service defined in the `compose.yaml` file
 4. Push the prisma schema to the database `npx prisma db push`
 5. Start the development server `pnpm run start:dev`
 6. If necessary, run prisma studio to check the db data `pnpm run prisma:studio`
@@ -25,6 +25,10 @@ This project requires [Node.js 20+](https://nodejs.org/en), [pnpm 10+](https://p
 ## Database diagram
 
 Each time you run the `prisma:gen` command, a new DBML diagram will be generated in the `prisma/schema.dbml` file. You can use [dbdiagram.io](https://dbdiagram.io/home) to visualize the database schema as an Entity-Relationship diagram.
+
+## Deployment
+
+You can use the provided `Dockerfile` to build and deploy the application in a Docker container. For more details about deploying NestJS applications, refer to the official [NestJS documentation](https://docs.nestjs.com/deployment).
 
 ## License
 
