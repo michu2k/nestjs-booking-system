@@ -4,6 +4,7 @@ import { ConfigModule } from "@nestjs/config";
 import { AuthModule } from "./auth/auth.module";
 import { BookingModule } from "./booking/booking.module";
 import { validateEnvs } from "./env.validation";
+import { HealthModule } from "./health/health.module";
 import { LocationModule } from "./location/location.module";
 import { PrismaModule } from "./prisma/prisma.module";
 import { ScheduleModule } from "./schedule/schedule.module";
@@ -17,6 +18,7 @@ import { UserModule } from "./user/user.module";
       validate: validateEnvs,
       envFilePath: [".env", ".env.development", ".env.production"]
     }),
+    HealthModule,
     AuthModule,
     UserModule,
     LocationModule,
