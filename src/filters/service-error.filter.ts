@@ -23,6 +23,8 @@ export class ServiceErrorFilter extends BaseExceptionFilter {
   catch(error: ServiceError, host: ArgumentsHost) {
     const Exception = EXCEPTION_BY_CODE[error.code];
 
+    console.error(error);
+
     super.catch(new Exception(error.message), host);
   }
 }
