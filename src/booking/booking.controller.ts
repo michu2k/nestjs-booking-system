@@ -1,11 +1,11 @@
 import {
-  BadRequestException,
   Body,
   ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
-  NotFoundException,
+  HttpCode,
+  HttpStatus,
   Param,
   ParseIntPipe,
   Patch,
@@ -24,7 +24,6 @@ import { RolesGuard } from "../guards/roles.guard";
 import { UserRole } from "../prisma/generated/client";
 import { FindAllEntitiesDto } from "../prisma/prisma.dto";
 import { UserEntity } from "../user/user.dto";
-import { getErrorMessage } from "../utils/get-error-message";
 import { BookingEntity, CreateBookingDto, UpdateBookingDto } from "./booking.dto";
 import { BookingService } from "./booking.service";
 
@@ -49,39 +48,34 @@ export class BookingController {
    */
   @Get(":id")
   async findOne(@Param("id", ParseIntPipe) id: number, @User() user: UserEntity) {
-    const booking = await this.bookingService.findOneBooking(id, { userId: user.id });
-
-    if (!booking) {
-      throw new NotFoundException("Booking not found.");
-    }
-
-    return new BookingEntity(booking);
+    return new BookingEntity(await this.bookingService.findOneBooking(id, { userId: user.id }));
   }
 
   /**
    * Create a new booking
    */
   @Post()
-  async create(@Body() data: CreateBookingDto) {
-    try {
-      return new BookingEntity(await this.bookingService.createBooking(data));
-    } catch (e) {
-      console.log(getErrorMessage(e));
-      throw new BadRequestException("Failed to create booking.");
-    }
+  async create(@Body() data: CreateBookingDto, @User() user: UserEntity) {
+    return new BookingEntity(await this.bookingService.createBooking(data, user.id));
+  }
+
+  /**
+   * Cancel a user's booking with the specified id
+   */
+  @Post(":id/cancel")
+  @HttpCode(HttpStatus.OK)
+  async cancel(@Param("id", ParseIntPipe) id: number, @User() user: UserEntity) {
+    return new BookingEntity(await this.bookingService.cancelBooking(id, user.id));
   }
 
   /**
    * Update a booking with the specified id
    */
   @Patch(":id")
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.MANAGER)
   async update(@Param("id", ParseIntPipe) id: number, @Body() data: UpdateBookingDto) {
-    try {
-      return new BookingEntity(await this.bookingService.updateBooking(id, data));
-    } catch (e) {
-      console.error(getErrorMessage(e));
-      throw new BadRequestException("Failed to update booking.");
-    }
+    return new BookingEntity(await this.bookingService.updateBooking(id, data));
   }
 
   /**
@@ -91,11 +85,6 @@ export class BookingController {
   @UseGuards(RolesGuard)
   @Roles(UserRole.ADMIN)
   async delete(@Param("id", ParseIntPipe) id: number) {
-    try {
-      return new DeleteEntityResponse(await this.bookingService.deleteBooking(id));
-    } catch (e) {
-      console.error(getErrorMessage(e));
-      throw new BadRequestException("Failed to delete booking.");
-    }
+    return new DeleteEntityResponse(await this.bookingService.deleteBooking(id));
   }
 }
