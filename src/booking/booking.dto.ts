@@ -39,12 +39,9 @@ export class BookingEntity implements Booking {
   }
 }
 
-export class CreateBookingDto extends PickType(BookingEntity, ["from", "to", "status"] as const) {
+export class CreateBookingDto extends PickType(BookingEntity, ["from", "to"] as const) {
   @IsInt()
   serviceId: number;
-
-  @IsInt()
-  userId: number;
 }
 
 export class UpdateBookingDto extends PartialType(PickType(BookingEntity, ["from", "to", "status"] as const)) {}
