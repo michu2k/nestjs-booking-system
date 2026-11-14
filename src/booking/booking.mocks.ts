@@ -15,11 +15,11 @@ export const mockBooking: BookingEntity = {
 export const mockCreateBooking: CreateBookingDto = {
   from: new Date(),
   to: new Date(),
-  status: BookingStatus.PENDING,
-  userId: 2,
   serviceId: 1
 };
 
 export const mockUpdateBooking: UpdateBookingDto = {
+  from: new Date(),
+  to: new Date(),
   status: BookingStatus.CANCELLED
 };
