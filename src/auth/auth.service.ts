@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { createHash, randomUUID, timingSafeEqual } from "crypto";
+import { Response } from "express";
 import { Profile } from "passport-google-oauth20";
 
 import { PrismaService } from "../prisma/prisma.service";
@@ -9,7 +10,6 @@ import { UserEntity } from "../user/user.dto";
 import { UserService } from "../user/user.service";
 import { getErrorMessage } from "../utils/get-error-message";
 import { ServiceError, ServiceErrorCode } from "../utils/service-error";
-import { JwtPayload } from "./auth.utils";
 
 @Injectable()
 export class AuthService {
@@ -37,7 +37,7 @@ export class AuthService {
    * Generate JWT tokens for the user
    */
   async generateAuthTokens({ id, email }: UserEntity) {
-    const payload: JwtPayload = { sub: id, email };
+    const payload = { sub: id, email };
 
     const accessToken = await this.jwtService.signAsync(payload, {
       expiresIn: this.configService.get("ACCESS_TOKEN_VALIDITY")
@@ -74,6 +74,29 @@ export class AuthService {
     const authTokens = await this.generateAuthTokens(user);
 
     return authTokens;
+  }
+
+  /**
+   * Set the access and refresh tokens as HTTP-only cookies
+   */
+  setAuthCookies(res: Response, { accessToken, refreshToken }: { accessToken: string; refreshToken: string }) {
+    const cookieOptions = { httpOnly: true, secure: true, sameSite: "lax" } as const;
+
+    const accessTokenCookie = this.configService.get("ACCESS_TOKEN");
+    const accessTokenMaxAge = this.configService.get("ACCESS_TOKEN_VALIDITY");
+
+    res.cookie(accessTokenCookie, accessToken, {
+      maxAge: accessTokenMaxAge,
+      ...cookieOptions
+    });
+
+    const refreshTokenCookie = this.configService.get("REFRESH_TOKEN");
+    const refreshTokenMaxAge = this.configService.get("REFRESH_TOKEN_VALIDITY");
+
+    res.cookie(refreshTokenCookie, refreshToken, {
+      maxAge: refreshTokenMaxAge,
+      ...cookieOptions
+    });
   }
 
   /**

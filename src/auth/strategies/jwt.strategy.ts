@@ -6,7 +6,6 @@ import { ExtractJwt, Strategy } from "passport-jwt";
 
 import { UserEntity } from "../../user/user.dto";
 import { UserService } from "../../user/user.service";
-import { JwtPayload } from "../auth.utils";
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, "jwt") {
@@ -32,7 +31,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, "jwt") {
     return cookie;
   }
 
-  async validate({ sub: id, email }: JwtPayload) {
+  async validate({ sub: id, email }: { sub: number; email: string }) {
     const user = await this.userService.findOneUser({ id, email });
 
     if (!user) {

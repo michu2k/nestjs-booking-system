@@ -6,7 +6,6 @@ import { Request, Response } from "express";
 import { User } from "../decorators/user.decorator";
 import { UserEntity } from "../user/user.dto";
 import { AuthService } from "./auth.service";
-import { createAuthCookies } from "./auth.utils";
 import { GoogleAuthGuard } from "./guards/google-auth.guard";
 import { JwtAuthGuard } from "./guards/jwt.guard";
 import { JwtRefreshAuthGuard } from "./guards/jwt-refresh.guard";
@@ -33,7 +32,7 @@ export class AuthController {
   @UseGuards(GoogleAuthGuard)
   async googleAuthRedirect(@Res() res: Response, @User() user: UserEntity) {
     const authTokens = await this.authService.generateAuthTokens(user);
-    createAuthCookies({ res, ...authTokens });
+    this.authService.setAuthCookies(res, authTokens);
 
     const redirectUrl = this.configService.get("AUTH_REDIRECT_URL");
     return res.status(HttpStatus.OK).redirect(redirectUrl);
@@ -49,7 +48,7 @@ export class AuthController {
     const cookie = req.cookies[refreshToken];
 
     const authTokens = await this.authService.refreshAuthTokens(user, cookie);
-    createAuthCookies({ res, ...authTokens });
+    this.authService.setAuthCookies(res, authTokens);
 
     return res.status(HttpStatus.OK).send();
   }
