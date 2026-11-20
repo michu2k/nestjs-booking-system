@@ -5,7 +5,8 @@ import {
   ConflictException,
   ForbiddenException,
   HttpException,
-  NotFoundException
+  NotFoundException,
+  UnauthorizedException
 } from "@nestjs/common";
 import { BaseExceptionFilter } from "@nestjs/core";
 
@@ -13,6 +14,7 @@ import { ServiceError, ServiceErrorCode } from "../utils/service-error";
 
 const EXCEPTION_BY_CODE: Record<ServiceErrorCode, new (message: string) => HttpException> = {
   [ServiceErrorCode.BAD_REQUEST]: BadRequestException,
+  [ServiceErrorCode.UNAUTHORIZED]: UnauthorizedException,
   [ServiceErrorCode.NOT_FOUND]: NotFoundException,
   [ServiceErrorCode.FORBIDDEN]: ForbiddenException,
   [ServiceErrorCode.CONFLICT]: ConflictException

@@ -1,13 +1,14 @@
-import { BadRequestException, Injectable, UnauthorizedException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
-import * as bcrypt from "bcrypt";
+import { createHash, randomUUID, timingSafeEqual } from "crypto";
 import { Profile } from "passport-google-oauth20";
 
 import { PrismaService } from "../prisma/prisma.service";
 import { UserEntity } from "../user/user.dto";
 import { UserService } from "../user/user.service";
 import { getErrorMessage } from "../utils/get-error-message";
+import { ServiceError, ServiceErrorCode } from "../utils/service-error";
 import { JwtPayload } from "./auth.utils";
 
 @Injectable()
@@ -43,10 +44,11 @@ export class AuthService {
     });
 
     const refreshToken = await this.jwtService.signAsync(payload, {
-      expiresIn: this.configService.get("REFRESH_TOKEN_VALIDITY")
+      expiresIn: this.configService.get("REFRESH_TOKEN_VALIDITY"),
+      jwtid: randomUUID() // unique id to make every refresh token different
     });
 
-    const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
+    const hashedRefreshToken = this.hashRefreshToken(refreshToken);
 
     try {
       await this.userService.updateUserRefreshToken(id, hashedRefreshToken);
@@ -57,7 +59,7 @@ export class AuthService {
       };
     } catch (e) {
       console.error(getErrorMessage(e));
-      throw new BadRequestException("Failed to update user's token");
+      throw new ServiceError(ServiceErrorCode.BAD_REQUEST, "Failed to update user's token");
     }
   }
 
@@ -65,14 +67,29 @@ export class AuthService {
    * Refresh authorization tokens by comparing the cookie token and the user's token
    */
   async refreshAuthTokens(user: UserEntity, refreshToken: string) {
-    const isTokenMatched = await bcrypt.compare(refreshToken, user.refreshToken);
-
-    if (!isTokenMatched) {
-      throw new UnauthorizedException("Invalid refresh token");
+    if (!refreshToken || !user.refreshToken || !this.isRefreshTokenMatched(refreshToken, user.refreshToken)) {
+      throw new ServiceError(ServiceErrorCode.UNAUTHORIZED, "Invalid refresh token");
     }
 
     const authTokens = await this.generateAuthTokens(user);
 
     return authTokens;
+  }
+
+  /**
+   * Hash a refresh token with SHA-256.
+   */
+  private hashRefreshToken(refreshToken: string) {
+    return createHash("sha256").update(refreshToken).digest("hex");
+  }
+
+  /**
+   * Compare a refresh token with the stored hash
+   */
+  private isRefreshTokenMatched(refreshToken: string, storedHash: string) {
+    const tokenHash = Buffer.from(this.hashRefreshToken(refreshToken), "hex");
+    const expectedHash = Buffer.from(storedHash, "hex");
+
+    return tokenHash.length === expectedHash.length && timingSafeEqual(tokenHash, expectedHash);
   }
 }
