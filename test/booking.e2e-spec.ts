@@ -32,6 +32,7 @@ describe("BookingController (e2e)", () => {
   const server = () => app.getHttpServer();
 
   const getAuthCookie = (user: User) => cookies.get(user.id);
+
   const getBooking = (id?: number) => prismaService.booking.findUnique({ where: { id: id ?? bookingId } });
 
   const createRequest = (user: User) => request(server()).post(BOOKING_URL).set("Cookie", getAuthCookie(user));

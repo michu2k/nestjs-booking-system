@@ -1,7 +1,7 @@
 import { ExecutionContext, INestApplication, ValidationPipe } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import { Request } from "express";
-import * as request from "supertest";
+import request from "supertest";
 
 import { AppModule } from "../src/app.module";
 import { JwtAuthGuard } from "../src/auth/guards/jwt.guard";
