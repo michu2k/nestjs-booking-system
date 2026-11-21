@@ -1,3 +1,4 @@
+import { HttpStatus, UnauthorizedException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { Test } from "@nestjs/testing";
 import { Request, Response } from "express";
@@ -9,30 +10,47 @@ import { AuthService } from "./auth.service";
 
 describe("AuthController", () => {
   let controller: AuthController;
-  let configService: ConfigService;
   let authService: AuthService;
 
+  const config: Record<string, string> = {
+    ACCESS_TOKEN: "access-cookie",
+    REFRESH_TOKEN: "refresh-cookie",
+    AUTH_REDIRECT_URL: "http://localhost:3000/dashboard"
+  };
+
   const mockConfigService = {
-    get: jest.fn().mockResolvedValue("value")
+    get: jest.fn((key: string) => config[key])
   };
 
   const mockAuthService = {
-    generateAuthTokens: jest.fn().mockResolvedValue(mockAuthAccessTokens),
-    refreshAuthTokens: jest.fn().mockResolvedValue(mockAuthAccessTokens)
+    generateAuthTokens: jest.fn(),
+    refreshAuthTokens: jest.fn(),
+    setAuthCookies: jest.fn()
   };
 
-  const mockResponse = {
-    status: jest.fn().mockReturnValue({ send: jest.fn(), redirect: jest.fn() }),
-    json: jest.fn().mockReturnValue({}),
-    clearCookie: jest.fn().mockReturnValue({}),
-    cookie: jest.fn().mockReturnValue({})
-  } as unknown as Response;
+  type MockResponse = Record<"status" | "send" | "redirect" | "clearCookie", jest.Mock>;
+  let res: MockResponse;
 
-  const mockRequest = {
-    cookies: jest.fn().mockReturnValue({})
-  } as unknown as Request;
+  const createResponse = (): MockResponse => {
+    const response: MockResponse = {
+      status: jest.fn(),
+      send: jest.fn(),
+      redirect: jest.fn(),
+      clearCookie: jest.fn()
+    };
+
+    response.status.mockReturnValue(response);
+    response.clearCookie.mockReturnValue(response);
+
+    return response;
+  };
 
   beforeEach(async () => {
+    jest.clearAllMocks();
+    mockAuthService.generateAuthTokens.mockResolvedValue(mockAuthAccessTokens);
+    mockAuthService.refreshAuthTokens.mockResolvedValue(mockAuthAccessTokens);
+    res = createResponse();
+
     const moduleRef = await Test.createTestingModule({
       providers: [
         {
@@ -48,45 +66,52 @@ describe("AuthController", () => {
     }).compile();
 
     controller = moduleRef.get(AuthController);
-    configService = moduleRef.get(ConfigService);
     authService = moduleRef.get(AuthService);
   });
 
-  it("should be defined", () => {
-    expect(controller).toBeDefined();
-  });
+  describe("googleAuthRedirect", () => {
+    it("should set auth cookies and redirect to the configured URL", async () => {
+      await controller.googleAuthRedirect(res as unknown as Response, mockUser);
 
-  it("authService should be defined", () => {
-    expect(authService).toBeDefined();
-  });
-
-  it("configService should be defined", () => {
-    expect(configService).toBeDefined();
-  });
-
-  describe("google provider", () => {
-    it("should generate auth tokens", async () => {
-      await controller.googleAuthRedirect(mockResponse, mockUser);
-
-      expect(authService.generateAuthTokens).toHaveBeenCalled();
-      expect(configService.get).toHaveBeenCalled();
+      expect(authService.generateAuthTokens).toHaveBeenCalledWith(mockUser);
+      expect(authService.setAuthCookies).toHaveBeenCalledWith(res, mockAuthAccessTokens);
+      expect(res.status).toHaveBeenCalledWith(HttpStatus.OK);
+      expect(res.redirect).toHaveBeenCalledWith(config.AUTH_REDIRECT_URL);
     });
   });
 
   describe("refresh", () => {
-    it("should refresh auth token", async () => {
-      await controller.refresh(mockResponse, mockRequest, mockUser);
+    const refreshTokenCookie = "refresh-token-from-cookie";
+    const req = { cookies: { [config.REFRESH_TOKEN]: refreshTokenCookie } } as unknown as Request;
 
-      expect(configService.get).toHaveBeenCalled();
-      expect(authService.refreshAuthTokens).toHaveBeenCalled();
+    it("should refresh tokens using the refresh token cookie", async () => {
+      await controller.refresh(res as unknown as Response, req, mockUser);
+
+      expect(authService.refreshAuthTokens).toHaveBeenCalledWith(mockUser, refreshTokenCookie);
+      expect(authService.setAuthCookies).toHaveBeenCalledWith(res, mockAuthAccessTokens);
+      expect(res.status).toHaveBeenCalledWith(HttpStatus.OK);
+      expect(res.send).toHaveBeenCalled();
+    });
+
+    it("should propagate errors and not set cookies when refresh fails", async () => {
+      const error = new UnauthorizedException("Invalid refresh token");
+      mockAuthService.refreshAuthTokens.mockRejectedValueOnce(error);
+
+      await expect(controller.refresh(res as unknown as Response, req, mockUser)).rejects.toBe(error);
+      expect(authService.setAuthCookies).not.toHaveBeenCalled();
+      expect(res.send).not.toHaveBeenCalled();
     });
   });
 
   describe("logout", () => {
-    it("should clear tokens", () => {
-      controller.logout(mockResponse);
+    it("should clear cookies", () => {
+      controller.logout(res as unknown as Response);
 
-      expect(configService.get).toHaveBeenCalled();
+      expect(res.clearCookie).toHaveBeenCalledTimes(2);
+      expect(res.clearCookie).toHaveBeenCalledWith(config.ACCESS_TOKEN);
+      expect(res.clearCookie).toHaveBeenCalledWith(config.REFRESH_TOKEN);
+      expect(res.status).toHaveBeenCalledWith(HttpStatus.OK);
+      expect(res.send).toHaveBeenCalled();
     });
   });
 });
