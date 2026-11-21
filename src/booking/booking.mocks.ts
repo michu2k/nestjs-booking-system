@@ -12,9 +12,11 @@ export const mockBooking: BookingEntity = {
   serviceId: 1
 };
 
+const HOUR_MS = 60 * 60 * 1000;
+
 export const mockCreateBooking: CreateBookingDto = {
-  from: new Date(),
-  to: new Date(),
+  from: new Date(Date.now() + HOUR_MS),
+  to: new Date(Date.now() + 2 * HOUR_MS),
   serviceId: 1
 };
 

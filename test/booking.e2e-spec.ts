@@ -21,11 +21,11 @@ describe("BookingController (e2e)", () => {
   let admin: User;
 
   const BOOKING_URL = "/api/v1/booking";
-  const DAY_MS = 24 * 60 * 60 * 1000;
-  const DATE = new Date();
-  const FUTURE_DATE = new Date(Date.now() + DAY_MS);
-  const SECOND_FUTURE_DATE = new Date(Date.now() + DAY_MS + DAY_MS);
-  const PAST_DATE = new Date(Date.now() - DAY_MS);
+  const HOUR_MS = 60 * 60 * 1000;
+  const FUTURE_DATE = new Date(Date.now() + HOUR_MS);
+  const SECOND_FUTURE_DATE = new Date(Date.now() + 2 * HOUR_MS);
+  const THIRD_FUTURE_DATE = new Date(Date.now() + 3 * HOUR_MS);
+  const PAST_DATE = new Date(Date.now() - HOUR_MS);
 
   const cookies = new Map<number, string>();
 
@@ -98,8 +98,8 @@ describe("BookingController (e2e)", () => {
   describe(`${BOOKING_URL} (POST)`, () => {
     it("creates a pending booking for the current user", async () => {
       const createBookingData: CreateBookingDto = {
-        from: DATE,
-        to: DATE,
+        from: FUTURE_DATE,
+        to: SECOND_FUTURE_DATE,
         serviceId
       };
 
@@ -117,11 +117,23 @@ describe("BookingController (e2e)", () => {
     it("rejects an invalid body", async () => {
       const createBookingData: CreateBookingDto = {
         from: "not-a-date" as unknown as Date,
-        to: DATE,
+        to: FUTURE_DATE,
         serviceId
       };
 
       await createRequest(owner).send(createBookingData).expect(400);
+    });
+
+    it("rejects a start date in the past", async () => {
+      const createBookingData: CreateBookingDto = { from: PAST_DATE, to: FUTURE_DATE, serviceId };
+
+      await createRequest(owner).send(createBookingData).expect(409);
+    });
+
+    it("rejects an end date before the start date", async () => {
+      const createBookingData: CreateBookingDto = { from: SECOND_FUTURE_DATE, to: FUTURE_DATE, serviceId };
+
+      await createRequest(owner).send(createBookingData).expect(409);
     });
   });
 
@@ -146,8 +158,8 @@ describe("BookingController (e2e)", () => {
       const { body } = await findOneRequest(owner).expect(200);
 
       expect(body.id).toBe(bookingId);
-      expect(body.from).toBe(DATE.toISOString());
-      expect(body.to).toBe(DATE.toISOString());
+      expect(body.from).toBe(FUTURE_DATE.toISOString());
+      expect(body.to).toBe(SECOND_FUTURE_DATE.toISOString());
     });
 
     it("returns 404 when another user requests the booking", async () => {
@@ -179,7 +191,7 @@ describe("BookingController (e2e)", () => {
   describe(`${BOOKING_URL}/:id (PATCH)`, () => {
     beforeAll(async () => {
       // Creates a fresh PENDING booking for the owner
-      const createBookingData: CreateBookingDto = { from: DATE, to: DATE, serviceId };
+      const createBookingData: CreateBookingDto = { from: FUTURE_DATE, to: SECOND_FUTURE_DATE, serviceId };
       const { body } = await createRequest(owner).send(createBookingData).expect(201);
 
       bookingId = body.id;
@@ -198,7 +210,7 @@ describe("BookingController (e2e)", () => {
       await updateRequest(manager).send(updateBookingData).expect(409);
       const { from } = await getBooking();
 
-      expect(from.toISOString()).toBe(DATE.toISOString());
+      expect(from.toISOString()).toBe(FUTURE_DATE.toISOString());
     });
 
     it("rejects an invalid status transition", async () => {
@@ -212,15 +224,15 @@ describe("BookingController (e2e)", () => {
     it("lets a manager confirm and reschedule the booking", async () => {
       const updateBookingData: UpdateBookingDto = {
         status: BookingStatus.CONFIRMED,
-        from: FUTURE_DATE,
-        to: SECOND_FUTURE_DATE
+        from: SECOND_FUTURE_DATE,
+        to: THIRD_FUTURE_DATE
       };
       await updateRequest(manager).send(updateBookingData).expect(200);
       const booking = await getBooking();
 
       expect(booking.status).toBe(BookingStatus.CONFIRMED);
-      expect(booking.from.toISOString()).toBe(FUTURE_DATE.toISOString());
-      expect(booking.to.toISOString()).toBe(SECOND_FUTURE_DATE.toISOString());
+      expect(booking.from.toISOString()).toBe(SECOND_FUTURE_DATE.toISOString());
+      expect(booking.to.toISOString()).toBe(THIRD_FUTURE_DATE.toISOString());
     });
   });
 

@@ -20,6 +20,17 @@ describe("BookingService", () => {
     }
   };
 
+  // Statuses a booking can transition to from its current status
+  const STATUS_TRANSITIONS: Record<BookingStatus, BookingStatus[]> = {
+    PENDING: [BookingStatus.CONFIRMED, BookingStatus.CANCELLED, BookingStatus.EXPIRED],
+    CONFIRMED: [BookingStatus.COMPLETED, BookingStatus.CANCELLED],
+    CANCELLED: [],
+    EXPIRED: [],
+    COMPLETED: []
+  };
+
+  const hoursFromNow = (hours: number) => new Date(Date.now() + hours * 60 * 60 * 1000);
+
   beforeEach(async () => {
     jest.resetAllMocks();
 
@@ -77,6 +88,17 @@ describe("BookingService", () => {
       });
       expect(result).toEqual(mockBooking);
     });
+
+    it.each([
+      ["starts in the past", { from: hoursFromNow(-1), to: hoursFromNow(1) }],
+      ["starts at the same time it ends", { from: hoursFromNow(1), to: hoursFromNow(1) }],
+      ["starts after it ends", { from: hoursFromNow(2), to: hoursFromNow(1) }]
+    ])("should throw error when the booking %s", async (_, dates) => {
+      await expect(service.createBooking({ ...mockCreateBooking, ...dates }, mockBooking.userId)).rejects.toMatchObject(
+        { code: ServiceErrorCode.CONFLICT }
+      );
+      expect(prisma.booking.create).not.toHaveBeenCalled();
+    });
   });
 
   describe("cancelBooking", () => {
@@ -105,74 +127,70 @@ describe("BookingService", () => {
   });
 
   describe("updateBooking", () => {
-    const hoursFromNow = (hours: number) => new Date(Date.now() + hours * 60 * 60 * 1000);
     const upcomingBooking = { ...mockBooking, from: hoursFromNow(1), to: hoursFromNow(2) };
 
-    describe("status", () => {
-      it.each([
-        [BookingStatus.PENDING, BookingStatus.CONFIRMED],
-        [BookingStatus.PENDING, BookingStatus.CANCELLED],
-        [BookingStatus.PENDING, BookingStatus.EXPIRED],
-        [BookingStatus.CONFIRMED, BookingStatus.COMPLETED],
-        [BookingStatus.CONFIRMED, BookingStatus.CANCELLED]
-      ])("should change a %s booking to %s", async (from, to) => {
-        prisma.booking.findUnique.mockResolvedValue({ ...upcomingBooking, status: from });
+    const statuses = Object.values(BookingStatus);
 
+    const allowedTransitions = statuses
+      .map((from): [BookingStatus, BookingStatus[]] => [from, STATUS_TRANSITIONS[from]])
+      .filter(([, targets]) => targets.length > 0);
+
+    const forbiddenTransitions = statuses.map((from): [BookingStatus, BookingStatus[]] => [
+      from,
+      statuses.filter((to) => to !== from && !STATUS_TRANSITIONS[from].includes(to))
+    ]);
+
+    it.each(allowedTransitions)("should change a %s booking to %j", async (from, targets) => {
+      prisma.booking.findUnique.mockResolvedValue({ ...upcomingBooking, status: from });
+
+      for (const to of targets) {
         await service.updateBooking(mockBooking.id, { status: to });
 
-        expect(prisma.booking.update).toHaveBeenCalledWith({ where: { id: mockBooking.id }, data: { status: to } });
-      });
+        expect(prisma.booking.update).toHaveBeenLastCalledWith({ where: { id: mockBooking.id }, data: { status: to } });
+      }
+    });
 
-      it.each([
-        [BookingStatus.PENDING, BookingStatus.COMPLETED],
-        [BookingStatus.CONFIRMED, BookingStatus.PENDING],
-        [BookingStatus.CONFIRMED, BookingStatus.EXPIRED],
-        [BookingStatus.CANCELLED, BookingStatus.CONFIRMED],
-        [BookingStatus.COMPLETED, BookingStatus.CANCELLED],
-        [BookingStatus.EXPIRED, BookingStatus.PENDING]
-      ])("should not change a %s booking to %s", async (from, to) => {
-        prisma.booking.findUnique.mockResolvedValue({ ...upcomingBooking, status: from });
+    it.each(forbiddenTransitions)("should not change a %s booking to %j", async (from, targets) => {
+      prisma.booking.findUnique.mockResolvedValue({ ...upcomingBooking, status: from });
 
+      for (const to of targets) {
         await expect(service.updateBooking(mockBooking.id, { status: to })).rejects.toMatchObject({
           code: ServiceErrorCode.BAD_REQUEST
         });
-        expect(prisma.booking.update).not.toHaveBeenCalled();
-      });
-
-      it("should allow sending the current status unchanged", async () => {
-        prisma.booking.findUnique.mockResolvedValue({ ...upcomingBooking, status: BookingStatus.COMPLETED });
-
-        await service.updateBooking(mockBooking.id, { status: BookingStatus.COMPLETED });
-
-        expect(prisma.booking.update).toHaveBeenCalled();
-      });
+      }
+      expect(prisma.booking.update).not.toHaveBeenCalled();
     });
 
-    describe("dates", () => {
-      beforeEach(() => {
-        prisma.booking.findUnique.mockResolvedValue(upcomingBooking);
+    it("should allow sending the current status unchanged", async () => {
+      prisma.booking.findUnique.mockResolvedValue({ ...upcomingBooking, status: BookingStatus.COMPLETED });
+
+      await service.updateBooking(mockBooking.id, { status: BookingStatus.COMPLETED });
+
+      expect(prisma.booking.update).toHaveBeenCalled();
+    });
+
+    it("should update the booking with valid future dates", async () => {
+      prisma.booking.findUnique.mockResolvedValue(upcomingBooking);
+      const data = { from: hoursFromNow(3), to: hoursFromNow(4) };
+
+      await service.updateBooking(mockBooking.id, data);
+
+      expect(prisma.booking.update).toHaveBeenCalledWith({ where: { id: mockBooking.id }, data });
+    });
+
+    it.each([
+      ["starts in the past", { from: hoursFromNow(-1), to: hoursFromNow(1) }],
+      ["starts at the same time it ends", { from: hoursFromNow(1), to: hoursFromNow(1) }],
+      ["starts after it ends", { from: hoursFromNow(2), to: hoursFromNow(1) }],
+      ["new end is before the current start", { to: hoursFromNow(0.5) }],
+      ["new start is after the current end", { from: hoursFromNow(3) }]
+    ])("should throw error when the booking %s", async (_, data) => {
+      prisma.booking.findUnique.mockResolvedValue(upcomingBooking);
+
+      await expect(service.updateBooking(mockBooking.id, data)).rejects.toMatchObject({
+        code: ServiceErrorCode.CONFLICT
       });
-
-      it("should update the booking with valid future dates", async () => {
-        const data = { from: hoursFromNow(3), to: hoursFromNow(4) };
-
-        await service.updateBooking(mockBooking.id, data);
-
-        expect(prisma.booking.update).toHaveBeenCalledWith({ where: { id: mockBooking.id }, data });
-      });
-
-      it.each([
-        ["starts in the past", { from: hoursFromNow(-1), to: hoursFromNow(1) }],
-        ["starts at the same time it ends", { from: hoursFromNow(3), to: hoursFromNow(3) }],
-        ["starts after it ends", { from: hoursFromNow(4), to: hoursFromNow(3) }],
-        ["new end is before the current start", { to: hoursFromNow(0.5) }],
-        ["new start is after the current end", { from: hoursFromNow(3) }]
-      ])("should throw error when the booking %s", async (_, data) => {
-        await expect(service.updateBooking(mockBooking.id, data)).rejects.toMatchObject({
-          code: ServiceErrorCode.CONFLICT
-        });
-        expect(prisma.booking.update).not.toHaveBeenCalled();
-      });
+      expect(prisma.booking.update).not.toHaveBeenCalled();
     });
   });
 
