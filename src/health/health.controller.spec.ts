@@ -29,14 +29,6 @@ describe("HealthController", () => {
     healthService = moduleRef.get(HealthService);
   });
 
-  it("should be defined", () => {
-    expect(controller).toBeDefined();
-  });
-
-  it("healthService should be defined", () => {
-    expect(healthService).toBeDefined();
-  });
-
   describe("getHealth", () => {
     it("should return health status", () => {
       const result = controller.getHealth();

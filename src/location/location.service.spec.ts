@@ -15,10 +15,6 @@ describe("LocationService", () => {
     service = moduleRef.get(LocationService);
   });
 
-  it("should be defined", () => {
-    expect(service).toBeDefined();
-  });
-
   describe("findAllLocations", () => {
     let findAllLocationsSpy: jest.SpyInstance;
 

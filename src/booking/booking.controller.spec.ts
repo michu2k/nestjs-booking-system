@@ -37,14 +37,6 @@ describe("BookingController", () => {
     bookingService = moduleRef.get(BookingService);
   });
 
-  it("should be defined", () => {
-    expect(controller).toBeDefined();
-  });
-
-  it("bookingService should be defined", () => {
-    expect(bookingService).toBeDefined();
-  });
-
   describe("findAll", () => {
     it("should get a list of user's bookings", async () => {
       const result = await controller.findAll(mockUser);

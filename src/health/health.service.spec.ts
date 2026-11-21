@@ -13,10 +13,6 @@ describe("HealthService", () => {
     service = moduleRef.get(HealthService);
   });
 
-  it("should be defined", () => {
-    expect(service).toBeDefined();
-  });
-
   describe("getHealthStatus", () => {
     it("should return health status", () => {
       const result = service.getHealthStatus();

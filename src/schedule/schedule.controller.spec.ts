@@ -28,14 +28,6 @@ describe("ScheduleController", () => {
     scheduleService = moduleRef.get(ScheduleService);
   });
 
-  it("should be defined", () => {
-    expect(controller).toBeDefined();
-  });
-
-  it("scheduleService should be defined", () => {
-    expect(scheduleService).toBeDefined();
-  });
-
   describe("findAll", () => {
     it("should get schedule for a service with the specified id", async () => {
       const result = await controller.findAll(mockSchedule.serviceId);

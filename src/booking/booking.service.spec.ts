@@ -31,10 +31,6 @@ describe("BookingService", () => {
     prisma = moduleRef.get(PrismaService) as unknown as typeof mockPrismaService;
   });
 
-  it("should be defined", () => {
-    expect(service).toBeDefined();
-  });
-
   describe("findAllBookings", () => {
     it("should get all bookings", async () => {
       prisma.booking.findMany.mockResolvedValue([mockBooking, mockBooking]);
