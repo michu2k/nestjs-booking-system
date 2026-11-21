@@ -42,6 +42,8 @@ export class BookingService {
   }
 
   async createBooking(data: CreateBookingDto, userId: number) {
+    this.validateBookingDates(data.from, data.to);
+
     return this.prisma.booking.create({
       data: { ...data, userId, status: BookingStatus.PENDING }
     });
@@ -68,12 +70,7 @@ export class BookingService {
     }
 
     if (data.from || data.to) {
-      const dateFrom = new Date(data.from ?? booking.from);
-      const dateTo = new Date(data.to ?? booking.to);
-
-      if (dateFrom <= new Date() || dateFrom >= dateTo) {
-        throw new ServiceError(ServiceErrorCode.CONFLICT, "Invalid booking dates.");
-      }
+      this.validateBookingDates(data.from ?? booking.from, data.to ?? booking.to);
     }
 
     return this.prisma.booking.update({
@@ -89,5 +86,14 @@ export class BookingService {
         id: true
       }
     });
+  }
+
+  private validateBookingDates(from: Date, to: Date) {
+    const dateFrom = new Date(from);
+    const dateTo = new Date(to);
+
+    if (dateFrom <= new Date() || dateFrom >= dateTo) {
+      throw new ServiceError(ServiceErrorCode.CONFLICT, "Invalid booking dates.");
+    }
   }
 }
