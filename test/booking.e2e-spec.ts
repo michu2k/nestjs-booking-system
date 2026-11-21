@@ -127,13 +127,13 @@ describe("BookingController (e2e)", () => {
     it("rejects a start date in the past", async () => {
       const createBookingData: CreateBookingDto = { from: PAST_DATE, to: FUTURE_DATE, serviceId };
 
-      await createRequest(owner).send(createBookingData).expect(409);
+      await createRequest(owner).send(createBookingData).expect(400);
     });
 
     it("rejects an end date before the start date", async () => {
       const createBookingData: CreateBookingDto = { from: SECOND_FUTURE_DATE, to: FUTURE_DATE, serviceId };
 
-      await createRequest(owner).send(createBookingData).expect(409);
+      await createRequest(owner).send(createBookingData).expect(400);
     });
   });
 
@@ -207,7 +207,7 @@ describe("BookingController (e2e)", () => {
 
     it("rejects a start date in the past", async () => {
       const updateBookingData: UpdateBookingDto = { from: PAST_DATE };
-      await updateRequest(manager).send(updateBookingData).expect(409);
+      await updateRequest(manager).send(updateBookingData).expect(400);
       const { from } = await getBooking();
 
       expect(from.toISOString()).toBe(FUTURE_DATE.toISOString());

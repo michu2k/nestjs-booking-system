@@ -93,7 +93,7 @@ export class BookingService {
     const dateTo = new Date(to);
 
     if (dateFrom <= new Date() || dateFrom >= dateTo) {
-      throw new ServiceError(ServiceErrorCode.CONFLICT, "Invalid booking dates.");
+      throw new ServiceError(ServiceErrorCode.BAD_REQUEST, "Invalid booking dates.");
     }
   }
 }

@@ -95,7 +95,7 @@ describe("BookingService", () => {
       ["starts after it ends", { from: hoursFromNow(2), to: hoursFromNow(1) }]
     ])("should throw error when the booking %s", async (_, dates) => {
       await expect(service.createBooking({ ...mockCreateBooking, ...dates }, mockBooking.userId)).rejects.toMatchObject(
-        { code: ServiceErrorCode.CONFLICT }
+        { code: ServiceErrorCode.BAD_REQUEST }
       );
       expect(prisma.booking.create).not.toHaveBeenCalled();
     });
@@ -188,7 +188,7 @@ describe("BookingService", () => {
       prisma.booking.findUnique.mockResolvedValue(upcomingBooking);
 
       await expect(service.updateBooking(mockBooking.id, data)).rejects.toMatchObject({
-        code: ServiceErrorCode.CONFLICT
+        code: ServiceErrorCode.BAD_REQUEST
       });
       expect(prisma.booking.update).not.toHaveBeenCalled();
     });
