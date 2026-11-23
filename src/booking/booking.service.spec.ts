@@ -20,7 +20,6 @@ describe("BookingService", () => {
     }
   };
 
-  // Statuses a booking can transition to from its current status
   const STATUS_TRANSITIONS: Record<BookingStatus, BookingStatus[]> = {
     PENDING: [BookingStatus.CONFIRMED, BookingStatus.CANCELLED, BookingStatus.EXPIRED],
     CONFIRMED: [BookingStatus.COMPLETED, BookingStatus.CANCELLED],

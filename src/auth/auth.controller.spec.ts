@@ -25,7 +25,8 @@ describe("AuthController", () => {
   const mockAuthService = {
     generateAuthTokens: jest.fn(),
     refreshAuthTokens: jest.fn(),
-    setAuthCookies: jest.fn()
+    setAuthCookies: jest.fn(),
+    revokeRefreshToken: jest.fn()
   };
 
   type MockResponse = Record<"status" | "send" | "redirect" | "clearCookie", jest.Mock>;
@@ -104,9 +105,10 @@ describe("AuthController", () => {
   });
 
   describe("logout", () => {
-    it("should clear cookies", () => {
-      controller.logout(res as unknown as Response);
+    it("should revoke the refresh token and clear cookies", async () => {
+      await controller.logout(res as unknown as Response, mockUser);
 
+      expect(authService.revokeRefreshToken).toHaveBeenCalledWith(mockUser.id);
       expect(res.clearCookie).toHaveBeenCalledTimes(2);
       expect(res.clearCookie).toHaveBeenCalledWith(config.ACCESS_TOKEN);
       expect(res.clearCookie).toHaveBeenCalledWith(config.REFRESH_TOKEN);

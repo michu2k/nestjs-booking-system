@@ -77,6 +77,18 @@ export class AuthService {
   }
 
   /**
+   * Revoke the user's refresh token so it can no longer be used
+   */
+  async revokeRefreshToken(userId: number) {
+    try {
+      await this.userService.updateUserRefreshToken(userId, null);
+    } catch (e) {
+      console.error(getErrorMessage(e));
+      throw new ServiceError(ServiceErrorCode.BAD_REQUEST, "Failed to revoke user's token");
+    }
+  }
+
+  /**
    * Set the access and refresh tokens as HTTP-only cookies
    */
   setAuthCookies(res: Response, { accessToken, refreshToken }: { accessToken: string; refreshToken: string }) {

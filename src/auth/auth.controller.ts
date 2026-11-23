@@ -1,4 +1,4 @@
-import { Controller, Get, HttpStatus, Req, Res, UseGuards, VERSION_NEUTRAL } from "@nestjs/common";
+import { Controller, Get, HttpStatus, Post, Req, Res, UseGuards, VERSION_NEUTRAL } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { ApiTags } from "@nestjs/swagger";
 import { Request, Response } from "express";
@@ -7,7 +7,6 @@ import { User } from "../decorators/user.decorator";
 import { UserEntity } from "../user/user.dto";
 import { AuthService } from "./auth.service";
 import { GoogleAuthGuard } from "./guards/google-auth.guard";
-import { JwtAuthGuard } from "./guards/jwt.guard";
 import { JwtRefreshAuthGuard } from "./guards/jwt-refresh.guard";
 
 @ApiTags("Auth")
@@ -54,11 +53,13 @@ export class AuthController {
   }
 
   /**
-   * Logging a user out of an account
+   * Log a user out by revoking their refresh token and clearing the auth cookies
    */
-  @Get("logout")
-  @UseGuards(JwtAuthGuard)
-  logout(@Res() res: Response) {
+  @Post("logout")
+  @UseGuards(JwtRefreshAuthGuard)
+  async logout(@Res() res: Response, @User() user: UserEntity) {
+    await this.authService.revokeRefreshToken(user.id);
+
     const accessToken = this.configService.get("ACCESS_TOKEN");
     const refreshToken = this.configService.get("REFRESH_TOKEN");
 

@@ -32,7 +32,6 @@ describe("AuthService", () => {
     REFRESH_TOKEN_VALIDITY: 604800000
   });
 
-  // Simulate the user row: generateAuthTokens stores the hash, refreshAuthTokens reads it
   const loggedInUser = () => ({ ...mockUser, refreshToken: storedHash });
 
   const hashRefreshToken = (token: string) => service["hashRefreshToken"](token);
@@ -137,6 +136,19 @@ describe("AuthService", () => {
         code: ServiceErrorCode.UNAUTHORIZED
       });
       expect(mockUserService.updateUserRefreshToken).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("revokeRefreshToken", () => {
+    it("should clear the stored hash so the refresh token is rejected", async () => {
+      const { refreshToken } = await service.generateAuthTokens(mockUser);
+
+      await service.revokeRefreshToken(mockUser.id);
+
+      expect(storedHash).toBeNull();
+      await expect(service.refreshAuthTokens(loggedInUser(), refreshToken)).rejects.toMatchObject({
+        code: ServiceErrorCode.UNAUTHORIZED
+      });
     });
   });
 
