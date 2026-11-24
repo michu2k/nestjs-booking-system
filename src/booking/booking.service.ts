@@ -14,7 +14,8 @@ const STATUS_TRANSITIONS: Record<BookingStatus, BookingStatus[]> = {
   CONFIRMED: [BookingStatus.COMPLETED, BookingStatus.CANCELLED],
   CANCELLED: [],
   EXPIRED: [],
-  COMPLETED: []
+  COMPLETED: [],
+  NO_SHOW: [] // Unused, remove later
 };
 
 @Injectable()

@@ -25,7 +25,8 @@ describe("BookingService", () => {
     CONFIRMED: [BookingStatus.COMPLETED, BookingStatus.CANCELLED],
     CANCELLED: [],
     EXPIRED: [],
-    COMPLETED: []
+    COMPLETED: [],
+    NO_SHOW: []
   };
 
   const hoursFromNow = (hours: number) => new Date(Date.now() + hours * 60 * 60 * 1000);
