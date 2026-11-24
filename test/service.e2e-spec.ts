@@ -1,5 +1,6 @@
-import { ExecutionContext, INestApplication, ValidationPipe } from "@nestjs/common";
+import { ExecutionContext, INestApplication, ValidationPipe, VersioningType } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
+import cookieParser from "cookie-parser";
 import { Request } from "express";
 import request from "supertest";
 
@@ -15,7 +16,7 @@ describe("ServiceController (e2e)", () => {
   let prismaService: PrismaService;
   let serviceId: number;
 
-  const SERVICE_URL = "/api/service";
+  const SERVICE_URL = "/api/v1/service";
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -36,6 +37,8 @@ describe("ServiceController (e2e)", () => {
 
     app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
     app.setGlobalPrefix("api");
+    app.enableVersioning({ type: VersioningType.URI, defaultVersion: "1" });
+    app.use(cookieParser());
 
     await app.init();
   });

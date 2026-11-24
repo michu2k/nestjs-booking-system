@@ -1,5 +1,6 @@
-import { ExecutionContext, INestApplication } from "@nestjs/common";
+import { ExecutionContext, INestApplication, ValidationPipe, VersioningType } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
+import cookieParser from "cookie-parser";
 import { Request } from "express";
 import request from "supertest";
 
@@ -27,7 +28,11 @@ describe("AuthController (e2e)", () => {
       .compile();
 
     app = moduleRef.createNestApplication();
+
+    app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
     app.setGlobalPrefix("api");
+    app.enableVersioning({ type: VersioningType.URI, defaultVersion: "1" });
+    app.use(cookieParser());
 
     await app.init();
   });

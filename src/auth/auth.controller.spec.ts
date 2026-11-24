@@ -13,8 +13,8 @@ describe("AuthController", () => {
   let authService: AuthService;
 
   const config: Record<string, string> = {
-    ACCESS_TOKEN: "access-cookie",
-    REFRESH_TOKEN: "refresh-cookie",
+    ACCESS_TOKEN: "access-token",
+    REFRESH_TOKEN: "refresh-token",
     AUTH_REDIRECT_URL: "http://localhost:3000/dashboard"
   };
 

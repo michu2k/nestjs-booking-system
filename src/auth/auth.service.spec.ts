@@ -29,7 +29,9 @@ describe("AuthService", () => {
     ACCESS_TOKEN: "access-cookie",
     ACCESS_TOKEN_VALIDITY: 600000,
     REFRESH_TOKEN: "refresh-cookie",
-    REFRESH_TOKEN_VALIDITY: 604800000
+    REFRESH_TOKEN_VALIDITY: 604800000,
+    JWT_SECRET: "test-secret",
+    JWT_REFRESH_SECRET: "test-refresh-secret"
   });
 
   const loggedInUser = () => ({ ...mockUser, refreshToken: storedHash });
@@ -88,12 +90,18 @@ describe("AuthService", () => {
     it("should sign both tokens for the user", async () => {
       const { accessToken, refreshToken } = await service.generateAuthTokens(mockUser);
 
-      for (const token of [accessToken, refreshToken]) {
-        await expect(jwtService.verifyAsync(token)).resolves.toMatchObject({
-          sub: mockUser.id,
-          email: mockUser.email
-        });
-      }
+      await expect(
+        jwtService.verifyAsync(accessToken, { secret: mockConfigService.get("JWT_SECRET") })
+      ).resolves.toMatchObject({
+        sub: mockUser.id,
+        email: mockUser.email
+      });
+      await expect(
+        jwtService.verifyAsync(refreshToken, { secret: mockConfigService.get("JWT_REFRESH_SECRET") })
+      ).resolves.toMatchObject({
+        sub: mockUser.id,
+        email: mockUser.email
+      });
     });
 
     it("should store a SHA-256 hash of the refresh token, not the token itself", async () => {
