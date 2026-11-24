@@ -40,10 +40,12 @@ export class AuthService {
     const payload = { sub: id, email };
 
     const accessToken = await this.jwtService.signAsync(payload, {
+      secret: this.configService.get("JWT_SECRET"),
       expiresIn: this.configService.get("ACCESS_TOKEN_VALIDITY")
     });
 
     const refreshToken = await this.jwtService.signAsync(payload, {
+      secret: this.configService.get("JWT_REFRESH_SECRET"),
       expiresIn: this.configService.get("REFRESH_TOKEN_VALIDITY"),
       jwtid: randomUUID() // unique id to make every refresh token different
     });
