@@ -40,7 +40,7 @@ export class AuthController {
   /**
    * Refresh a JWT token
    */
-  @Get("refresh")
+  @Post("refresh")
   @UseGuards(JwtRefreshAuthGuard)
   async refresh(@Res() res: Response, @Req() req: Request, @User() user: UserEntity) {
     const refreshToken = this.configService.get("REFRESH_TOKEN");
