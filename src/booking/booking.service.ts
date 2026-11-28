@@ -69,6 +69,11 @@ export class BookingService {
     }
 
     if (data.from || data.to) {
+      // A booking without further transitions cannot be rescheduled
+      if (STATUS_TRANSITIONS[booking.status].length === 0) {
+        throw new ServiceError(ServiceErrorCode.BAD_REQUEST, "This booking can no longer be rescheduled.");
+      }
+
       this.validateBookingDates(from, to);
     }
 

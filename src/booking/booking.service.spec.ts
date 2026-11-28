@@ -197,14 +197,29 @@ describe("BookingService", () => {
       expect(prisma.booking.update).toHaveBeenCalled();
     });
 
-    it("should update the booking with valid future dates", async () => {
-      prisma.booking.findUnique.mockResolvedValue(upcomingBooking);
-      const data = { from: hoursFromNow(3), to: hoursFromNow(4) };
+    it.each([BookingStatus.PENDING, BookingStatus.CONFIRMED])(
+      "should update %s booking with valid future dates",
+      async (status) => {
+        prisma.booking.findUnique.mockResolvedValue({ ...upcomingBooking, status });
+        const data = { from: hoursFromNow(2), to: hoursFromNow(3) };
 
-      await service.updateBooking(mockBooking.id, data);
+        await service.updateBooking(mockBooking.id, data);
 
-      expect(prisma.booking.update).toHaveBeenCalledWith({ where: { id: mockBooking.id }, data });
-    });
+        expect(prisma.booking.update).toHaveBeenCalledWith({ where: { id: mockBooking.id }, data });
+      }
+    );
+
+    it.each([BookingStatus.CANCELLED, BookingStatus.EXPIRED, BookingStatus.COMPLETED, BookingStatus.NO_SHOW])(
+      "should not update dates when status is %s",
+      async (status) => {
+        prisma.booking.findUnique.mockResolvedValue({ ...upcomingBooking, status });
+
+        await expect(
+          service.updateBooking(mockBooking.id, { from: hoursFromNow(2), to: hoursFromNow(3) })
+        ).rejects.toMatchObject({ code: ServiceErrorCode.BAD_REQUEST });
+        expect(prisma.booking.update).not.toHaveBeenCalled();
+      }
+    );
 
     it.each([
       ["starts in the past", { from: hoursFromNow(-1), to: hoursFromNow(1) }],
