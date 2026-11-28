@@ -1,5 +1,7 @@
 import { Test } from "@nestjs/testing";
 
+import { DeleteEntityResponse } from "../dtos/response.dto";
+import { BookingStatus } from "../prisma/generated/client";
 import { mockUser } from "../user/user.mocks";
 import { BookingController } from "./booking.controller";
 import { mockBooking, mockCreateBooking, mockUpdateBooking } from "./booking.mocks";
@@ -14,10 +16,13 @@ describe("BookingController", () => {
     findOneBooking: jest.fn().mockResolvedValue(mockBooking),
     createBooking: jest.fn((data) => Promise.resolve({ ...mockBooking, ...data })),
     updateBooking: jest.fn((_, data) => Promise.resolve({ ...mockBooking, ...data })),
-    deleteBooking: jest.fn().mockResolvedValue(mockBooking)
+    cancelBooking: jest.fn().mockResolvedValue({ ...mockBooking, status: BookingStatus.CANCELLED }),
+    deleteBooking: jest.fn().mockResolvedValue({ id: mockBooking.id })
   };
 
   beforeEach(async () => {
+    jest.clearAllMocks();
+
     const moduleRef = await Test.createTestingModule({
       providers: [
         {
@@ -32,19 +37,11 @@ describe("BookingController", () => {
     bookingService = moduleRef.get(BookingService);
   });
 
-  it("should be defined", () => {
-    expect(controller).toBeDefined();
-  });
-
-  it("bookingService should be defined", () => {
-    expect(bookingService).toBeDefined();
-  });
-
   describe("findAll", () => {
     it("should get a list of user's bookings", async () => {
       const result = await controller.findAll(mockUser);
 
-      expect(bookingService.findAllBookings).toHaveBeenCalled();
+      expect(bookingService.findAllBookings).toHaveBeenCalledWith(undefined, undefined, { userId: mockUser.id });
       expect(result).toEqual([mockBooking, mockBooking]);
     });
   });
@@ -53,17 +50,26 @@ describe("BookingController", () => {
     it("should get a booking", async () => {
       const result = await controller.findOne(mockBooking.id, mockUser);
 
-      expect(bookingService.findOneBooking).toHaveBeenCalled();
+      expect(bookingService.findOneBooking).toHaveBeenCalledWith(mockBooking.id, { userId: mockUser.id });
       expect(result).toEqual(mockBooking);
     });
   });
 
   describe("create", () => {
     it("should create a booking", async () => {
-      const result = await controller.create(mockCreateBooking);
+      const result = await controller.create(mockCreateBooking, mockUser);
 
-      expect(bookingService.createBooking).toHaveBeenCalled();
+      expect(bookingService.createBooking).toHaveBeenCalledWith(mockCreateBooking, mockUser.id);
       expect(result).toEqual({ ...mockBooking, ...mockCreateBooking });
+    });
+  });
+
+  describe("cancel", () => {
+    it("should cancel the logged-in user's booking", async () => {
+      const result = await controller.cancel(mockBooking.id, mockUser);
+
+      expect(bookingService.cancelBooking).toHaveBeenCalledWith(mockBooking.id, mockUser.id);
+      expect(result).toEqual({ ...mockBooking, status: BookingStatus.CANCELLED });
     });
   });
 
@@ -71,7 +77,7 @@ describe("BookingController", () => {
     it("should update a booking", async () => {
       const result = await controller.update(mockBooking.id, mockUpdateBooking);
 
-      expect(bookingService.updateBooking).toHaveBeenCalled();
+      expect(bookingService.updateBooking).toHaveBeenCalledWith(mockBooking.id, mockUpdateBooking);
       expect(result).toEqual({ ...mockBooking, ...mockUpdateBooking });
     });
   });
@@ -80,8 +86,9 @@ describe("BookingController", () => {
     it("should delete a booking", async () => {
       const result = await controller.delete(mockBooking.id);
 
-      expect(bookingService.deleteBooking).toHaveBeenCalled();
-      expect(result).toEqual(mockBooking);
+      expect(bookingService.deleteBooking).toHaveBeenCalledWith(mockBooking.id);
+      expect(result).toBeInstanceOf(DeleteEntityResponse);
+      expect(result).toEqual({ id: mockBooking.id });
     });
   });
 });

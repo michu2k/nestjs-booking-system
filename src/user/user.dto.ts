@@ -1,4 +1,5 @@
-import { ApiProperty, PickType } from "@nestjs/swagger";
+import { ApiHideProperty, ApiProperty, PickType } from "@nestjs/swagger";
+import { Exclude } from "class-transformer";
 import { IsArray, IsEnum, IsInt, IsOptional, IsPhoneNumber, IsString } from "class-validator";
 
 import { Account, User, UserRole } from "../prisma/generated/client";
@@ -23,6 +24,8 @@ export class UserEntity implements User {
 
   @IsString()
   @IsOptional()
+  @Exclude()
+  @ApiHideProperty()
   refreshToken: string | null;
 
   constructor(partial: Partial<UserEntity>) {

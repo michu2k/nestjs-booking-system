@@ -1,4 +1,4 @@
-import { Controller, Get, HttpStatus, Req, Res, UseGuards, VERSION_NEUTRAL } from "@nestjs/common";
+import { Controller, Get, HttpStatus, Post, Req, Res, UseGuards, VERSION_NEUTRAL } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { ApiTags } from "@nestjs/swagger";
 import { Request, Response } from "express";
@@ -6,9 +6,7 @@ import { Request, Response } from "express";
 import { User } from "../decorators/user.decorator";
 import { UserEntity } from "../user/user.dto";
 import { AuthService } from "./auth.service";
-import { createAuthCookies } from "./auth.utils";
 import { GoogleAuthGuard } from "./guards/google-auth.guard";
-import { JwtAuthGuard } from "./guards/jwt.guard";
 import { JwtRefreshAuthGuard } from "./guards/jwt-refresh.guard";
 
 @ApiTags("Auth")
@@ -33,7 +31,7 @@ export class AuthController {
   @UseGuards(GoogleAuthGuard)
   async googleAuthRedirect(@Res() res: Response, @User() user: UserEntity) {
     const authTokens = await this.authService.generateAuthTokens(user);
-    createAuthCookies({ res, ...authTokens });
+    this.authService.setAuthCookies(res, authTokens);
 
     const redirectUrl = this.configService.get("AUTH_REDIRECT_URL");
     return res.status(HttpStatus.OK).redirect(redirectUrl);
@@ -42,24 +40,26 @@ export class AuthController {
   /**
    * Refresh a JWT token
    */
-  @Get("refresh")
+  @Post("refresh")
   @UseGuards(JwtRefreshAuthGuard)
   async refresh(@Res() res: Response, @Req() req: Request, @User() user: UserEntity) {
     const refreshToken = this.configService.get("REFRESH_TOKEN");
     const cookie = req.cookies[refreshToken];
 
     const authTokens = await this.authService.refreshAuthTokens(user, cookie);
-    createAuthCookies({ res, ...authTokens });
+    this.authService.setAuthCookies(res, authTokens);
 
     return res.status(HttpStatus.OK).send();
   }
 
   /**
-   * Logging a user out of an account
+   * Log a user out by revoking their refresh token and clearing the auth cookies
    */
-  @Get("logout")
-  @UseGuards(JwtAuthGuard)
-  logout(@Res() res: Response) {
+  @Post("logout")
+  @UseGuards(JwtRefreshAuthGuard)
+  async logout(@Res() res: Response, @User() user: UserEntity) {
+    await this.authService.revokeRefreshToken(user.id);
+
     const accessToken = this.configService.get("ACCESS_TOKEN");
     const refreshToken = this.configService.get("REFRESH_TOKEN");
 

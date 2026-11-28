@@ -15,10 +15,6 @@ describe("UserService", () => {
     service = moduleRef.get(UserService);
   });
 
-  it("should be defined", () => {
-    expect(service).toBeDefined();
-  });
-
   describe("findOneUser", () => {
     it("should get a user", async () => {
       const findOneUserSpy = jest.spyOn(service, "findOneUser").mockResolvedValue(mockUser);

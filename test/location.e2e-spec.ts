@@ -1,7 +1,8 @@
-import { ExecutionContext, INestApplication, ValidationPipe } from "@nestjs/common";
+import { ExecutionContext, INestApplication, ValidationPipe, VersioningType } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
+import cookieParser from "cookie-parser";
 import { Request } from "express";
-import * as request from "supertest";
+import request from "supertest";
 
 import { AppModule } from "../src/app.module";
 import { JwtAuthGuard } from "../src/auth/guards/jwt.guard";
@@ -12,7 +13,7 @@ describe("LocationController (e2e)", () => {
   let app: INestApplication;
   let locationId: number;
 
-  const LOCATION_URL = "/api/location";
+  const LOCATION_URL = "/api/v1/location";
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -32,6 +33,8 @@ describe("LocationController (e2e)", () => {
 
     app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
     app.setGlobalPrefix("api");
+    app.enableVersioning({ type: VersioningType.URI, defaultVersion: "1" });
+    app.use(cookieParser());
 
     await app.init();
   });

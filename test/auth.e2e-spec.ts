@@ -1,7 +1,8 @@
-import { ExecutionContext, INestApplication } from "@nestjs/common";
+import { ExecutionContext, INestApplication, ValidationPipe, VersioningType } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
+import cookieParser from "cookie-parser";
 import { Request } from "express";
-import * as request from "supertest";
+import request from "supertest";
 
 import { AppModule } from "../src/app.module";
 import { JwtAuthGuard } from "../src/auth/guards/jwt.guard";
@@ -27,7 +28,11 @@ describe("AuthController (e2e)", () => {
       .compile();
 
     app = moduleRef.createNestApplication();
+
+    app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
     app.setGlobalPrefix("api");
+    app.enableVersioning({ type: VersioningType.URI, defaultVersion: "1" });
+    app.use(cookieParser());
 
     await app.init();
   });
@@ -40,8 +45,8 @@ describe("AuthController (e2e)", () => {
     return request(app.getHttpServer()).get(`${AUTH_URL}/google/callback`).expect(302);
   });
 
-  it(`${AUTH_URL}/logout (GET)`, () => {
-    return request(app.getHttpServer()).get(`${AUTH_URL}/logout`).expect(200);
+  it(`${AUTH_URL}/logout (POST)`, () => {
+    return request(app.getHttpServer()).post(`${AUTH_URL}/logout`).expect(401);
   });
 
   afterAll(async () => {

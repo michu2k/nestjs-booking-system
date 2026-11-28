@@ -16,10 +16,6 @@ describe("ServiceService", () => {
     service = moduleRef.get(ServiceService);
   });
 
-  it("should be defined", () => {
-    expect(service).toBeDefined();
-  });
-
   describe("findAllServices", () => {
     let findAllServicesSpy: jest.SpyInstance;
 

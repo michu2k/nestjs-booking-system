@@ -1,7 +1,8 @@
-import { ExecutionContext, INestApplication, ValidationPipe } from "@nestjs/common";
+import { ExecutionContext, INestApplication, ValidationPipe, VersioningType } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
+import cookieParser from "cookie-parser";
 import { Request } from "express";
-import * as request from "supertest";
+import request from "supertest";
 
 import { AppModule } from "../src/app.module";
 import { JwtAuthGuard } from "../src/auth/guards/jwt.guard";
@@ -13,7 +14,7 @@ describe("UserController (e2e)", () => {
   let prismaService: PrismaService;
   let userId: number;
 
-  const USER_URL = "/api/user";
+  const USER_URL = "/api/v1/user";
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -35,6 +36,8 @@ describe("UserController (e2e)", () => {
 
     app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
     app.setGlobalPrefix("api");
+    app.enableVersioning({ type: VersioningType.URI, defaultVersion: "1" });
+    app.use(cookieParser());
 
     // Get the id of the last user
     userId = (await prismaService.user.findFirst({ orderBy: { id: "desc" } })).id;

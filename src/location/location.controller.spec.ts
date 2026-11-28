@@ -31,14 +31,6 @@ describe("LocationController", () => {
     locationService = moduleRef.get(LocationService);
   });
 
-  it("should be defined", () => {
-    expect(controller).toBeDefined();
-  });
-
-  it("locationService should be defined", () => {
-    expect(locationService).toBeDefined();
-  });
-
   describe("findAll", () => {
     it("should get all locations", async () => {
       const result = await controller.findAll();

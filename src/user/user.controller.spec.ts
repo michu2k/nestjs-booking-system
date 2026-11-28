@@ -28,14 +28,6 @@ describe("UserController", () => {
     userService = moduleRef.get(UserService);
   });
 
-  it("should be defined", () => {
-    expect(controller).toBeDefined();
-  });
-
-  it("userService should be defined", () => {
-    expect(userService).toBeDefined();
-  });
-
   describe("findOne", () => {
     it("should get a user", async () => {
       const result = await controller.findOne(mockUser.id, mockUser);

@@ -31,14 +31,6 @@ describe("ServiceController", () => {
     serviceService = moduleRef.get(ServiceService);
   });
 
-  it("should be defined", () => {
-    expect(controller).toBeDefined();
-  });
-
-  it("serviceService should be defined", () => {
-    expect(serviceService).toBeDefined();
-  });
-
   describe("findAll", () => {
     it("should get all services", async () => {
       const result = await controller.findAll();

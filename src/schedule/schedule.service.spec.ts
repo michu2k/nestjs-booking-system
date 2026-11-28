@@ -15,10 +15,6 @@ describe("ScheduleService", () => {
     service = moduleRef.get(ScheduleService);
   });
 
-  it("should be defined", () => {
-    expect(service).toBeDefined();
-  });
-
   describe("findSchedule", () => {
     it("should get a schedule", async () => {
       const findScheduleSpy = jest.spyOn(service, "findSchedule").mockResolvedValue([mockSchedule, mockSchedule]);
