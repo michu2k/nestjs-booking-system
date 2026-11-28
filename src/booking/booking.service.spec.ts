@@ -106,7 +106,7 @@ describe("BookingService", () => {
   });
 
   describe("cancelBooking", () => {
-    it.each([BookingStatus.PENDING, BookingStatus.CONFIRMED])("should cancel a %s booking", async (status) => {
+    it.each([BookingStatus.PENDING, BookingStatus.CONFIRMED])("should cancel when status is %s", async (status) => {
       prisma.booking.findUnique.mockResolvedValue({ ...upcomingBooking, status });
 
       await service.cancelBooking(mockBooking.id, mockBooking.userId);

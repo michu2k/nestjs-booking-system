@@ -3,7 +3,7 @@ import { Injectable } from "@nestjs/common";
 import { BookingStatus, Prisma } from "../prisma/generated/client";
 import { PrismaService } from "../prisma/prisma.service";
 import { ServiceError, ServiceErrorCode } from "../utils/service-error";
-import { ACTIVE_BOOKING_STATUSES, STATUS_TIME_GUARDS, STATUS_TRANSITIONS } from "./booking.constants";
+import { STATUS_TIME_GUARDS, STATUS_TRANSITIONS } from "./booking.constants";
 import { CreateBookingDto, UpdateBookingDto } from "./booking.dto";
 
 @Injectable()
@@ -41,7 +41,7 @@ export class BookingService {
   async cancelBooking(id: number, userId: number) {
     const booking = await this.findOneBooking(id, { userId });
 
-    if (!ACTIVE_BOOKING_STATUSES.includes(booking.status)) {
+    if (!STATUS_TRANSITIONS[booking.status].includes(BookingStatus.CANCELLED)) {
       throw new ServiceError(ServiceErrorCode.BAD_REQUEST, "This booking can no longer be cancelled.");
     }
 

@@ -1,8 +1,5 @@
 import { BookingStatus } from "../prisma/generated/enums";
 
-// Statuses a booking must have in order to be cancelled
-export const ACTIVE_BOOKING_STATUSES: BookingStatus[] = [BookingStatus.PENDING, BookingStatus.CONFIRMED];
-
 // Statuses a booking can transition to from its current status
 export const STATUS_TRANSITIONS: Record<BookingStatus, BookingStatus[]> = {
   PENDING: [BookingStatus.CONFIRMED, BookingStatus.CANCELLED, BookingStatus.EXPIRED],
